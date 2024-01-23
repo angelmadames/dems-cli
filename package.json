@@ -11,7 +11,7 @@
   },
   "scripts": {
     "build": "bun build --target=bun ./cli.ts --outdir dist/",
-    "compile": "bun build --compile ./cli.ts --outfile ./bun-test"
+    "compile": "bun build --compile ./cli.ts --outfile ./dems"
   },
   "devDependencies": {
     "@types/bun": "latest"

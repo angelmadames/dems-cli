@@ -176,4 +176,4 @@ dist
 
 # Build files
 dist/**
-bun-test
+./dems
