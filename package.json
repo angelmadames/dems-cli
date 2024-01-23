@@ -11,9 +11,13 @@
   },
   "scripts": {
     "build": "bun build --target=bun ./cli.ts --outdir dist/",
-    "compile": "bun build --compile ./cli.ts --outfile ./dems"
+    "compile": "bun build --compile ./cli.ts --outfile ./dems",
+    "format": "biome format src/ --write",
+    "lint": "biome lint src/",
+    "check": "biome check src/ --apply"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.5.3",
     "@types/bun": "latest"
   },
   "peerDependencies": {
