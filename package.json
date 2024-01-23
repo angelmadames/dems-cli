@@ -12,9 +12,10 @@
   "scripts": {
     "build": "bun build --target=bun ./cli.ts --outdir dist/",
     "compile": "bun build --compile ./cli.ts --outfile ./dems",
-    "format": "biome format src/ --write",
+    "format": "biome format src/ test/ --write",
     "lint": "biome lint src/",
-    "check": "biome check src/ --apply"
+    "check": "biome check src/ --apply",
+    "test": "bun test"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.5.3",
