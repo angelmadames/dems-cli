@@ -1,5 +1,5 @@
-import { confirm } from '@inquirer/prompts';
 import * as fs from 'node:fs';
+import { confirm } from '@inquirer/prompts';
 import log from './log';
 
 export const sleep = (seconds: number): Promise<void> => {
@@ -29,7 +29,7 @@ export const copyFile = (source: string, target: string): void => {
   }
 };
 
-export const createFile = (file: string, content: any): void => {
+export const createFile = (file: string, content: string): void => {
   log.info(`Creating file: ${file}...`);
   if (!isFile(file)) {
     fs.writeFileSync(file, content, 'utf8');

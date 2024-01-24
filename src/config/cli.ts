@@ -1,7 +1,7 @@
-import { exit } from 'node:process';
-import { homedir } from 'node:os';
-import { isFile } from '../utils/file-system';
 import * as fs from 'node:fs';
+import { homedir } from 'node:os';
+import { exit } from 'node:process';
+import { isFile } from '../utils/file-system';
 import log from '../utils/log';
 
 class CLIConfig {

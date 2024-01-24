@@ -1,13 +1,12 @@
 import { Command } from 'commander';
-import { createFile, createPath } from '../../utils/file-system';
-import cliConfig from '../../config/cli';
 import yaml from 'yaml';
+import cliConfig from '../../config/cli';
+import { createFile, createPath } from '../../utils/file-system';
 import log from '../../utils/log';
 
 const ConfigCLICommand = new Command();
 
-ConfigCLICommand
-  .name('cli')
+ConfigCLICommand.name('cli')
   .summary('Manage DEMS CLI config')
   .description('Manage the DEMS CLI config')
   .option('-g, --generate', 'Generate CLI config file')

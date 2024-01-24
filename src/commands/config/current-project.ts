@@ -1,11 +1,10 @@
-import { Command } from 'commander';
 import * as fs from 'node:fs';
+import { Command } from 'commander';
 import cliConfig from '../../config/cli';
 
 const CurrentProjectCommand = new Command();
 
-CurrentProjectCommand
-  .name('current-project')
+CurrentProjectCommand.name('current-project')
   .summary('Manage DEMS current project state')
   .description('Manage the current project state of DEMS')
   .option('-s, --set <project>', 'Set current project to a new value')
