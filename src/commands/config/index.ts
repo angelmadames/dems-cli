@@ -5,7 +5,7 @@ import CurrentProjectCommand from './current-project';
 const ConfigCommand = new Command();
 
 ConfigCommand.name('config')
-  .option('-g, --generate', 'Generate initial config file', false)
+  .option('-c, --create', 'Create initial config file', false)
   .addCommand(ConfigCLICommand)
   .addCommand(CurrentProjectCommand)
   .action((options) => {
