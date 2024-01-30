@@ -1,5 +1,5 @@
-import { Command } from 'commander';
 import * as fs from 'node:fs';
+import { Command } from 'commander';
 import cliConfig from '../../config/cli';
 
 export const currentProjectCommand = () => {

@@ -1,15 +1,19 @@
 import { Command } from 'commander';
-import ConfigCLICommand from './cli';
-import CurrentProjectCommand from './current-project';
+import { configCLICommand } from './cli';
+import { currentProjectCommand } from './current-project';
 
-const ConfigCommand = new Command();
+export const configCommand = () => {
+  const command = new Command();
+  command
+    .name('config')
+    .option('-c, --create', 'Create initial config file', false)
+    .addCommand(configCLICommand())
+    .addCommand(currentProjectCommand())
+    .action((options) => {
+      console.log(`Generate config file set to: ${options.generate}`);
+    });
 
-ConfigCommand.name('config')
-  .option('-c, --create', 'Create initial config file', false)
-  .addCommand(ConfigCLICommand)
-  .addCommand(CurrentProjectCommand)
-  .action((options) => {
-    console.log(`Generate config file set to: ${options.generate}`);
-  });
+  return command;
+};
 
-export default ConfigCommand;
+export default configCommand();
