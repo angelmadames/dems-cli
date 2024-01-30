@@ -1,16 +1,24 @@
 import { Command } from 'commander';
-import { configCLICommand } from './cli';
+import yaml from 'yaml';
+import cliConfig from '../../config/cli';
+import { createFile, createPath } from '../../utils/file-system';
+import log from '../../utils/log';
 import { currentProjectCommand } from './current-project';
 
 export const configCommand = () => {
   const command = new Command();
   command
     .name('config')
-    .option('-c, --create', 'Create initial config file', false)
-    .addCommand(configCLICommand())
+    .option('-g, --generate', 'Generate CLI config file')
     .addCommand(currentProjectCommand())
     .action((options) => {
-      console.log(`Generate config file set to: ${options.generate}`);
+      if (options.generate) {
+        createPath(cliConfig.root);
+        createFile(cliConfig.file, yaml.stringify(cliConfig));
+        createFile(cliConfig.currentProjectFile, cliConfig.currentProject);
+      } else {
+        log.info(yaml.stringify(cliConfig));
+      }
     });
 
   return command;
