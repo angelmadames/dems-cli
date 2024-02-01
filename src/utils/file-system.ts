@@ -30,8 +30,8 @@ export const copyFile = (source: string, target: string): void => {
 };
 
 export const createFile = (file: string, content: string): void => {
-  log.info(`Creating file: ${file}...`);
   if (!isFile(file)) {
+    log.info(`Creating file: ${file}...`);
     fs.writeFileSync(file, content, 'utf8');
     log.success(`✅ File: ${file} successfully created.`);
   } else {
@@ -40,8 +40,8 @@ export const createFile = (file: string, content: string): void => {
 };
 
 export const createPath = (path: string): void => {
-  log.info(`Creating path: ${path}...`);
   if (!fs.existsSync(path)) {
+    log.info(`Creating path: ${path}...`);
     fs.mkdirSync(path, { recursive: true });
     log.success(`✅ Path: ${path} successfully created.`);
   } else {
