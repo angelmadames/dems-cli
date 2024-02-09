@@ -2,7 +2,7 @@
 
 import { Command } from 'commander';
 import { configCommand } from './src/commands/config';
-import { initCommand } from './src/commands/init';
+import { setupCommand } from './src/commands/setup';
 
 const cli = new Command();
 
@@ -11,6 +11,6 @@ cli
   .description('DEMS (Development Environment Management System) CLI')
   .version('0.0.1')
   .addCommand(configCommand())
-  .addCommand(initCommand(), { isDefault: true })
+  .addCommand(setupCommand(), { isDefault: true })
 
 cli.parse();

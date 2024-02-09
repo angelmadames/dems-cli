@@ -1,18 +1,19 @@
 import fs from 'node:fs';
 import { homedir } from 'node:os';
-import { confirm, input } from '@inquirer/prompts';
+import { input } from '@inquirer/prompts';
 import { Command } from 'commander';
 import yaml from 'yaml';
 import cliConfig from '../../config/cli';
 import { createFile, createPath } from '../../utils/file-system';
 import log from '../../utils/log';
+import config from '../../config/dems';
 
-export const initCommand = () => {
+export const setupCommand = () => {
   const command = new Command();
   command
-    .name('init')
-    .aliases(['initialize', 'configure', 'new'])
-    .summary('Initialize DEMS CLI for a new project')
+    .name('setup')
+    .aliases(['init', 'configure'])
+    .summary('Setup DEMS CLI for a new project')
     .description(
       'Initializes a new configuration for a new local project using DEMS.\n' +
         'It generates the default config files and prepares for the setup command.\n' +
@@ -26,7 +27,7 @@ export const initCommand = () => {
     .option('-g, --git-ref [ref]', 'Git default ref')
     .option('-d, --dockerfile [dockerfile]', 'Dockerfile needed for dev')
     .action(async (options) => {
-      log.info('Welcome to the DEMS CLI initialization process!');
+      log.info('Welcome to the DEMS CLI setup process!');
       log.warning(
         '⚠️ If DEMS has been initialized for another project, CLI config files\n' +
           'will not be touched by default. Use --override to re-create them.',
@@ -50,9 +51,16 @@ export const initCommand = () => {
         default:
           process.env.DEMS_REPOS_ROOT_PATH || options.reposRootPath || homedir,
       });
+      config.paths.repositories_root = repositoriesRoot;
+
+      const gitOrgUrl = await input({
+        message: 'What is the URL of the git organization? (git@github.com:<OWNER>)',
+        default: process.env.GITHUB_OWNER || options.gitOrg,
+      })
+      config.git.org_url = gitOrgUrl;
     });
 
   return command;
 };
 
-export default initCommand();
+export default setupCommand();
