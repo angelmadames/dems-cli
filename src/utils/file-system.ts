@@ -35,23 +35,23 @@ export const copyFile = (
   }
 };
 
-export const createFile = (file: string, content: string): void => {
+export const createFile = (file: string, content: string, verbose = true): void => {
   if (!isFile(file)) {
-    log.info(`Creating file: ${file}...`);
+    if (verbose) log.info(`Creating file: ${file}...`);
     fs.writeFileSync(file, content, 'utf8');
-    log.success(`✅ File: ${file} successfully created.`);
+    if (verbose) log.success(`✅ File: ${file} successfully created.`);
   } else {
-    log.warning(`File: ${file} already exists.`);
+    if (verbose) log.warning(`File: ${file} already exists.`);
   }
 };
 
-export const createPath = (path: string): void => {
+export const createPath = (path: string, verbose = true): void => {
   if (!fs.existsSync(path)) {
-    log.info(`Creating path: ${path}...`);
+    if (verbose) log.info(`Creating path: ${path}...`);
     fs.mkdirSync(path, { recursive: true });
-    log.success(`✅ Path: ${path} successfully created.`);
+    if (verbose) log.success(`✅ Path: ${path} successfully created.`);
   } else {
-    log.warning(`Path: ${path} already exists.`);
+    if (verbose) log.warning(`Path: ${path} already exists.`);
   }
 };
 
