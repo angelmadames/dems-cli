@@ -3,7 +3,7 @@ export const capitalizeFirstLetter = (word: string): string => {
 };
 
 export const removeExtraSpaces = (text: string): string => {
-  return text.replace(/\s+/g, ' ');
+  return text.trim().replace(/\s+/g, ' ');
 };
 
 export const removeBreakLines = (text: string): string => {

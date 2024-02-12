@@ -35,7 +35,11 @@ export const copyFile = (
   }
 };
 
-export const createFile = (file: string, content: string, verbose = true): void => {
+export const createFile = (
+  file: string,
+  content: string,
+  verbose = true,
+): void => {
   if (!isFile(file)) {
     if (verbose) log.info(`Creating file: ${file}...`);
     fs.writeFileSync(file, content, 'utf8');

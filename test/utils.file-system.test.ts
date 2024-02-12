@@ -8,7 +8,7 @@ import {
   isFile,
 } from '../src/utils/file-system';
 
-describe('Utils: <file-system>', () => {
+describe('Utils: file-system', () => {
   test('isFile returns true if file exists', () => {
     const exists = isFile('./cli.ts');
     expect(exists).toBeTrue();

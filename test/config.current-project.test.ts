@@ -2,7 +2,7 @@ import { describe, expect, test } from 'bun:test';
 import { spawnSync } from 'bun';
 import { currentProjectCommand } from '../src/commands/config/current-project';
 
-describe('Command: <config current-project>', () => {
+describe("Command: 'config current-project'", () => {
   test('is set by --set flag', () => {
     const command = currentProjectCommand();
     const current = 'testProject';
