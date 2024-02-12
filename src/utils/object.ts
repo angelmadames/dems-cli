@@ -27,9 +27,11 @@ export const replaceKeyValue = (
   path: string,
   key: string,
   value: string,
+  verbose = true,
 ): void => {
   if (!isFile(path)) {
-    `❌ File ${path} is not a valid file.`;
+    if (verbose) log.error(`❌ File ${path} is not a valid file.`);
+    process.exit(1);
   }
   try {
     const fileContent = fs.readFileSync(path, 'utf-8');
@@ -38,9 +40,13 @@ export const replaceKeyValue = (
       `${key}=${value}`,
     );
     fs.writeFileSync(path, updatedContent);
-    log.success(`✅ File ${path} updated successfully with ${key}=${value}.`);
+    if (verbose) {
+      log.success(`✅ File ${path} updated successfully with ${key}=${value}.`);
+    }
   } catch (error) {
-    log.error(`❌ Error updating file ${path}. See below for more info:`);
+    if (verbose) {
+      log.error(`❌ Error updating file ${path}. See below for more info:`);
+    }
     console.error(error);
   }
 };
@@ -50,9 +56,10 @@ type mapLike<T = string> = { [key: string]: T };
 export const replaceKeysInFile = (
   filePath: string,
   replaceMap: Map<string, string> | mapLike,
+  verbose = true,
 ): void => {
   if (!isFile(filePath)) {
-    `❌ File ${filePath} is not a valid file.`;
+    if (verbose) `❌ File ${filePath} is not a valid file.`;
   }
 
   // biome-ignore lint/suspicious/noExplicitAny:
@@ -65,15 +72,19 @@ export const replaceKeysInFile = (
     const fileContent = fs.readFileSync(filePath, 'utf-8');
     let updatedContent = fileContent;
     for (const [key, value] of map) {
-      updatedContent = fileContent.replace(
+      updatedContent = updatedContent.replace(
         new RegExp(`${key}=.*`, 'g'),
         `${key}=${value}`,
       );
     }
     fs.writeFileSync(filePath, updatedContent);
-    log.success(`✅ File ${filePath} updated successfully with replacements.`);
+    if (verbose)
+      log.success(
+        `✅ File ${filePath} updated successfully with replacements.`,
+      );
   } catch (error) {
-    log.error(`❌ Error updating file ${filePath}. See below for more info:`);
+    if (verbose)
+      log.error(`❌ Error updating file ${filePath}. See below for more info:`);
     console.error(error);
   }
 };
