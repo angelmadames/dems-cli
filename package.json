@@ -13,8 +13,8 @@
     "build": "bun build --target=bun ./cli.ts --outdir dist/",
     "compile": "bun build --compile ./cli.ts --outfile ./dems",
     "format": "biome format src/ test/ --write",
-    "lint": "biome lint src/",
-    "check": "biome check src/ --apply",
+    "lint": "biome lint src/ test/",
+    "check": "biome check src/ test/ --apply",
     "test": "bun test"
   },
   "devDependencies": {

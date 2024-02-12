@@ -1,4 +1,4 @@
-import * as fs from 'node:fs';
+import fs from 'node:fs';
 import { confirm } from '@inquirer/prompts';
 import log from './log';
 
@@ -15,17 +15,23 @@ export const isDirectory = (path: string): boolean => {
   return fs.existsSync(path) && fs.lstatSync(path).isDirectory();
 };
 
-export const copyFile = (source: string, target: string): void => {
+export const copyFile = (
+  source: string,
+  target: string,
+  output = true,
+): void => {
   if (isFile(target)) {
-    log.warning(`⏩ Path: ${target} already exists.`);
+    if (output) log.warning(`⏩ Path: ${target} already exists.`);
     return;
   }
 
   if (isFile(source)) {
     fs.copyFileSync(source, target, 0);
-    log.success(`✅ File: ${source} successfully copied to ${target}.`);
+    if (output)
+      log.success(`✅ File: ${source} successfully copied to ${target}.`);
   } else {
-    log.error('❌ Source is not a valid file.');
+    if (output) log.error('❌ Source is not a valid file.');
+    process.exit(1);
   }
 };
 
