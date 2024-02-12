@@ -11,6 +11,6 @@ cli
   .description('DEMS (Development Environment Management System) CLI')
   .version('0.0.1')
   .addCommand(configCommand())
-  .addCommand(setupCommand(), { isDefault: true })
+  .addCommand(setupCommand())
 
 cli.parse();

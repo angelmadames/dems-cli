@@ -6,17 +6,14 @@ import { isFile } from '../utils/file-system';
 import log from '../utils/log';
 import cliConfig from './cli';
 
-type DEMSConfigType = {
+export type DEMSProjectConfig = {
   compose: {
     project_name: string;
-    files: string;
   };
   repositories: string[];
   paths: {
     repositories_root: string;
     data: string;
-    project_root: string;
-    config_file: string;
     env_file: string;
   };
   dockerfile: string;
@@ -26,33 +23,29 @@ type DEMSConfigType = {
   };
 };
 
-export const parseDEMSConfigFile = (configFile: string): DEMSConfigType => {
-  if (!isFile(configFile)) {
-    log.error(`Config file ${configFile} is not valid!`);
+export const defaultConfig: DEMSProjectConfig = {
+  repositories: [],
+  paths: {
+    repositories_root: '',
+    data: '',
+    env_file: '',
+  },
+  dockerfile: '',
+  git: {
+    org_url: '',
+    default_ref: '',
+  },
+  compose: {
+    project_name: '',
+  },
+};
+
+export const parseDEMSConfigFile = (file: string): DEMSProjectConfig => {
+  if (!isFile(file)) {
+    log.error(`Config file ${file} is not valid!`);
     log.error('It is not a valid file, or does not exists.');
     process.exit(1);
   }
 
-  return yaml.parse(fs.readFileSync(configFile, 'utf8'));
+  return yaml.parse(fs.readFileSync(file, 'utf8'));
 };
-
-class Config {
-  config: DEMSConfigType = parseDEMSConfigFile(
-    process.env.DEMS_CONFIG_FILE ?? cliConfig.file,
-  );
-
-  constructor() {
-    this.config = {
-      ...this.config,
-      paths: {
-        ...this.config.paths,
-        repositories_root: String(homedir),
-        project_root: `${cliConfig.root}/${cliConfig.currentProject}`,
-        config_file: cliConfig.file,
-        env_file: `${cliConfig.root}/${cliConfig.currentProject}/.env`,
-      },
-    };
-  }
-}
-
-export default new Config().config;
