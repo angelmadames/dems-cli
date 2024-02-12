@@ -1,14 +1,18 @@
 import fs from 'node:fs';
 import { homedir } from 'node:os';
 import { confirm, input } from '@inquirer/prompts';
+import chalk from 'chalk';
 import { Command } from 'commander';
 import yaml from 'yaml';
 import cliConfig from '../../config/cli';
-import { type DEMSProjectConfig, defaultConfig } from '../../config/dems';
+import {
+  type DEMSProjectConfig,
+  defaultConfig,
+  demsEnvVars,
+} from '../../config/dems';
+import dotEnv from '../../config/env';
 import { createFile, createPath } from '../../utils/file-system';
 import log from '../../utils/log';
-import chalk from 'chalk';
-import dotEnv from '../../config/env';
 
 export const setupCommand = () => {
   const command = new Command();
@@ -49,8 +53,7 @@ export const setupCommand = () => {
 
       const currentProject = await input({
         message: 'What is the name of project DEMS will manage?',
-        default:
-          process.env.DEMS_CURRENT_PROJECT || options.projectName || 'demo',
+        default: demsEnvVars.projectName || options.projectName || 'demo',
       });
       fs.writeFileSync(cliConfig.currentProjectFile, currentProject);
       createPath(`${cliConfig.root}/${cliConfig.currentProject}`);
@@ -58,24 +61,21 @@ export const setupCommand = () => {
 
       const repositoriesRoot = await input({
         message: 'Where would like your repositories to be cloned?',
-        default:
-          process.env.DEMS_REPOS_ROOT_PATH || options.reposRootPath || homedir,
+        default: demsEnvVars.reposRoot || options.reposRootPath || homedir,
       });
       config.paths.repositories_root = repositoriesRoot;
 
       const gitOrgUrl = await input({
         message: 'What is the URL of the git organization?',
         default:
-          process.env.GITHUB_OWNER ||
-          options.gitOrg ||
-          'git@github.com:gbh-tech',
+          demsEnvVars.gitOrgUrl || options.gitOrg || 'git@github.com:gbh-tech',
       });
       config.git.org_url = gitOrgUrl;
 
       const repos = await input({
         message:
           'What are the repositories for this project? (comma-sperated list)',
-        default: process.env.DEMS_REPOS || options.repo || 'demo-api,demo-web',
+        default: demsEnvVars.repos || options.repo || 'demo-api,demo-web',
       });
       for (const repo of repos.split(',')) {
         config.repositories.push(repo);
@@ -83,23 +83,21 @@ export const setupCommand = () => {
 
       const gitRef = await input({
         message: 'What is the default git reference (branch) to use?',
-        default: process.env.DEMS_DEFAULT_GIT_REF || options.gitRef || 'main',
+        default: demsEnvVars.gitDefaultRef || options.gitRef || 'main',
       });
       config.git.default_ref = gitRef;
 
       const dockerfile = await input({
         message: 'What would be the Dockerfile default path?',
         default:
-          process.env.DEMS_DOCKERFILE ||
-          options.dockerfile ||
-          'dems.Dockerfile',
+          demsEnvVars.dockerfile || options.dockerfile || 'dems.Dockerfile',
       });
       config.dockerfile = dockerfile;
 
       const dotEnvFile = await input({
         message: 'What is the path for the project config .env file?',
         default:
-          process.env.DEMS_PROJECT_ENV_FILE ||
+          demsEnvVars.envFilePath ||
           options.dotEnv ||
           `${cliConfig.root}/${cliConfig.currentProject}/.env`,
       });
@@ -109,25 +107,21 @@ export const setupCommand = () => {
         message:
           'What would be the directory to store all project persistent data?',
         default:
-          process.env.DEMS_PROJECT_DATA_PATH ||
+          demsEnvVars.dataPath ||
           options.dataPath ||
           `${cliConfig.root}/${cliConfig.currentProject}/data`,
       });
       config.paths.data = dataPath;
-
 
       console.log(
         `Config file content: \n${chalk.blue(JSON.stringify(config, null, 2))}`,
       );
 
       const confirmConfig = await confirm({
-        message: 'Create config file (.env) using provided values?'
+        message: 'Create config file (.env) using provided values?',
       });
       if (confirmConfig) {
-        dotEnv.generate(
-          `${cliConfig.root}/${cliConfig.currentProject}/.env`,
-          config,
-        );
+        dotEnv.generate(dotEnvFile, config);
       }
     });
 
