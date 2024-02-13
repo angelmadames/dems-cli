@@ -6,7 +6,7 @@ import {
   deletePath,
   isDirectory,
   isFile,
-} from '../src/utils/file-system';
+} from '../../src/utils/file-system';
 
 describe('Utils: file-system', () => {
   test('isFile returns true if file exists', () => {

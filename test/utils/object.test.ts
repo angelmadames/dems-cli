@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
-import { replaceKeyValue, replaceKeysInFile } from '../src/utils/object';
-import { createFile, isFile } from '../src/utils/file-system';
+import { replaceKeyValue, replaceKeysInFile } from '../../src/utils/object';
+import { createFile, isFile } from '../../src/utils/file-system';
 import fs from 'node:fs';
 
 describe('Utils: object', () => {

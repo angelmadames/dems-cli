@@ -3,7 +3,7 @@ import {
   capitalizeFirstLetter,
   removeBreakLines,
   removeExtraSpaces,
-} from '../src/utils/string';
+} from '../../src/utils/string';
 
 describe('Utils: string', () => {
   test('first letter of a word is capitalized', () => {
