@@ -1,8 +1,12 @@
 import { describe, expect, test } from 'bun:test';
-import { flattenObject, replaceKeyValue, replaceKeysInFile } from '../../src/utils/object';
-import { createFile, isFile } from '../../src/utils/file-system';
 import fs from 'node:fs';
-import { defaultConfig, type DEMSProjectConfig } from '../../src/config/dems';
+import { type DEMSProjectConfig, defaultConfig } from '../../src/config/dems';
+import { createFile, isFile } from '../../src/utils/file-system';
+import {
+  flattenObject,
+  replaceKeyValue,
+  replaceKeysInFile,
+} from '../../src/utils/object';
 
 describe('Utils: object', () => {
   const testFile = '.env.test';
@@ -17,14 +21,18 @@ describe('Utils: object', () => {
     expect(replacedContent).toContain('VALUE10');
   });
 
-  test('Replaces various keys\' values in a file', () => {
+  test("Replaces various keys' values in a file", () => {
     createFile(testFile, testFileContent, false);
     expect(isFile(testFile)).toBeTrue();
 
-    replaceKeysInFile(testFile, {
-      KEY1: 'VALUE_KEY1',
-      KEY2: 'VALUE_KEY2',
-    }, false);
+    replaceKeysInFile(
+      testFile,
+      {
+        KEY1: 'VALUE_KEY1',
+        KEY2: 'VALUE_KEY2',
+      },
+      false,
+    );
 
     const replacedContent = fs.readFileSync(testFile, 'utf8');
     expect(replacedContent).toContain('VALUE_KEY1');
@@ -35,12 +43,12 @@ describe('Utils: object', () => {
   test('Flattens a simnple nested object', () => {
     const input = {
       key1: {
-        key1_a: 'value1'
-      }
+        key1_a: 'value1',
+      },
     };
 
     const expectedOutput = {
-      key1_key1_a: 'value1'
+      key1_key1_a: 'value1',
     };
 
     expect(flattenObject(input)).toEqual(expectedOutput);
@@ -50,23 +58,23 @@ describe('Utils: object', () => {
     const input = {
       key1: {
         key1_a: {
-          key1_a_a: 'value1'
+          key1_a_a: 'value1',
         },
-        key1_b: 'value2'
+        key1_b: 'value2',
       },
       key2: {
         key2_a: {
           key2_a_a: {
-            key2_a_a_a: 'value3'
-          }
-        }
-      }
+            key2_a_a_a: 'value3',
+          },
+        },
+      },
     };
 
     const expectedOutput = {
       key1_key1_a_key1_a_a: 'value1',
       key1_key1_b: 'value2',
-      key2_key2_a_key2_a_a_key2_a_a_a: 'value3'
+      key2_key2_a_key2_a_a_key2_a_a_a: 'value3',
     };
 
     expect(flattenObject(input)).toEqual(expectedOutput);

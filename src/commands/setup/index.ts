@@ -13,6 +13,7 @@ import {
 import dotEnv from '../../config/env';
 import { createFile, createPath } from '../../utils/file-system';
 import log from '../../utils/log';
+import sharedOptions from '../../utils/shared-options';
 
 export const setupCommand = () => {
   const command = new Command();
@@ -30,9 +31,9 @@ export const setupCommand = () => {
     .option('-z, --git-org [git-org]', 'Git organization URL for repositories')
     .option('-o, --repos-root-path [root-path]', 'Repositories root path')
     .option('-r, --repo [repo...]', 'Set project repositories')
-    .option('-g, --git-ref [ref]', 'Git default ref')
     .option('-e, --dot-env [path]', 'Project config dot env file')
     .option('-d, --dockerfile [dockerfile]', 'Dockerfile needed for dev')
+    .addOption(sharedOptions.gitRef())
     .option(
       '-t, --data-path [path]',
       'Directory for all project persistent data',
@@ -121,6 +122,10 @@ export const setupCommand = () => {
         message: 'Create config file (.env) using provided values?',
       });
       if (confirmConfig) {
+        createFile(
+          `${cliConfig.root}/${cliConfig.currentProject}/config.json`,
+          JSON.stringify(config, null, 2),
+        );
         dotEnv.generate(dotEnvFile, config);
       }
     });

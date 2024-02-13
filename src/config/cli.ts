@@ -1,4 +1,4 @@
-import * as fs from 'node:fs';
+import fs from 'node:fs';
 import { homedir } from 'node:os';
 import { exit } from 'node:process';
 import { isFile } from '../utils/file-system';

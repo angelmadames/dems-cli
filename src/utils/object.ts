@@ -1,4 +1,4 @@
-import * as fs from 'node:fs';
+import fs from 'node:fs';
 import { isFile } from './file-system.js';
 import log from './log.js';
 
