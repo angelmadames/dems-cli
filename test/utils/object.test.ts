@@ -1,7 +1,8 @@
 import { describe, expect, test } from 'bun:test';
-import { replaceKeyValue, replaceKeysInFile } from '../../src/utils/object';
+import { flattenObject, replaceKeyValue, replaceKeysInFile } from '../../src/utils/object';
 import { createFile, isFile } from '../../src/utils/file-system';
 import fs from 'node:fs';
+import { defaultConfig, type DEMSProjectConfig } from '../../src/config/dems';
 
 describe('Utils: object', () => {
   const testFile = '.env.test';
@@ -14,9 +15,6 @@ describe('Utils: object', () => {
     replaceKeyValue(testFile, 'KEY1', 'VALUE10', false);
     const replacedContent = fs.readFileSync(testFile, 'utf8');
     expect(replacedContent).toContain('VALUE10');
-
-    fs.rmSync(testFile);
-    expect(isFile(testFile)).toBeFalse();
   });
 
   test('Replaces various keys\' values in a file', () => {
@@ -31,8 +29,52 @@ describe('Utils: object', () => {
     const replacedContent = fs.readFileSync(testFile, 'utf8');
     expect(replacedContent).toContain('VALUE_KEY1');
     expect(replacedContent).toContain('VALUE_KEY2');
-
     fs.rmSync(testFile);
-    expect(isFile(testFile)).toBeFalse();
+  });
+
+  test('Flattens a simnple nested object', () => {
+    const input = {
+      key1: {
+        key1_a: 'value1'
+      }
+    };
+
+    const expectedOutput = {
+      key1_key1_a: 'value1'
+    };
+
+    expect(flattenObject(input)).toEqual(expectedOutput);
+  });
+
+  test('Flattens a deeply nested object', () => {
+    const input = {
+      key1: {
+        key1_a: {
+          key1_a_a: 'value1'
+        },
+        key1_b: 'value2'
+      },
+      key2: {
+        key2_a: {
+          key2_a_a: {
+            key2_a_a_a: 'value3'
+          }
+        }
+      }
+    };
+
+    const expectedOutput = {
+      key1_key1_a_key1_a_a: 'value1',
+      key1_key1_b: 'value2',
+      key2_key2_a_key2_a_a_key2_a_a_a: 'value3'
+    };
+
+    expect(flattenObject(input)).toEqual(expectedOutput);
+  });
+
+  test('Flattens an empty object', () => {
+    const input = {};
+    const expectedOutput = {};
+    expect(flattenObject(input)).toEqual(expectedOutput);
   });
 });

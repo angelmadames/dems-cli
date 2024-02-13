@@ -16,7 +16,7 @@ export const flattenObject = (
       const flattened = flattenObject(value, newKey, separator);
       Object.assign(result, flattened);
     } else {
-      result[newKey] = JSON.stringify(value);
+      result[newKey] = value;
     }
   }
 
