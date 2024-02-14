@@ -55,7 +55,7 @@ export default class Git {
     });
 
     if (proc.exitCode === 0) {
-      console.log(`Remote repo: ${repo} is valid.`);
+      log.info(`Remote repo: ${repo} is valid.`);
     } else {
       throw new Error(`Remote repo: ${repo} is not valid or does not exist.`);
     }

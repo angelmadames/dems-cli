@@ -42,10 +42,11 @@ export const setupCommand = () => {
     .action(async (options) => {
       log.info('Welcome to the DEMS CLI setup process!');
       log.warning(
-        '⚠️ If DEMS has been initialized for another project, CLI config files\n' +
-          'will not be touched by default. Use --override to re-create them.',
+        `${chalk.dim(
+          'If DEMS has been initialized for another project, CLI config files\n' +
+            'will not be touched by default. Use --override to re-create them.',
+        )}`,
       );
-
       log.info('Creating initial files for DEMS...');
       createPath(cliConfig.root);
       createFile({ file: cliConfig.file, content: yaml.stringify(cliConfig) });
