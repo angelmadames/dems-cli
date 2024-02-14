@@ -1,7 +1,7 @@
+import fs from 'node:fs';
 import { isDirectory, isFile } from '../utils/file-system';
 import cliConfig from './cli';
-import { defaultConfig, type DEMSProjectConfig } from './dems';
-import fs from 'node:fs';
+import { type DEMSProjectConfig, defaultConfig } from './dems';
 
 export const projectConfig = (): DEMSProjectConfig => {
   let parsedConfig = defaultConfig;

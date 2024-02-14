@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import { homedir } from 'node:os';
 import { confirm, input } from '@inquirer/prompts';
+import { file } from 'bun';
 import chalk from 'chalk';
 import { Command } from 'commander';
 import yaml from 'yaml';
@@ -14,7 +15,6 @@ import dotEnv from '../../config/env';
 import { createFile, createPath, isFile } from '../../utils/file-system';
 import log from '../../utils/log';
 import sharedOptions from '../../utils/shared-options';
-import { file } from 'bun';
 
 export const setupCommand = () => {
   const command = new Command();
@@ -29,11 +29,12 @@ export const setupCommand = () => {
         'setup at every repository specified.',
     )
     .option('-p, --project-name [project-name]', 'Set project name')
-    .option('-z, --git-org [git-org]', 'Git organization URL for repositories')
     .option('-o, --repos-root-path [root-path]', 'Repositories root path')
     .option('-r, --repo [repo...]', 'Set project repositories')
     .option('-e, --dot-env [path]', 'Project config dot env file')
     .option('-d, --dockerfile [dockerfile]', 'Dockerfile needed for dev')
+    .addOption(sharedOptions.gitOrg())
+    .addOption(sharedOptions.reposRoot())
     .addOption(sharedOptions.gitRef())
     .option(
       '-t, --data-path [path]',
@@ -65,11 +66,11 @@ export const setupCommand = () => {
       createPath(`${cliConfig.root}/${cliConfig.currentProject}`);
       config.compose.project_name = currentProject;
 
-      const repositoriesRoot = await input({
+      const reposRoot = await input({
         message: 'Where would like your repositories to be cloned?',
-        default: demsEnvVars.reposRoot || options.reposRootPath || homedir,
+        default: demsEnvVars.reposRoot || options.reposRoot || homedir,
       });
-      config.paths.repositories_root = repositoriesRoot;
+      config.paths.repos_root = reposRoot;
 
       const gitOrgUrl = await input({
         message: 'What is the URL of the git organization?',
