@@ -35,12 +35,20 @@ export const copyFile = (
   }
 };
 
-export const createFile = (
-  file: string,
-  content: string,
+interface FileModificiationInput {
+  file: string;
+  content: string;
+  verbose?: boolean;
+  override?: boolean;
+}
+
+export const createFile = ({
+  file,
+  content,
   verbose = true,
-): void => {
-  if (!isFile(file)) {
+  override = false,
+}: FileModificiationInput): void => {
+  if (!isFile(file) || override) {
     if (verbose) log.info(`Creating file: ${file}...`);
     fs.writeFileSync(file, content, 'utf8');
     if (verbose) log.success(`✅ File: ${file} successfully created.`);

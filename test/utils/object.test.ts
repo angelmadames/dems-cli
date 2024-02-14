@@ -13,7 +13,7 @@ describe('Utils: object', () => {
   const testFileContent = 'KEY1=VALUE1\nKEY2=VALUE2';
 
   test('Replaces a key value in a file', () => {
-    createFile(testFile, testFileContent, false);
+    createFile({ file: testFile, content: testFileContent, verbose: false });
     expect(isFile(testFile)).toBeTrue();
 
     replaceKeyValue(testFile, 'KEY1', 'VALUE10', false);
@@ -22,7 +22,7 @@ describe('Utils: object', () => {
   });
 
   test("Replaces various keys' values in a file", () => {
-    createFile(testFile, testFileContent, false);
+    createFile({ file: testFile, content: testFileContent, verbose: false });
     expect(isFile(testFile)).toBeTrue();
 
     replaceKeysInFile(

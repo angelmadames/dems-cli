@@ -1,15 +1,15 @@
-import { isDirectory } from '../utils/file-system';
+import { isDirectory, isFile } from '../utils/file-system';
 import cliConfig from './cli';
 import { defaultConfig, type DEMSProjectConfig } from './dems';
 import fs from 'node:fs';
 
 export const projectConfig = (): DEMSProjectConfig => {
-  const parsedConfig = defaultConfig;
+  let parsedConfig = defaultConfig;
   const configFile = `${cliConfig.root}/${cliConfig.currentProject}/config.json`;
 
-  if (isDirectory(configFile)) {
+  if (isFile(configFile)) {
     const config = fs.readFileSync(configFile).toString();
-    const parsedConfig = JSON.parse(config);
+    parsedConfig = JSON.parse(config);
   }
   return parsedConfig;
 };

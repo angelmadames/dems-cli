@@ -35,7 +35,7 @@ describe('Utils: file-system', () => {
     const content = 'this is a test file';
 
     // Create and copy file with createFile() and copyFile()
-    createFile(file, content, false);
+    createFile({ file: file, content: content, verbose: false });
     expect(isFile(file)).toBeTrue();
     copyFile(file, copiedFile, false);
     expect(isFile(copiedFile)).toBeTrue();

@@ -11,9 +11,10 @@ import {
   demsEnvVars,
 } from '../../config/dems';
 import dotEnv from '../../config/env';
-import { createFile, createPath } from '../../utils/file-system';
+import { createFile, createPath, isFile } from '../../utils/file-system';
 import log from '../../utils/log';
 import sharedOptions from '../../utils/shared-options';
+import { file } from 'bun';
 
 export const setupCommand = () => {
   const command = new Command();
@@ -47,8 +48,11 @@ export const setupCommand = () => {
 
       log.info('Creating initial files for DEMS...');
       createPath(cliConfig.root);
-      createFile(cliConfig.file, yaml.stringify(cliConfig));
-      createFile(cliConfig.currentProjectFile, cliConfig.currentProject);
+      createFile({ file: cliConfig.file, content: yaml.stringify(cliConfig) });
+      createFile({
+        file: cliConfig.currentProjectFile,
+        content: cliConfig.currentProject,
+      });
 
       const config = defaultConfig;
 
@@ -76,7 +80,7 @@ export const setupCommand = () => {
       const repos = await input({
         message:
           'What are the repositories for this project? (comma-sperated list)',
-        default: demsEnvVars.repos || options.repo || 'demo-api,demo-web',
+        default: demsEnvVars.repos || options.repo || 'demo-api,demo-webapp',
       });
       for (const repo of repos.split(',')) {
         config.repositories.push(repo);
@@ -122,10 +126,21 @@ export const setupCommand = () => {
         message: 'Create config file (.env) using provided values?',
       });
       if (confirmConfig) {
-        createFile(
-          `${cliConfig.root}/${cliConfig.currentProject}/config.json`,
-          JSON.stringify(config, null, 2),
-        );
+        const configJson = `${cliConfig.root}/${cliConfig.currentProject}/config.json`;
+
+        let confirmOverride = false;
+        if (isFile(configJson)) {
+          confirmOverride = await confirm({
+            message: `Config file: ${configJson} already exists. Override content?`,
+            default: false,
+          });
+        }
+
+        createFile({
+          file: `${cliConfig.root}/${cliConfig.currentProject}/config.json`,
+          content: JSON.stringify(config, null, 2),
+          override: confirmOverride,
+        });
         dotEnv.generate(dotEnvFile, config);
       }
     });

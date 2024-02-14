@@ -16,8 +16,14 @@ export const configCommand = () => {
     .action((options) => {
       if (options.generate) {
         createPath(cliConfig.root);
-        createFile(cliConfig.file, yaml.stringify(cliConfig));
-        createFile(cliConfig.currentProjectFile, cliConfig.currentProject);
+        createFile({
+          file: cliConfig.file,
+          content: yaml.stringify(cliConfig),
+        });
+        createFile({
+          file: cliConfig.currentProjectFile,
+          content: cliConfig.currentProject,
+        });
       } else {
         log.info(yaml.stringify(cliConfig));
       }
