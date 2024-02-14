@@ -35,3 +35,6 @@ jobs:
           bun run format:ci
           bun run lint:ci
           bun run check:ci
+
+      - name: 🧪 Run tests
+        run: bun run test

@@ -50,13 +50,13 @@ export default class Git {
     );
   }
 
-  remoteRepoExists(repo: string = this.repoUrl) {
+  remoteRepoExists(repo: string = this.repoUrl, verbose = false) {
     const proc = Bun.spawnSync(['git', 'ls-remote', repo], {
       stdin: 'inherit',
     });
 
     if (proc.exitCode === 0) {
-      log.info(`Remote repo: ${repo} is valid.`);
+      if (verbose) log.info(`Remote repo: ${repo} is valid.`);
     } else {
       throw new Error(`Remote repo: ${repo} is not valid or does not exist.`);
     }
