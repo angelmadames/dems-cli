@@ -1,11 +1,3 @@
-import fs from 'node:fs';
-import { homedir } from 'os';
-import * as yaml from 'yaml';
-import { composeFiles } from '../utils/compose';
-import { isFile } from '../utils/file-system';
-import log from '../utils/log';
-import cliConfig from './cli';
-
 export type DEMSProjectConfig = {
   compose: {
     project_name: string;

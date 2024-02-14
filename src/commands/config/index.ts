@@ -4,6 +4,7 @@ import cliConfig from '../../config/cli';
 import { createFile, createPath } from '../../utils/file-system';
 import log from '../../utils/log';
 import { currentProjectCommand } from './current-project';
+import { projectConfigCommand } from './project';
 
 export const configCommand = () => {
   const command = new Command();
@@ -11,6 +12,7 @@ export const configCommand = () => {
     .name('config')
     .option('-g, --generate', 'Generate CLI config file')
     .addCommand(currentProjectCommand())
+    .addCommand(projectConfigCommand())
     .action((options) => {
       if (options.generate) {
         createPath(cliConfig.root);
