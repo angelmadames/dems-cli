@@ -1,0 +1,37 @@
+name: 🧪 Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.ref }}'
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 💻 Checkout current code ref
+        uses: actions/checkout@v4
+
+      - name: 🟢 Configure Bun on runner
+        uses: oven-sh/setup-bun@v1
+
+      - name: 📦 Install package dependencies using lockfile
+        run: bun install --frozen-lockfile
+
+      - name: 🔨 Run build
+        run: |
+          bun run build
+          bun run compile
+
+      - name: 🌷 Run format, lint & check with Biome
+        run: |
+          bun run format:ci
+          bun run lint:ci
+          bun run check:ci
