@@ -12,7 +12,7 @@ class CLIConfig {
 
   constructor() {
     this.root = process.env.DEMS_CLI_ROOT ?? `${homedir()}/.dems`;
-    this.file = process.env.DEMS_CLI_CONFIG_FILE ?? `${this.root}/config.yml`;
+    this.file = process.env.DEMS_CLI_CONFIG_FILE ?? `${this.root}/config.json`;
     this.currentProjectFile = this.selectCurrentProjectFile();
     this.currentProject = this.selectCurrentProject();
   }

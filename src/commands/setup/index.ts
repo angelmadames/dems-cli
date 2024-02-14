@@ -4,7 +4,6 @@ import { confirm, input } from '@inquirer/prompts';
 import { file } from 'bun';
 import chalk from 'chalk';
 import { Command } from 'commander';
-import yaml from 'yaml';
 import cliConfig from '../../config/cli';
 import {
   type DEMSProjectConfig,
@@ -50,7 +49,7 @@ export const setupCommand = () => {
       );
       log.info('Creating initial files for DEMS...');
       createPath(cliConfig.root);
-      createFile({ file: cliConfig.file, content: yaml.stringify(cliConfig) });
+      createFile({ file: cliConfig.file, content: JSON.stringify(cliConfig) });
       createFile({
         file: cliConfig.currentProjectFile,
         content: cliConfig.currentProject,
@@ -63,7 +62,7 @@ export const setupCommand = () => {
         default: demsEnvVars.projectName || options.projectName || 'demo',
       });
       fs.writeFileSync(cliConfig.currentProjectFile, currentProject);
-      createPath(`${cliConfig.root}/${cliConfig.currentProject}`);
+      createPath(`${cliConfig.root}/${currentProject}`);
       config.compose.project_name = currentProject;
 
       const reposRoot = await input({
@@ -106,7 +105,7 @@ export const setupCommand = () => {
         default:
           demsEnvVars.envFilePath ||
           options.dotEnv ||
-          `${cliConfig.root}/${cliConfig.currentProject}/.env`,
+          `${cliConfig.root}/${currentProject}/.env`,
       });
       config.paths.env_file = dotEnvFile;
 
@@ -116,7 +115,7 @@ export const setupCommand = () => {
         default:
           demsEnvVars.dataPath ||
           options.dataPath ||
-          `${cliConfig.root}/${cliConfig.currentProject}/data`,
+          `${cliConfig.root}/${currentProject}/data`,
       });
       config.paths.data = dataPath;
 
@@ -128,7 +127,7 @@ export const setupCommand = () => {
         message: 'Create config file (.env) using provided values?',
       });
       if (confirmConfig) {
-        const configJson = `${cliConfig.root}/${cliConfig.currentProject}/config.json`;
+        const configJson = `${cliConfig.root}/${currentProject}/config.json`;
 
         let confirmOverride = false;
         if (isFile(configJson)) {
@@ -139,7 +138,7 @@ export const setupCommand = () => {
         }
 
         createFile({
-          file: `${cliConfig.root}/${cliConfig.currentProject}/config.json`,
+          file: `${cliConfig.root}/${currentProject}/config.json`,
           content: JSON.stringify(config, null, 2),
           override: confirmOverride,
         });

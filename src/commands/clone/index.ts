@@ -12,7 +12,7 @@ export const cloneCommand = () => {
   command
     .name('clone')
     .description(
-      'Clones all configured git repositories defined in the config.yml\n' +
+      'Clones all configured git repositories defined in the config.json\n' +
         "file in the root directory. Uses 'git clone' strategy.",
     )
     .option('-c, --checkout', 'Checkout to git ref instead of clone')

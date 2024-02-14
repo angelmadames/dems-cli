@@ -1,10 +1,10 @@
 import { Command } from 'commander';
-import yaml from 'yaml';
 import cliConfig from '../../config/cli';
 import { createFile, createPath } from '../../utils/file-system';
 import log from '../../utils/log';
 import { currentProjectCommand } from './current-project';
 import { projectConfigCommand } from './project';
+import fs from 'node:fs';
 
 export const configCommand = () => {
   const command = new Command();
@@ -18,14 +18,15 @@ export const configCommand = () => {
         createPath(cliConfig.root);
         createFile({
           file: cliConfig.file,
-          content: yaml.stringify(cliConfig),
+          content: JSON.stringify(cliConfig, null, 2),
         });
         createFile({
           file: cliConfig.currentProjectFile,
           content: cliConfig.currentProject,
         });
       } else {
-        log.info(yaml.stringify(cliConfig));
+        const configContent = fs.readFileSync(cliConfig.file).toString();
+        console.log(JSON.parse(configContent));
       }
     });
 
