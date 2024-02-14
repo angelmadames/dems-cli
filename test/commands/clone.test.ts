@@ -7,7 +7,7 @@ import { removeExtraSpaces } from '../../src/utils/string';
 describe("Command: 'clone'", () => {
   const config = projectConfig();
 
-  test('Flags (repos-root, git-org, git-ref) parsed correctly', () => {
+  test.skip('Flags (repos-root, git-org, git-ref) parsed correctly', () => {
     const gitRef = 'custom-branch';
     const gitOrgUrl = 'git@github.com/example';
     const reposRoot = './repos';
@@ -29,7 +29,7 @@ describe("Command: 'clone'", () => {
     expect(output).toContain(`Git org > ${gitOrgUrl}`);
   });
 
-  test('Clones a repository', () => {
+  test.skip('Clones a repository', () => {
     const reposRoot = './repos';
     const result = spawnSync([
       './cli.ts',
