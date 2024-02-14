@@ -8,11 +8,13 @@ type GitParams = {
 };
 
 export default class Git {
+  repoUrl: string;
   repoPath: string;
   gitRef: string;
 
   constructor({ repo, workingDir, ref }: GitParams) {
     this.repoPath = `${workingDir}/${repo.split('/').pop()}`;
+    this.repoUrl = repo;
     this.gitRef = ref;
   }
 
@@ -47,7 +49,7 @@ export default class Git {
     );
   }
 
-  remoteRepoExists(repo: string) {
+  remoteRepoExists(repo: string = this.repoUrl) {
     const proc = Bun.spawnSync(['git', 'ls-remote', repo], {
       stdin: 'inherit',
     });
