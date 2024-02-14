@@ -25,10 +25,9 @@ export const sharedOptions = {
       'Git organization URL for repositories',
     );
   },
-};
-
-export const exitCommandIfInfoOnly = (info = false) => {
-  if (info) process.exit(0);
+  repos() {
+    return new Option('-r, --repos [repos...]', 'Git repositories to clone');
+  },
 };
 
 export default sharedOptions;

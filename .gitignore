@@ -177,3 +177,4 @@ dist
 # Build files
 dist/**
 ./dems
+**/repos/

@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { createPath } from './file-system.js';
 import log from './log.js';
 
 type GitParams = {
@@ -20,7 +21,7 @@ export default class Git {
 
   clone({ workingDir, repo, ref }: GitParams) {
     this.remoteRepoExists(repo);
-
+    createPath(workingDir);
     if (this.localRepoExists(this.repoPath)) {
       log.warning(`Repo ${repo} already cloned.`);
     } else {

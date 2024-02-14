@@ -30,9 +30,9 @@ export const setupCommand = () => {
     )
     .option('-p, --project-name [project-name]', 'Set project name')
     .option('-o, --repos-root-path [root-path]', 'Repositories root path')
-    .option('-r, --repo [repo...]', 'Set project repositories')
     .option('-e, --dot-env [path]', 'Project config dot env file')
     .option('-d, --dockerfile [dockerfile]', 'Dockerfile needed for dev')
+    .addOption(sharedOptions.repos())
     .addOption(sharedOptions.gitOrg())
     .addOption(sharedOptions.reposRoot())
     .addOption(sharedOptions.gitRef())
@@ -82,7 +82,7 @@ export const setupCommand = () => {
       const repos = await input({
         message:
           'What are the repositories for this project? (comma-sperated list)',
-        default: demsEnvVars.repos || options.repo || 'demo-api,demo-webapp',
+        default: demsEnvVars.repos || options.repos || 'demo-api,demo-webapp',
       });
       for (const repo of repos.split(',')) {
         config.repositories.push(repo);

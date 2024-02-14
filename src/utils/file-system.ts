@@ -70,12 +70,15 @@ export const createPath = (path: string, verbose = true): void => {
 export const deletePath = async ({
   path,
   force = false,
+  verbose = true,
 }: {
   path: string;
   force?: boolean;
+  verbose?: boolean;
 }): Promise<void> => {
   if (!isDirectory(path)) {
-    log.warning(`⏩ Path: ${path} is not a valid directory. Not removing.`);
+    if (verbose)
+      log.warning(`⏩ Path: ${path} is not a valid directory. Not removing.`);
     return;
   }
 
@@ -84,8 +87,8 @@ export const deletePath = async ({
     (await confirm({ message: `Delete path ${path} recursively?` }))
   ) {
     fs.rmSync(path, { recursive: true, force: true });
-    log.success(`🗑️ Path: ${path} recursively deleted.`);
+    if (verbose) log.success(`🗑️ Path: ${path} recursively deleted.`);
   } else {
-    log.info('⏩ Skipping...');
+    if (verbose) log.info('⏩ Skipping...');
   }
 };
