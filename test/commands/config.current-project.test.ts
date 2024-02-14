@@ -11,14 +11,14 @@ describe("Command: 'config current-project'", () => {
     );
   });
 
-  test('is set by environment variable', async () => {
+  test('is set by environment variable', () => {
     const result = spawnSync(['bun', './cli.ts', 'config', 'current-project'], {
       env: { ...process.env, DEMS_CURRENT_PROJECT: 'dev' },
     });
     expect(result.stdout.toString()).toContain('dev');
   });
 
-  test('empty --set flag is missing argument', async () => {
+  test('empty --set flag is missing argument', () => {
     const command = currentProjectCommand();
     expect(command.getOptionValue('set')).toBeUndefined();
     const result = spawnSync([
