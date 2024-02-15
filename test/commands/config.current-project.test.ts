@@ -1,14 +1,27 @@
 import { describe, expect, test } from 'bun:test';
 import { spawnSync } from 'bun';
 import { currentProjectCommand } from '../../src/commands/config/current-project';
+import cliConfig from '../../src/config/cli';
+import fs from 'node:fs';
+import { createFile, createPath } from '../../src/utils/file-system';
 
 describe("Command: 'config current-project'", () => {
   test('is set by --set flag', () => {
-    const command = currentProjectCommand();
     const current = 'testProject';
-    expect(command.setOptionValue('set', current).getOptionValue('set')).toBe(
+    const currentProjectFile = './current-project-test';
+    createFile({ file: currentProjectFile, content: '', verbose: false });
+    const command = Bun.spawnSync([
+      './cli.ts',
+      'config',
+      'current-project',
+      '-s',
       current,
-    );
+      '-f',
+      currentProjectFile,
+    ]);
+    const currentProject = cliConfig.selectCurrentProject(currentProjectFile);
+    expect(command.stdout.toString()).toEqual(currentProject);
+    fs.rmSync(currentProjectFile);
   });
 
   test('is set by environment variable', () => {
