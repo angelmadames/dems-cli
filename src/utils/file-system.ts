@@ -2,11 +2,6 @@ import fs from 'node:fs';
 import { confirm } from '@inquirer/prompts';
 import log from './log';
 
-export const sleep = (seconds: number): Promise<void> => {
-  const time = seconds * 1000;
-  return new Promise((r) => setTimeout(r, time));
-};
-
 export const isFile = (path: string): boolean => {
   return fs.existsSync(path) && fs.lstatSync(path).isFile();
 };

@@ -6,6 +6,19 @@ import fs from 'node:fs';
 import { createFile, createPath } from '../../src/utils/file-system';
 
 describe("Command: 'config current-project'", () => {
+  test('ensure --set option has no default value', () => {
+    const command = currentProjectCommand();
+    const optionValue = 'project';
+
+    const emptyOptionValue = command.getOptionValue('set');
+    const setOptionValue = command
+      .setOptionValue('set', optionValue)
+      .getOptionValue('set');
+
+    expect(emptyOptionValue).toBeUndefined();
+    expect(setOptionValue).toEqual(setOptionValue);
+  });
+
   test('is set by --set flag', () => {
     const current = 'testProject';
     const currentProjectFile = './current-project-test';
