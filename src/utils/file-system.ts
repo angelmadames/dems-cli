@@ -62,28 +62,40 @@ export const createPath = (path: string, verbose = true): void => {
   }
 };
 
+interface PathDeletionParams {
+  path: string;
+  force?: boolean;
+  verbose?: boolean;
+}
+
 export const deletePath = async ({
   path,
   force = false,
   verbose = true,
-}: {
-  path: string;
-  force?: boolean;
-  verbose?: boolean;
-}): Promise<void> => {
-  if (!isDirectory(path)) {
-    if (verbose)
-      log.warning(`⏩ Path: ${path} is not a valid directory. Not removing.`);
-    return;
+}: PathDeletionParams) => {
+  if (isDirectory(path)) {
+    if (
+      force ||
+      (await confirm({ message: `Delete directory ${path} recursively?` }))
+    ) {
+      fs.rmdirSync(path, { recursive: true });
+      if (verbose) log.success(`Directory ${path} deleted.`);
+      return;
+    }
   }
 
-  if (
-    force ||
-    (await confirm({ message: `Delete path ${path} recursively?` }))
-  ) {
-    fs.rmSync(path, { recursive: true, force: true });
-    if (verbose) log.success(`🗑️ Path: ${path} recursively deleted.`);
-  } else {
-    if (verbose) log.info('⏩ Skipping...');
+  if (isFile(path)) {
+    if (force || await confirm({
+      message: `Delete file ${path}?`,
+    })) {
+      fs.rmSync(path, { force: true });
+      if (verbose) log.success(`File ${path} deleted.`);
+      return;
+    }
+  }
+
+  if (verbose) {
+    log.info(`${path} is not a valid file or directory.`);
+    return;
   }
 };

@@ -21,7 +21,7 @@ export default class Git {
 
   clone({ workingDir, repo, ref }: GitParams) {
     this.remoteRepoExists(repo);
-    createPath(workingDir);
+    createPath(workingDir, false);
     if (this.localRepoExists(this.repoPath)) {
       log.warning(`Repo ${repo} already cloned.`);
     } else {

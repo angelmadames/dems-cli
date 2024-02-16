@@ -1,8 +1,6 @@
-import chalk from 'chalk';
 import { Command } from 'commander';
-import { projectConfig, projectEnvVars } from '../../config/project';
+import { projectConfig } from '../../config/project';
 import Git from '../../utils/git';
-import log from '../../utils/log';
 import sharedOptions from '../../utils/shared-options';
 
 export const cloneCommand = () => {
@@ -19,7 +17,7 @@ export const cloneCommand = () => {
     .addOption(sharedOptions.gitRef().default(config.git.default_ref))
     .addOption(sharedOptions.reposRoot().default(config.paths.repos_root))
     .addOption(sharedOptions.gitOrg().default(config.git.org_url))
-    .addOption(sharedOptions.repos())
+    .addOption(sharedOptions.repos().default(config.repositories))
     .addOption(sharedOptions.info())
     .action((options) => {
       console.log(`Git org    > ${options.gitOrg}`);

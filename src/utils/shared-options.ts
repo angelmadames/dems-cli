@@ -26,7 +26,16 @@ export const sharedOptions = {
     );
   },
   repos() {
-    return new Option('-r, --repos [repos...]', 'Git repositories to clone');
+    return new Option(
+      '-r, --repos [repos...]',
+      'Git repositories to manage/operate',
+    );
+  },
+  force() {
+    return new Option(
+      '-f, --force',
+      'Prevents user interactivity and assumes default values',
+    ).default(false);
   },
 };
 

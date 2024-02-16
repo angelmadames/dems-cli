@@ -13,6 +13,10 @@ const log = {
     console.log(chalk.yellow(text));
   },
 
+  dimmedWarning: (...text: string[]): void => {
+    console.log(chalk.dim.yellow(text));
+  },
+
   error: (...text: string[]): void => {
     console.log(chalk.red(text));
   },

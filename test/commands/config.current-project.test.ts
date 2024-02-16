@@ -1,8 +1,8 @@
 import { describe, expect, test } from 'bun:test';
+import fs from 'node:fs';
 import { spawnSync } from 'bun';
 import { currentProjectCommand } from '../../src/commands/config/current-project';
 import cliConfig from '../../src/config/cli';
-import fs from 'node:fs';
 import { createFile, createPath } from '../../src/utils/file-system';
 
 describe("Command: 'config current-project'", () => {

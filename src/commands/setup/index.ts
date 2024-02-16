@@ -1,15 +1,10 @@
 import fs from 'node:fs';
 import { homedir } from 'node:os';
 import { confirm, input } from '@inquirer/prompts';
-import { file } from 'bun';
 import chalk from 'chalk';
 import { Command } from 'commander';
 import cliConfig from '../../config/cli';
-import {
-  type DEMSProjectConfig,
-  defaultConfig,
-  demsEnvVars,
-} from '../../config/dems';
+import { defaultConfig, demsEnvVars } from '../../config/dems';
 import dotEnv from '../../config/env';
 import { createFile, createPath, isFile } from '../../utils/file-system';
 import log from '../../utils/log';
@@ -41,11 +36,9 @@ export const setupCommand = () => {
     )
     .action(async (options) => {
       log.info('Welcome to the DEMS CLI setup process!');
-      log.warning(
-        `${chalk.dim(
-          'If DEMS has been initialized for another project, CLI config files\n' +
-            'will not be touched by default. Use --override to re-create them.',
-        )}`,
+      log.dimmedWarning(
+        'If DEMS has been initialized for another project, CLI config files\n' +
+          'will not be touched by default. Use --override to re-create them.',
       );
       log.info('Creating initial files for DEMS...');
       createPath(cliConfig.root);
@@ -59,10 +52,13 @@ export const setupCommand = () => {
 
       const currentProject = await input({
         message: 'What is the name of project DEMS will manage?',
-        default: demsEnvVars.projectName || options.projectName || 'demo',
+        default:
+          demsEnvVars.projectName ||
+          options.projectName ||
+          cliConfig.currentProject ||
+          'demo',
       });
-      fs.writeFileSync(cliConfig.currentProjectFile, currentProject);
-      createPath(`${cliConfig.root}/${currentProject}`);
+      const projectRootPath = `${cliConfig.root}/${currentProject}`;
       config.compose.project_name = currentProject;
 
       const reposRoot = await input({
@@ -105,7 +101,7 @@ export const setupCommand = () => {
         default:
           demsEnvVars.envFilePath ||
           options.dotEnv ||
-          `${cliConfig.root}/${currentProject}/.env`,
+          `${projectRootPath}/.env`,
       });
       config.paths.env_file = dotEnvFile;
 
@@ -113,9 +109,7 @@ export const setupCommand = () => {
         message:
           'What would be the directory to store all project persistent data?',
         default:
-          demsEnvVars.dataPath ||
-          options.dataPath ||
-          `${cliConfig.root}/${currentProject}/data`,
+          demsEnvVars.dataPath || options.dataPath || `${projectRootPath}/data`,
       });
       config.paths.data = dataPath;
 
@@ -127,7 +121,7 @@ export const setupCommand = () => {
         message: 'Create config file (.env) using provided values?',
       });
       if (confirmConfig) {
-        const configJson = `${cliConfig.root}/${currentProject}/config.json`;
+        const configJson = `${projectRootPath}/config.json`;
 
         let confirmOverride = false;
         if (isFile(configJson)) {
@@ -137,11 +131,14 @@ export const setupCommand = () => {
           });
         }
 
+        fs.writeFileSync(cliConfig.currentProjectFile, currentProject);
+        createPath(`${projectRootPath}`);
         createFile({
-          file: `${cliConfig.root}/${currentProject}/config.json`,
+          file: `${projectRootPath}/config.json`,
           content: JSON.stringify(config, null, 2),
           override: confirmOverride,
         });
+        createPath(dataPath);
         dotEnv.generate(dotEnvFile, config);
       }
     });
