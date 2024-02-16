@@ -85,9 +85,12 @@ export const deletePath = async ({
   }
 
   if (isFile(path)) {
-    if (force || await confirm({
-      message: `Delete file ${path}?`,
-    })) {
+    if (
+      force ||
+      (await confirm({
+        message: `Delete file ${path}?`,
+      }))
+    ) {
       fs.rmSync(path, { force: true });
       if (verbose) log.success(`File ${path} deleted.`);
       return;

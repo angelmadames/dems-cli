@@ -3,7 +3,6 @@ import fs from 'node:fs';
 import {
   copyFile,
   createFile,
-  deletePath,
   isDirectory,
   isFile,
 } from '../../src/utils/file-system';

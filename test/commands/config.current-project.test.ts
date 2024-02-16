@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import { spawnSync } from 'bun';
 import { currentProjectCommand } from '../../src/commands/config/current-project';
 import cliConfig from '../../src/config/cli';
-import { createFile, createPath } from '../../src/utils/file-system';
+import { createFile } from '../../src/utils/file-system';
 
 describe("Command: 'config current-project'", () => {
   test('ensure --set option has no default value', () => {

@@ -1,6 +1,5 @@
 import { describe, expect, test } from 'bun:test';
 import fs from 'node:fs';
-import { type DEMSProjectConfig, defaultConfig } from '../../src/config/dems';
 import { createFile, isFile } from '../../src/utils/file-system';
 import {
   flattenObject,

@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import { isDirectory, isFile } from '../utils/file-system';
+import { isFile } from '../utils/file-system';
 import cliConfig from './cli';
 import { type DEMSProjectConfig, defaultConfig } from './dems';
 

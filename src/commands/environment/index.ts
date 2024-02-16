@@ -1,9 +1,7 @@
 import { Command } from 'commander';
-import { projectConfig, projectEnvVars } from '../../config/project';
-import { deletePath } from '../../utils/file-system';
-import log from '../../utils/log';
-import sharedOptions from '../../utils/shared-options';
 import dotEnv from '../../config/env';
+import { projectConfig, projectEnvVars } from '../../config/project';
+import log from '../../utils/log';
 
 export const environmentCommand = () => {
   const command = new Command();
@@ -20,15 +18,15 @@ export const environmentCommand = () => {
     )
     .option(
       '-g, --generate-dot-env',
-      "Generates the dot env file for current project's config.json",
+      "Generate the dot env file for current project's config.json",
     )
     .action(async (options) => {
       if (options.generateDotEnv) {
-        log.info('Generating project\'s dot env file...');
+        log.info("Generating project's dot env file...");
         dotEnv.generate(config.paths.env_file, config);
       } else {
         console.log(projectEnvVars());
-      };
+      }
     });
 
   return command;

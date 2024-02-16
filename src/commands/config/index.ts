@@ -2,7 +2,6 @@ import fs from 'node:fs';
 import { Command } from 'commander';
 import cliConfig from '../../config/cli';
 import { createFile, createPath } from '../../utils/file-system';
-import log from '../../utils/log';
 import { currentProjectCommand } from './current-project';
 import { projectConfigCommand } from './project';
 
