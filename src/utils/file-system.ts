@@ -1,5 +1,10 @@
 import fs from 'node:fs';
 import { confirm } from '@inquirer/prompts';
+import type {
+  FileModificationOperation,
+  PathModificationOperation,
+  SourceTargetOperation,
+} from './interfaces';
 import log from './log';
 
 export const isFile = (path: string): boolean => {
@@ -10,39 +15,32 @@ export const isDirectory = (path: string): boolean => {
   return fs.existsSync(path) && fs.lstatSync(path).isDirectory();
 };
 
-export const copyFile = (
-  source: string,
-  target: string,
-  output = true,
-): void => {
+export const copyFile = ({
+  source,
+  target,
+  verbose = true,
+}: SourceTargetOperation) => {
   if (isFile(target)) {
-    if (output) log.warning(`Path: ${target} already exists.`);
+    if (verbose) log.warning(`Path: ${target} already exists.`);
     return;
   }
 
   if (isFile(source)) {
     fs.copyFileSync(source, target, 0);
-    if (output)
+    if (verbose)
       log.success(`File: ${source} successfully copied to ${target}.`);
   } else {
-    if (output) log.error('Source is not a valid file.');
+    if (verbose) log.error('Source is not a valid file.');
     process.exit(1);
   }
 };
-
-interface FileModificiationInput {
-  file: string;
-  content: string;
-  verbose?: boolean;
-  override?: boolean;
-}
 
 export const createFile = ({
   file,
   content,
   verbose = true,
   override = false,
-}: FileModificiationInput): void => {
+}: FileModificationOperation) => {
   if (!isFile(file) || override) {
     if (verbose) log.info(`Creating file: ${file}...`);
     fs.writeFileSync(file, content, 'utf8');
@@ -52,7 +50,10 @@ export const createFile = ({
   }
 };
 
-export const createPath = (path: string, verbose = true): void => {
+export const createPath = ({
+  path,
+  verbose = true,
+}: PathModificationOperation) => {
   if (!fs.existsSync(path)) {
     if (verbose) log.info(`Creating path: ${path}...`);
     fs.mkdirSync(path, { recursive: true });
@@ -62,17 +63,11 @@ export const createPath = (path: string, verbose = true): void => {
   }
 };
 
-interface PathDeletionParams {
-  path: string;
-  force?: boolean;
-  verbose?: boolean;
-}
-
 export const deletePath = async ({
   path,
   force = false,
   verbose = true,
-}: PathDeletionParams) => {
+}: PathModificationOperation) => {
   if (isDirectory(path)) {
     if (
       force ||

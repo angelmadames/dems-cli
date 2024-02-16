@@ -36,7 +36,7 @@ describe('Utils: file-system', () => {
     // Create and copy file with createFile() and copyFile()
     createFile({ file: file, content: content, verbose: false });
     expect(isFile(file)).toBeTrue();
-    copyFile(file, copiedFile, false);
+    copyFile({ source: file, target: copiedFile, verbose: false });
     expect(isFile(copiedFile)).toBeTrue();
 
     // Ensure files are deleted

@@ -1,5 +1,5 @@
 import fs from 'fs';
-import log from '../utils/log.js';
+import log from '../utils/log';
 import { flattenObject } from '../utils/object';
 import { type DEMSProjectConfig } from './dems';
 

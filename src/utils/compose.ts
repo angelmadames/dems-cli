@@ -1,15 +1,12 @@
 import fs from 'node:fs';
 import path from 'path';
+import type { ComposeFilesParams } from './interfaces';
 
 export const composeFiles = ({
   prefix = 'compose',
   filesDir = 'src/compose',
   dockerDir = '.docker',
-}: {
-  prefix?: string;
-  filesDir?: string;
-  dockerDir?: string;
-} = {}): string => {
+}: ComposeFilesParams): string => {
   let composeFileString = '';
 
   const readFilesRecursively = (currentDir: string) => {

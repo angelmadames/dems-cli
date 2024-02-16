@@ -1,12 +1,6 @@
-import fs from 'node:fs';
-import { createPath } from './file-system.js';
-import log from './log.js';
-
-type GitParams = {
-  workingDir: string;
-  repo: string;
-  ref: string;
-};
+import { createPath, isDirectory } from './file-system';
+import type { GitParams } from './interfaces';
+import log from './log';
 
 export default class Git {
   repoUrl: string;
@@ -21,7 +15,7 @@ export default class Git {
 
   clone({ workingDir, repo, ref }: GitParams) {
     this.remoteRepoExists(repo);
-    createPath(workingDir, false);
+    createPath({ path: workingDir, verbose: false });
     if (this.localRepoExists(this.repoPath)) {
       log.warning(`Repo ${repo} already cloned.`);
     } else {
@@ -44,10 +38,7 @@ export default class Git {
   }
 
   localRepoExists(path: string) {
-    return (
-      fs.existsSync(`${path}/.git`) &&
-      fs.lstatSync(`${path}/.git`).isDirectory()
-    );
+    return isDirectory(`${path}/.git`);
   }
 
   remoteRepoExists(repo: string = this.repoUrl, verbose = false) {

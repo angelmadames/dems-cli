@@ -40,7 +40,7 @@ export const setupCommand = () => {
           'will not be touched by default. Use --override to re-create them.',
       );
       log.info('Creating initial files for DEMS...');
-      createPath(cliConfig.root);
+      createPath({ path: cliConfig.root });
       createFile({ file: cliConfig.file, content: JSON.stringify(cliConfig) });
       createFile({
         file: cliConfig.currentProjectFile,
@@ -131,13 +131,13 @@ export const setupCommand = () => {
         }
 
         fs.writeFileSync(cliConfig.currentProjectFile, currentProject);
-        createPath(`${projectRootPath}`);
+        createPath({ path: projectRootPath });
         createFile({
           file: `${projectRootPath}/config.json`,
           content: JSON.stringify(config, null, 2),
           override: confirmOverride,
         });
-        createPath(dataPath);
+        createPath({ path: dataPath });
         dotEnv.generate(dotEnvFile, config);
       }
     });

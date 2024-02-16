@@ -1,6 +1,6 @@
 import fs from 'node:fs';
-import { isFile } from './file-system.js';
-import log from './log.js';
+import { isFile } from './file-system';
+import log from './log';
 
 export const flattenObject = (
   // biome-ignore lint/suspicious/noExplicitAny:
@@ -79,9 +79,7 @@ export const replaceKeysInFile = (
     }
     fs.writeFileSync(filePath, updatedContent);
     if (verbose)
-      log.success(
-        `File ${filePath} updated successfully with replacements.`,
-      );
+      log.success(`File ${filePath} updated successfully with replacements.`);
   } catch (error) {
     if (verbose)
       log.error(`Error updating file ${filePath}. See below for more info:`);
