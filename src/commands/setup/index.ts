@@ -23,7 +23,6 @@ export const setupCommand = () => {
         'setup at every repository specified.',
     )
     .option('-p, --project-name [project-name]', 'Set project name')
-    .option('-o, --repos-root-path [root-path]', 'Repositories root path')
     .option('-e, --dot-env [path]', 'Project config dot env file')
     .option('-d, --dockerfile [dockerfile]', 'Dockerfile needed for dev')
     .addOption(sharedOptions.repos())

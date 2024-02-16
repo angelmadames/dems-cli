@@ -38,7 +38,7 @@ describe("Command: 'config current-project'", () => {
   });
 
   test('is set by environment variable', () => {
-    const result = spawnSync(['bun', './cli.ts', 'config', 'current-project'], {
+    const result = spawnSync(['./cli.ts', 'config', 'current-project'], {
       env: { ...process.env, DEMS_CURRENT_PROJECT: 'dev' },
     });
     expect(result.stdout.toString()).toContain('dev');
@@ -48,7 +48,6 @@ describe("Command: 'config current-project'", () => {
     const command = currentProjectCommand();
     expect(command.getOptionValue('set')).toBeUndefined();
     const result = spawnSync([
-      'bun',
       './cli.ts',
       'config',
       'current-project',
