@@ -16,16 +16,16 @@ export const copyFile = (
   output = true,
 ): void => {
   if (isFile(target)) {
-    if (output) log.warning(`⏩ Path: ${target} already exists.`);
+    if (output) log.warning(`Path: ${target} already exists.`);
     return;
   }
 
   if (isFile(source)) {
     fs.copyFileSync(source, target, 0);
     if (output)
-      log.success(`✅ File: ${source} successfully copied to ${target}.`);
+      log.success(`File: ${source} successfully copied to ${target}.`);
   } else {
-    if (output) log.error('❌ Source is not a valid file.');
+    if (output) log.error('Source is not a valid file.');
     process.exit(1);
   }
 };
@@ -46,7 +46,7 @@ export const createFile = ({
   if (!isFile(file) || override) {
     if (verbose) log.info(`Creating file: ${file}...`);
     fs.writeFileSync(file, content, 'utf8');
-    if (verbose) log.success(`✅ File: ${file} successfully created.`);
+    if (verbose) log.success(`File: ${file} successfully created.`);
   } else {
     if (verbose) log.warning(`File: ${file} already exists.`);
   }
@@ -56,7 +56,7 @@ export const createPath = (path: string, verbose = true): void => {
   if (!fs.existsSync(path)) {
     if (verbose) log.info(`Creating path: ${path}...`);
     fs.mkdirSync(path, { recursive: true });
-    if (verbose) log.success(`✅ Path: ${path} successfully created.`);
+    if (verbose) log.success(`Path: ${path} successfully created.`);
   } else {
     if (verbose) log.warning(`Path: ${path} already exists.`);
   }
@@ -95,10 +95,5 @@ export const deletePath = async ({
       if (verbose) log.success(`File ${path} deleted.`);
       return;
     }
-  }
-
-  if (verbose) {
-    log.info(`${path} is not a valid file or directory.`);
-    return;
   }
 };
