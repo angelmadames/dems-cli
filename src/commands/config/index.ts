@@ -14,7 +14,7 @@ export const configCommand = () => {
     .addCommand(projectConfigCommand())
     .action((options) => {
       if (options.generate) {
-        createPath(cliConfig.root);
+        createPath({ path: cliConfig.root });
         createFile({
           file: cliConfig.file,
           content: JSON.stringify(cliConfig, null, 2),

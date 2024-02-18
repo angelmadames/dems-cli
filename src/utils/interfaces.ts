@@ -24,6 +24,8 @@ export interface GitParams {
 }
 
 export interface ComposeFilesParams {
+  reposRoot?: string;
+  repos?: Array<string>;
   prefix?: string;
   filesDir?: string;
   dockerDir?: string;

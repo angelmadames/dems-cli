@@ -1,30 +1,34 @@
 import fs from 'node:fs';
 import path from 'path';
+import { projectConfig } from '../config/project';
 import type { ComposeFilesParams } from './interfaces';
 
 export const composeFiles = ({
+  filesDir = '.dems',
   prefix = 'compose',
-  filesDir = 'src/compose',
-  dockerDir = '.docker',
+  repos = projectConfig().repositories,
+  reposRoot = projectConfig().paths.repos_root,
 }: ComposeFilesParams): string => {
   let composeFileString = '';
+  const composeDirs = [];
 
-  const readFilesRecursively = (currentDir: string) => {
-    const files = fs.readdirSync(currentDir);
+  for (const dir of repos) {
+    composeDirs.push(`${reposRoot}/${dir}/${filesDir}`);
+  }
 
+  for (const dir of composeDirs) {
+    const files = fs.readdirSync(dir);
     for (const file of files) {
-      const filePath = path.join(currentDir, file);
-      const isDirectory = fs.statSync(filePath).isDirectory();
-
-      if (isDirectory && file === dockerDir) {
-        readFilesRecursively(filePath);
-      } else if (file.match(`${prefix}.*.yml`)) {
-        composeFileString += ` -f ${filePath}`;
+      if (file.match(`${prefix}*.yml`)) {
+        composeFileString += ` -f ${path.join(dir, file)}`;
       }
     }
-  };
-
-  readFilesRecursively(filesDir);
+  }
 
   return composeFileString;
 };
+
+// Execute script only if called directly
+if (import.meta.path === Bun.main) {
+  console.log(composeFiles({ prefix: 'compose', filesDir: '.dems' }));
+}

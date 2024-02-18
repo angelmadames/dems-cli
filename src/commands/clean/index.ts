@@ -22,9 +22,18 @@ export const cleanCommand = () => {
         log.info('User interactivity disabled due to --force flag.');
       }
 
-      await deletePath({ path: config.paths.repos_root, force: options.force });
-      await deletePath({ path: config.paths.data, force: options.force });
-      await deletePath({ path: config.paths.env_file, force: options.force });
+      await deletePath({
+        path: config.paths.repos_root,
+        force: options.force,
+      });
+      await deletePath({
+        path: config.paths.data,
+        force: options.force,
+      });
+      await deletePath({
+        path: config.paths.env_file,
+        force: options.force,
+      });
 
       log.success('Clean completed for current project.');
     });
