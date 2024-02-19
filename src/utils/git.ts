@@ -53,3 +53,15 @@ export default class Git {
     }
   }
 }
+
+export const validateLocalGitRepo = (path: string) => {
+  const gitStatus = Bun.spawnSync(['git', 'status'], {
+    cwd: path,
+  });
+
+  if (gitStatus.exitCode === 0) {
+    return;
+  }
+
+  throw new Error(`Local path ${path} is not a valid git repository.`);
+};

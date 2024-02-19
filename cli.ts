@@ -6,6 +6,7 @@ import { setupCommand } from './src/commands/setup';
 import { cloneCommand } from './src/commands/clone';
 import { cleanCommand } from './src/commands/clean';
 import { environmentCommand } from './src/commands/environment';
+import { composeCommand } from './src/commands/compose';
 
 const cli = new Command();
 
@@ -18,5 +19,6 @@ cli
   .addCommand(cloneCommand())
   .addCommand(cleanCommand())
   .addCommand(environmentCommand())
+  .addCommand(composeCommand())
 
 cli.parse();

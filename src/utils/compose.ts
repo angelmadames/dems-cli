@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'path';
 import { projectConfig } from '../config/project';
 import type { ComposeFilesParams } from './interfaces';
+import { validateLocalGitRepo } from './git';
 
 export const composeFiles = ({
   filesDir = '.dems',
@@ -13,6 +14,7 @@ export const composeFiles = ({
   const composeDirs = [];
 
   for (const dir of repos) {
+    validateLocalGitRepo(`${reposRoot}/${dir}`);
     composeDirs.push(`${reposRoot}/${dir}/${filesDir}`);
   }
 
@@ -20,7 +22,7 @@ export const composeFiles = ({
     const files = fs.readdirSync(dir);
     for (const file of files) {
       if (file.match(`${prefix}*.yml`)) {
-        composeFileString += ` -f ${path.join(dir, file)}`;
+        composeFileString += `-f ${path.join(dir, file)} `;
       }
     }
   }

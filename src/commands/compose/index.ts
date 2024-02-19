@@ -1,5 +1,6 @@
 import { Command } from 'commander';
 import { projectConfig } from '../../config/project';
+import { composeFiles } from '../../utils/compose';
 
 export const composeCommand = () => {
   const command = new Command();
@@ -12,7 +13,11 @@ export const composeCommand = () => {
       'Aids in container orchestration for services in DEMS.\n' +
         'Uses Compose under the hood.',
     )
-    .action(async (options) => {});
+    .option('-z, --show-compose-string', 'Shows the Composo files string')
+    .action(async (options) => {
+      if (options.showComposeString)
+        console.log(composeFiles({ prefix: 'compose', filesDir: '.dems' }));
+    });
 
   return command;
 };
