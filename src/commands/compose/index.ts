@@ -1,6 +1,7 @@
 import { Command } from 'commander';
 import { projectConfig } from '../../config/project';
 import { composeFiles, composeSettings } from '../../utils/compose';
+import log from '../../utils/log';
 
 export const composeCommand = () => {
   const command = new Command();
@@ -15,13 +16,24 @@ export const composeCommand = () => {
     )
     .option('-z, --show-compose-string', 'Shows the Composo files string')
     .action(async (options) => {
+      const args = process.argv.slice(3);
       const composeFilesString = composeFiles({
         prefix: 'compose',
         filesDir: '.dems',
       });
       const composeString = composeFilesString.concat(composeSettings());
 
-      if (options.showComposeString) console.log(composeString);
+      if (options.showComposeString) {
+        console.log(composeString);
+        return;
+      };
+
+      if (args.length === 0) {
+        log.error('A Compose command needs to be specified.');
+        process.exit(1);
+      }
+
+      console.log(args);
     });
 
   return command;

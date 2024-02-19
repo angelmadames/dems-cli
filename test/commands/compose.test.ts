@@ -20,4 +20,10 @@ describe("Command: 'compose'", () => {
       `-p ${projectConfig().compose.project_name}`,
     );
   });
+
+  test('Returns error when no arguments', () => {
+    const command = Bun.spawnSync(['./cli.ts', 'compose']);
+    expect(command.stdout.toString()).toContain('A Compose command needs to be specified.');
+    expect(command.exitCode).toEqual(1);
+  });
 });
