@@ -1,8 +1,8 @@
 import fs from 'node:fs';
 import path from 'path';
 import { projectConfig } from '../config/project';
-import type { ComposeFilesParams } from './interfaces';
 import { validateLocalGitRepo } from './git';
+import type { ComposeFilesParams } from './interfaces';
 
 export const composeFiles = ({
   filesDir = '.dems',
@@ -28,6 +28,16 @@ export const composeFiles = ({
   }
 
   return composeFileString;
+};
+
+export const composeSettings = (
+  projectName: string = projectConfig().compose.project_name,
+  envFile: string = projectConfig().paths.env_file,
+) => {
+  let composeSettingString = '';
+  composeSettingString += `-p ${projectName} `;
+  composeSettingString += `--env-file ${envFile}`;
+  return composeSettingString;
 };
 
 // Execute script only if called directly
