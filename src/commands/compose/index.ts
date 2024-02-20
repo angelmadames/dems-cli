@@ -2,6 +2,7 @@ import { Command } from 'commander';
 import { projectConfig } from '../../config/project';
 import { composeExec } from '../../utils/compose';
 import { composeShowArgsCommand } from './show-args';
+import log from '../../utils/log';
 
 export const composeCommand = () => {
   const command = new Command();
@@ -19,13 +20,13 @@ export const composeCommand = () => {
       const config = projectConfig();
       const args = process.argv.slice(3);
 
-      // if (args.length === 0) {
-      //   log.error('A Compose command needs to be specified.');
-      //   process.exit(1);
-      // }
+      if (args.length === 0) {
+        log.error('A Compose command needs to be specified.');
+        process.exit(1);
+      }
 
       const result = composeExec({
-        cmd: ['build'],
+        cmd: args,
       });
       console.log(result.exitCode);
       console.log(result.stdout.toString());

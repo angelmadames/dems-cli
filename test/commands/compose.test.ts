@@ -1,23 +1,20 @@
 import { describe, expect, test } from 'bun:test';
 import { projectConfig } from '../../src/config/project';
-import { composeFiles, composeSettings } from '../../src/utils/compose';
+import { composeExecParams, composeFiles } from '../../src/utils/compose';
 
 describe("Command: 'compose'", () => {
   const config = projectConfig();
 
   test('Returns compose files string', () => {
-    const composeFileString = composeFiles({
-      prefix: 'compose',
-      filesDir: '.dems',
-    });
-    const composeSettingsString = composeSettings();
+    const composeFileString = composeFiles({});
+    const composeSettingsString = composeExecParams();
 
-    expect(composeFileString).toBeString();
+    expect(composeFileString).toBeArray();
     expect(composeSettingsString).toContain(
       `--env-file ${projectConfig().paths.env_file}`,
     );
     expect(composeSettingsString).toContain(
-      `-p ${projectConfig().compose.project_name}`,
+      `--project-name ${projectConfig().compose.project_name}`,
     );
   });
 

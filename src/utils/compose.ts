@@ -10,10 +10,10 @@ export const composeExec = ({
   files = composeFiles({}),
   cmd,
 }: ComposeExecParams) => {
-  const command = ['docker', 'compose'];
-  command.concat(envFiles).concat(files).concat(cmd);
+  let command = ['docker', 'compose'];
+  command = command.concat(envFiles).concat(files).concat(cmd);
   console.log(command);
-  const result = Bun.spawnSync(command);
+  const result = Bun.spawnSync(command.join(' ').split(' '));
   return result;
 };
 
