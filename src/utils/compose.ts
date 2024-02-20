@@ -1,23 +1,17 @@
 import fs from 'node:fs';
 import path from 'path';
 import { projectConfig } from '../config/project';
+import { isFile } from './file-system';
 import { validateLocalGitRepo } from './git';
-import type { ComposeFilesParams } from './interfaces';
+import type { ComposeExecParams, ComposeFilesParams } from './interfaces';
 
-export const compose = ({
+export const composeExec = ({
+  envFiles = composeExecParams(),
+  files = composeFiles({}),
   cmd,
-  envFile = '.env',
-  projectName = projectConfig().compose.project_name,
-  args = '',
-}: {
-  cmd: string;
-  envFile?: string;
-  projectName?: string;
-  args?: string;
-}) => {
+}: ComposeExecParams) => {
   const command = ['docker', 'compose'];
-  for (const arg of args.split(' ')) command.push(`${arg.trim()}`);
-  command.push(cmd);
+  command.concat(envFiles).concat(files).concat(cmd);
   console.log(command);
   const result = Bun.spawnSync(command);
   return result;
@@ -26,40 +20,54 @@ export const compose = ({
 export const composeFiles = ({
   filesDir = '.dems',
   prefix = 'compose',
-  repos = projectConfig().repositories,
-  reposRoot = projectConfig().paths.repos_root,
-}: ComposeFilesParams): string => {
-  let composeFileString = '';
-  const composeDirs = [];
+}: ComposeFilesParams) => {
+  const config = projectConfig();
 
-  for (const dir of repos) {
-    validateLocalGitRepo(`${reposRoot}/${dir}`);
-    composeDirs.push(`${reposRoot}/${dir}/${filesDir}`);
+  const composeFiles: string[] = [];
+  const dirs = [];
+
+  for (const dir of config.repositories) {
+    validateLocalGitRepo(`${config.paths.repos_root}/${dir}`);
+    dirs.push(`${config.paths.repos_root}/${dir}/${filesDir}`);
   }
 
-  for (const dir of composeDirs) {
+  for (const dir of dirs) {
     const files = fs.readdirSync(dir);
     for (const file of files) {
       if (file.match(`${prefix}*.yml`)) {
-        composeFileString += `-f ${path.join(dir, file)} `;
+        composeFiles.push(`--file ${path.join(dir, file)}`);
       }
     }
   }
 
-  return composeFileString;
+  return composeFiles;
 };
 
-export const composeSettings = (
-  projectName: string = projectConfig().compose.project_name,
-  envFile: string = projectConfig().paths.env_file,
-) => {
-  let composeSettingString = '';
-  composeSettingString += `-p ${projectName} `;
-  composeSettingString += `--env-file ${envFile}`;
-  return composeSettingString;
+export const composeExecParams = () => {
+  const config = projectConfig();
+  const params = [];
+
+  params.push(`--project-name ${config.compose.project_name}`);
+  params.push(`--env-file ${config.paths.env_file}`);
+
+  for (const repo of config.repositories) {
+    const envFile = `${config.paths.repos_root}/${repo}/.env`;
+    if (isFile(envFile)) {
+      params.push(`--env-file ${envFile}`);
+    }
+  }
+
+  return params;
 };
 
 // Execute script only if called directly
 if (import.meta.path === Bun.main) {
-  console.log(composeFiles({ prefix: 'compose', filesDir: '.dems' }));
+  console.log(JSON.stringify(composeExecParams(), null, 2));
+  console.log(
+    JSON.stringify(
+      composeFiles({ prefix: 'compose', filesDir: '.dems' }),
+      null,
+      2,
+    ),
+  );
 }
