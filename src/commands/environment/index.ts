@@ -1,6 +1,7 @@
 import { Command } from 'commander';
 import dotEnv from '../../config/env';
 import { projectConfig, projectEnvVars } from '../../config/project';
+import { copyFile } from '../../utils/file-system';
 import log from '../../utils/log';
 
 export const environmentCommand = () => {
@@ -20,13 +21,31 @@ export const environmentCommand = () => {
       '-g, --generate-dot-env',
       "Generate the dot env file for current project's config.json",
     )
+    .option(
+      '-c, --copy-example-files',
+      "Copy the .env.example file of the current project's repositories",
+    )
     .action(async (options) => {
+      const config = projectConfig();
+
+      if (options.copyExampleFiles) {
+        for (const repo of config.repositories) {
+          const repoPath = `${config.paths.repos_root}/${repo}`;
+          copyFile({
+            source: `${repoPath}/.env.example`,
+            target: `${repoPath}/.env`,
+          });
+        }
+        return;
+      }
+
       if (options.generateDotEnv) {
         log.info("Generating project's dot env file...");
         dotEnv.generate(config.paths.env_file, config);
-      } else {
-        console.log(projectEnvVars());
+        return;
       }
+
+      console.log(projectEnvVars());
     });
 
   return command;

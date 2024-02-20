@@ -4,6 +4,25 @@ import { projectConfig } from '../config/project';
 import { validateLocalGitRepo } from './git';
 import type { ComposeFilesParams } from './interfaces';
 
+export const compose = ({
+  cmd,
+  envFile = '.env',
+  projectName = projectConfig().compose.project_name,
+  args = '',
+}: {
+  cmd: string;
+  envFile?: string;
+  projectName?: string;
+  args?: string;
+}) => {
+  const command = ['docker', 'compose'];
+  for (const arg of args.split(' ')) command.push(`${arg.trim()}`);
+  command.push(cmd);
+  console.log(command);
+  const result = Bun.spawnSync(command);
+  return result;
+};
+
 export const composeFiles = ({
   filesDir = '.dems',
   prefix = 'compose',
