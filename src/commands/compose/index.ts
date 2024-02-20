@@ -28,9 +28,6 @@ export const composeCommand = () => {
       const result = composeExec({
         cmd: args,
       });
-      console.log(result.exitCode);
-      console.log(result.stdout.toString());
-      console.log(result.stderr.toString());
     });
 
   return command;

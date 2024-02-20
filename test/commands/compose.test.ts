@@ -20,7 +20,7 @@ describe("Command: 'compose'", () => {
     const files = composeFiles({});
     expect(files).toBeArray();
     expect(files.join(' ').split(' ')).toContain('--file');
-  })
+  });
 
   test('Returns error when no arguments', () => {
     const command = Bun.spawnSync(['./cli.ts', 'compose']);
@@ -35,6 +35,5 @@ describe("Command: 'compose'", () => {
     expect(command.stdout.toString()).toContain('Compose command params:');
     expect(command.stdout.toString()).toContain('Compose files params:');
     expect(command.exitCode).toEqual(0);
-  })
+  });
 });
-
