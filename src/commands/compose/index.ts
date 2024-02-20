@@ -16,7 +16,7 @@ export const composeCommand = () => {
         'Uses Compose under the hood.',
     )
     .addCommand(composeShowArgsCommand())
-    .action(async (options) => {
+    .action(() => {
       const config = projectConfig();
       const args = process.argv.slice(3);
 
