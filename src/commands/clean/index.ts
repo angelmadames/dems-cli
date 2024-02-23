@@ -3,6 +3,7 @@ import { projectConfig } from '../../config/project';
 import { deletePath } from '../../utils/file-system';
 import log from '../../utils/log';
 import sharedOptions from '../../utils/shared-options';
+import { cleanDepsCommand } from './deps';
 
 export const cleanCommand = () => {
   const command = new Command();
@@ -15,6 +16,7 @@ export const cleanCommand = () => {
       'Cleans all configured resources and services initialized\n' +
         'by DEMS. Resets your local development environment.',
     )
+    .addCommand(cleanDepsCommand())
     .addOption(sharedOptions.force().default(false))
     .action(async (options) => {
       log.info('Cleaning DEMS-related resources...');

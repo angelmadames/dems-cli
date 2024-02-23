@@ -80,6 +80,7 @@ export const setupCommand = () => {
       });
       for (const repo of repos.split(',')) {
         config.repositories.push(repo);
+        config.paths.repos[repo] = `${reposRoot.replace('-', '_')}/${repo}`;
       }
 
       const gitRef = await input({

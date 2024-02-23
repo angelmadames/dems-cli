@@ -1,7 +1,6 @@
 import { describe, expect, test } from 'bun:test';
 import { projectConfig } from '../../src/config/project';
 import { composeExecParams, composeFiles } from '../../src/utils/compose';
-import { composeCommand } from '../../src/commands/compose';
 
 describe("Command: 'compose'", () => {
   const config = projectConfig();

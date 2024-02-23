@@ -1,10 +1,10 @@
 import fs from 'node:fs';
 import path from 'path';
 import { projectConfig } from '../config/project';
+import { cmd as $ } from './cmd';
 import { isFile } from './file-system';
 import { validateLocalGitRepo } from './git';
 import type { ComposeExecParams, ComposeFilesParams } from './interfaces';
-import { cmd as $ } from './cmd';
 
 export const composeExec = ({
   envFiles = composeExecParams(),

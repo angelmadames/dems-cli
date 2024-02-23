@@ -4,6 +4,7 @@ export type DEMSProjectConfig = {
   };
   repositories: string[];
   paths: {
+    repos: { [key: string]: string };
     repos_root: string;
     data: string;
     env_file: string;
@@ -21,6 +22,7 @@ export const defaultConfig: DEMSProjectConfig = {
   },
   repositories: [],
   paths: {
+    repos: {},
     repos_root: '',
     data: '',
     env_file: '',
