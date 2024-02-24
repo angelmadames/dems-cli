@@ -6,7 +6,6 @@ export type DEMSProjectConfig = {
   paths: {
     repos: { [key: string]: string };
     repos_root: string;
-    data: string;
     env_file: string;
   };
   dockerfile: string;
@@ -24,7 +23,6 @@ export const defaultConfig: DEMSProjectConfig = {
   paths: {
     repos: {},
     repos_root: '',
-    data: '',
     env_file: '',
   },
   dockerfile: '',
@@ -41,6 +39,5 @@ export const demsEnvVars = {
   gitDefaultRef: process.env.DEMS_GIT_DEFAULT_REF,
   gitOrgUrl: process.env.DEMS_GIT_ORG_URL,
   dockerfile: process.env.DEMS_DOCKERFILE,
-  dataPath: process.env.DEMS_DATA_PATH,
   envFilePath: process.env.DEMS_PROJECT_ENV_FILE,
 };

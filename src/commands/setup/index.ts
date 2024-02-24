@@ -29,10 +29,6 @@ export const setupCommand = () => {
     .addOption(sharedOptions.gitOrg())
     .addOption(sharedOptions.reposRoot())
     .addOption(sharedOptions.gitRef())
-    .option(
-      '-t, --data-path [path]',
-      'Directory for all project persistent data',
-    )
     .action(async (options) => {
       log.info('Welcome to the DEMS CLI setup process!');
       log.dimmedWarning(
@@ -105,14 +101,6 @@ export const setupCommand = () => {
       });
       config.paths.env_file = dotEnvFile;
 
-      const dataPath = await input({
-        message:
-          'What would be the directory to store all project persistent data?',
-        default:
-          demsEnvVars.dataPath || options.dataPath || `${projectRootPath}/data`,
-      });
-      config.paths.data = dataPath;
-
       console.log(
         `Config file content: \n${chalk.blue(JSON.stringify(config, null, 2))}`,
       );
@@ -138,7 +126,6 @@ export const setupCommand = () => {
           content: JSON.stringify(config, null, 2),
           override: confirmOverride,
         });
-        createPath({ path: dataPath });
         dotEnv.generate(dotEnvFile, config);
       }
     });

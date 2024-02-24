@@ -29,10 +29,6 @@ export const cleanCommand = () => {
         force: options.force,
       });
       await deletePath({
-        path: config.paths.data,
-        force: options.force,
-      });
-      await deletePath({
         path: config.paths.env_file,
         force: options.force,
       });
