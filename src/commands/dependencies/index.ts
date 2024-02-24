@@ -1,5 +1,7 @@
 import { Command } from 'commander';
 import { projectConfig } from '../../config/project';
+import { cleanDepsCommand } from '../clean/deps';
+import { depsCopyCommand } from './copy';
 
 export const dependenciesCommand = () => {
   const command = new Command();
@@ -7,15 +9,11 @@ export const dependenciesCommand = () => {
 
   command
     .name('dependencies')
-    .alias('Install application dependencies locally')
-    .summary('Updates application environment config (.env)')
-    .description(
-      'Uses temporary containers to install application dependencies\n' +
-        'locally using bind volume mounts, which enables dependencies\n' +
-        'installed to be shared between your local text editor or IDE\n' +
-        'and the app container.',
-    )
-    .action(async (options) => {});
+    .alias('deps')
+    .summary('Manages application dependencies locally')
+    .description('Allows management of applicacion dependencies')
+    .addCommand(depsCopyCommand())
+    .addCommand(cleanDepsCommand().name('clean'));
 
   return command;
 };
