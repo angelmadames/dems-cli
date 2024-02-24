@@ -16,17 +16,18 @@ export const composeCommand = () => {
         'Uses Compose under the hood.',
     )
     .addCommand(composeShowArgsCommand())
-    .action(() => {
+    .argument('[composeArgs...]', 'Compose arguments to use')
+    .allowUnknownOption()
+    .action((composeArgs) => {
       const config = projectConfig();
-      const args = process.argv.slice(3);
 
-      if (args.length === 0) {
+      if (composeArgs.length === 0) {
         log.error('A Compose command needs to be specified.');
         process.exit(1);
       }
 
-      const result = composeExec({
-        cmd: args,
+      composeExec({
+        cmd: composeArgs,
       });
     });
 
