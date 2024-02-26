@@ -17,7 +17,6 @@ export const cleanCommand = () => {
         'by DEMS. Resets your local development environment.',
     )
     .addCommand(cleanDepsCommand())
-    .addOption(sharedOptions.verbose().default(true))
     .addOption(sharedOptions.force().default(false))
     .addOption(sharedOptions.reposRoot().default(config.paths.repos_root))
     .option('-e, --env-file <path>', '.env file', config.paths.repos_root)
@@ -30,11 +29,10 @@ export const cleanCommand = () => {
       await deletePath({
         path: options.reposRoot,
         force: options.force,
-        verbose: options.verbose,
       });
       await deletePath({
         path: options.envFile,
-        force: options.verbose,
+        force: options.force,
       });
 
       log.success('Clean completed for current project.');

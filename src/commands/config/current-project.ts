@@ -9,11 +9,12 @@ export const currentProjectCommand = () => {
     .summary('Manage DEMS current project state')
     .description('Manage the current project state of DEMS')
     .option('-s, --set <project>', 'Set current project to a new value')
-    .option('-f, --current-project-file', 'Set the current project file to use')
+    .option('-f, --current-project-file [file]', 'Set the current project file to use')
     .action((options) => {
       const currentProjectFile =
-        options.currentProjectFile ?? cliConfig.currentProjectFile;
+        options.currentProjectFile || cliConfig.currentProjectFile;
       if (options.set) {
+        console.log(currentProjectFile);
         fs.writeFileSync(currentProjectFile, options.set);
         console.log(`Current project set to: ${options.set}`);
       } else {

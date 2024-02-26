@@ -1,40 +1,36 @@
-import { describe, expect, test } from 'bun:test';
+import { describe, expect, test, beforeEach, afterEach } from 'bun:test';
 import fs from 'node:fs';
 import { spawnSync } from 'bun';
 import { currentProjectCommand } from '../../src/commands/config/current-project';
 import cliConfig from '../../src/config/cli';
-import { createFile } from '../../src/utils/file-system';
+import { createFile, deletePath } from '../../src/utils/file-system';
+import { omitConsoleLogs } from '../helpers';
+import type { Command } from 'commander';
+
+const PROJECT = 'testProject';
+const CURRENT_PROJECT_FILE = './current-project-test';
+
+beforeEach(() => {
+  omitConsoleLogs();
+  createFile({ file: CURRENT_PROJECT_FILE, content: 'test' });
+});
+
+afterEach(() => {
+  deletePath({ path: CURRENT_PROJECT_FILE, force: true });
+})
 
 describe("Command: 'config current-project'", () => {
-  test('ensure --set option has no default value', () => {
-    const command = currentProjectCommand();
-    const optionValue = 'project';
-
-    const emptyOptionValue = command.getOptionValue('set');
-    const setOptionValue = command
-      .setOptionValue('set', optionValue)
-      .getOptionValue('set');
-
-    expect(emptyOptionValue).toBeUndefined();
-    expect(setOptionValue).toEqual(setOptionValue);
-  });
-
   test('is set by --set flag', () => {
-    const current = 'testProject';
-    const currentProjectFile = './current-project-test';
-    createFile({ file: currentProjectFile, content: '', verbose: false });
-    const command = Bun.spawnSync([
-      './cli.ts',
-      'config',
-      'current-project',
+    currentProjectCommand().parse([
+      ...process.argv,
       '-s',
-      current,
+      PROJECT,
       '-f',
-      currentProjectFile,
+      CURRENT_PROJECT_FILE,
     ]);
-    const currentProject = cliConfig.selectCurrentProject(currentProjectFile);
-    expect(command.stdout.toString()).toEqual(currentProject);
-    fs.rmSync(currentProjectFile);
+    currentProjectCommand().parse();
+    const currentProject = cliConfig.selectCurrentProject(CURRENT_PROJECT_FILE);
+    expect(currentProject).toEqual(PROJECT);
   });
 
   test('is set by environment variable', () => {

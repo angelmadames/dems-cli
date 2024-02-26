@@ -6,22 +6,25 @@ import {
   replaceKeyValue,
   replaceKeysInFile,
 } from '../../src/utils/object';
+import { omitConsoleLogs } from '../helpers';
+
+omitConsoleLogs();
 
 describe('Utils: object', () => {
   const testFile = '.env.test';
   const testFileContent = 'KEY1=VALUE1\nKEY2=VALUE2';
 
   test('Replaces a key value in a file', () => {
-    createFile({ file: testFile, content: testFileContent, verbose: false });
+    createFile({ file: testFile, content: testFileContent });
     expect(isFile(testFile)).toBeTrue();
 
-    replaceKeyValue(testFile, 'KEY1', 'VALUE10', false);
+    replaceKeyValue(testFile, 'KEY1', 'VALUE10');
     const replacedContent = fs.readFileSync(testFile, 'utf8');
     expect(replacedContent).toContain('VALUE10');
   });
 
   test("Replaces various keys' values in a file", () => {
-    createFile({ file: testFile, content: testFileContent, verbose: false });
+    createFile({ file: testFile, content: testFileContent });
     expect(isFile(testFile)).toBeTrue();
 
     replaceKeysInFile(
