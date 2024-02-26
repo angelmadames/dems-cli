@@ -75,7 +75,6 @@ export const deletePath = async ({
     ) {
       fs.rmdirSync(path, { recursive: true });
       if (verbose) log.success(`Directory ${path} deleted.`);
-      return;
     }
   }
 
@@ -86,9 +85,10 @@ export const deletePath = async ({
         message: `Delete file ${path}?`,
       }))
     ) {
-      fs.rmSync(path, { force: true });
+      fs.rmSync(path);
       if (verbose) log.success(`File ${path} deleted.`);
-      return;
     }
   }
+
+  return;
 };
