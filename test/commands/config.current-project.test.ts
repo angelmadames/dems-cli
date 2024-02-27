@@ -3,13 +3,13 @@ import { spawnSync } from 'bun';
 import { currentProjectCommand } from '../../src/commands/config/current-project';
 import cliConfig from '../../src/config/cli';
 import { createFile, deletePath } from '../../src/utils/file-system';
-import { omitConsoleLogs } from '../test-helpers';
+import { testSetup } from '../lifecycle';
 
 const PROJECT = 'testProject';
 const CURRENT_PROJECT_FILE = './current-project-test';
 
 beforeEach(() => {
-  omitConsoleLogs();
+  testSetup();
   createFile({ file: CURRENT_PROJECT_FILE, content: 'test' });
 });
 
@@ -21,10 +21,8 @@ describe("Command: 'config current-project'", () => {
   test('is set by --set flag', () => {
     currentProjectCommand().parse([
       ...process.argv,
-      '-s',
-      PROJECT,
-      '-f',
-      CURRENT_PROJECT_FILE,
+      `--set=${PROJECT}`,
+      `--current-project-file=${CURRENT_PROJECT_FILE}`,
     ]);
     currentProjectCommand().parse();
     const currentProject = cliConfig.selectCurrentProject(CURRENT_PROJECT_FILE);

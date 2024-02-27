@@ -6,7 +6,7 @@ import {
   replaceKeyValue,
   replaceKeysInFile,
 } from '../../src/utils/object';
-import { omitConsoleLogs } from '../test-helpers';
+import { omitConsoleLogs } from '../helpers';
 
 omitConsoleLogs();
 

@@ -1,14 +1,14 @@
-import { beforeEach, describe, expect, test } from 'bun:test';
+import { afterAll, beforeEach, describe, expect, test } from 'bun:test';
 import { cleanCommand } from '../../src/commands/clean';
 import { cleanDepsCommand } from '../../src/commands/clean/deps';
+import { projectConfig } from '../../src/config/project';
 import {
   createFile,
   createPath,
   isDirectory,
   isFile,
 } from '../../src/utils/file-system';
-import { testSetup } from '../test-setup';
-import { projectConfig } from '../../src/config/project';
+import { testSetup, testTeardown } from '../lifecycle';
 
 const ENV_FILE = './test/.env';
 const REPOS_ROOT = './test/repos';
@@ -17,6 +17,10 @@ beforeEach(() => {
   testSetup();
   createPath({ path: REPOS_ROOT });
   createFile({ file: ENV_FILE, content: 'KEY=VALUE' });
+});
+
+afterAll(() => {
+  testTeardown();
 });
 
 describe("Command: 'clean'", () => {

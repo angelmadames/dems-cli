@@ -1,16 +1,15 @@
-import { describe, expect, test, beforeEach, afterAll } from 'bun:test';
-import { projectConfig } from '../../src/config/project';
-import { deletePath } from '../../src/utils/file-system';
-import { testSetup } from '../test-setup';
+import { afterAll, beforeEach, describe, expect, test } from 'bun:test';
 import { cloneCommand } from '../../src/commands/clone';
+import { projectConfig } from '../../src/config/project';
 import { localRepoExists } from '../../src/utils/git';
+import { testSetup, testTeardown } from '../lifecycle';
 
 beforeEach(() => {
   testSetup();
 });
 
 afterAll(() => {
-  deletePath({ path: projectConfig().paths.repos_root, force: true });
+  testTeardown();
 });
 
 describe("Command: 'clone'", () => {
