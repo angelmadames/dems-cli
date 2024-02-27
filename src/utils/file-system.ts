@@ -27,8 +27,7 @@ export const copyFile = ({
 
   if (isFile(source)) {
     fs.copyFileSync(source, target, 0);
-    if (verbose)
-      log.success(`File: ${source} successfully copied to ${target}.`);
+    if (verbose) log.success(`File: ${source} copied to ${target}.`);
   } else {
     if (verbose) log.error('Source is not a valid file.');
     process.exit(1);
