@@ -14,9 +14,8 @@ export default class Git {
   }
 
   clone({ workingDir, repo, ref }: GitParams) {
-    this.remoteRepoExists(repo);
     createPath({ path: workingDir, verbose: false });
-    if (this.localRepoExists(this.repoPath)) {
+    if (localRepoExists(this.repoPath)) {
       log.warning(`Repo ${repo} already cloned.`);
     } else {
       Bun.spawnSync(['git', 'clone', `${repo}.git`, '-b', ref], {
@@ -29,16 +28,12 @@ export default class Git {
   }
 
   checkout({ workingDir, ref }: Pick<GitParams, 'workingDir' | 'ref'>) {
-    if (!this.localRepoExists(workingDir)) {
+    if (!localRepoExists(workingDir)) {
       log.error(`Repo does not exist at: ${workingDir}`);
       throw new Error('Repo not found.');
     }
     Bun.spawnSync(['git', `-C ${workingDir}`, 'checkout', `${ref}`]);
     log.success(`Repo was checked out to ref ${ref} successfully!`);
-  }
-
-  localRepoExists(path: string) {
-    return isDirectory(`${path}/.git`);
   }
 
   remoteRepoExists(repo: string = this.repoUrl, verbose = false) {
@@ -53,6 +48,10 @@ export default class Git {
     }
   }
 }
+
+export const localRepoExists = (path: string) => {
+  return isDirectory(`${path}/.git`);
+};
 
 export const validateLocalGitRepo = (path: string) => {
   try {

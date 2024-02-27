@@ -33,7 +33,7 @@ export const sharedOptions = {
   },
   repos() {
     return new Option(
-      '-r, --repos [repos...]',
+      '-r, --repos [repos]',
       'Git repositories to manage/operate',
     );
   },

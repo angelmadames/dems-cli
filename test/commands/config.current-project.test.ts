@@ -1,11 +1,9 @@
-import { describe, expect, test, beforeEach, afterEach } from 'bun:test';
-import fs from 'node:fs';
+import { afterEach, beforeEach, describe, expect, test } from 'bun:test';
 import { spawnSync } from 'bun';
 import { currentProjectCommand } from '../../src/commands/config/current-project';
 import cliConfig from '../../src/config/cli';
 import { createFile, deletePath } from '../../src/utils/file-system';
-import { omitConsoleLogs } from '../helpers';
-import type { Command } from 'commander';
+import { omitConsoleLogs } from '../test-helpers';
 
 const PROJECT = 'testProject';
 const CURRENT_PROJECT_FILE = './current-project-test';
@@ -17,7 +15,7 @@ beforeEach(() => {
 
 afterEach(() => {
   deletePath({ path: CURRENT_PROJECT_FILE, force: true });
-})
+});
 
 describe("Command: 'config current-project'", () => {
   test('is set by --set flag', () => {

@@ -9,6 +9,17 @@ import dotEnv from '../../config/env';
 import { createFile, createPath, isFile } from '../../utils/file-system';
 import log from '../../utils/log';
 import sharedOptions from '../../utils/shared-options';
+import { hyphenToUnderscore } from '../../utils/string';
+
+const cliInit = () => {
+  log.info('Initializing DEMS CLI...');
+  createPath({ path: cliConfig.root });
+  createFile({ file: cliConfig.file, content: JSON.stringify(cliConfig) });
+  createFile({
+    file: cliConfig.currentProjectFile,
+    content: cliConfig.currentProject,
+  });
+};
 
 export const setupCommand = () => {
   const command = new Command();
@@ -29,104 +40,130 @@ export const setupCommand = () => {
     .addOption(sharedOptions.gitOrg())
     .addOption(sharedOptions.reposRoot())
     .addOption(sharedOptions.gitRef())
+    .option(
+      '-i, --interactive [boolean]',
+      'Run the command in interactive mode',
+      true,
+    )
     .action(async (options) => {
-      log.info('Welcome to the DEMS CLI setup process!');
-      log.dimmedWarning(
-        'If DEMS has been initialized for another project, CLI config files\n' +
-          'will not be touched by default. Use --override to re-create them.',
-      );
-      log.info('Creating initial files for DEMS...');
-      createPath({ path: cliConfig.root });
-      createFile({ file: cliConfig.file, content: JSON.stringify(cliConfig) });
-      createFile({
-        file: cliConfig.currentProjectFile,
-        content: cliConfig.currentProject,
-      });
-
+      log.info('Welcome to DEMS setup process for a new project!');
+      cliInit();
       const config = defaultConfig;
+      const env = demsEnvVars;
+      const cli = cliConfig;
 
-      const currentProject = await input({
-        message: 'What is the name of project DEMS will manage?',
-        default:
-          demsEnvVars.projectName ||
-          options.projectName ||
-          cliConfig.currentProject ||
-          'demo',
-      });
-      const projectRootPath = `${cliConfig.root}/${currentProject}`;
-      config.compose.project_name = currentProject;
-
-      const reposRoot = await input({
-        message: 'Where would like your repositories to be cloned?',
-        default: demsEnvVars.reposRoot || options.reposRoot || homedir,
-      });
-      config.paths.repos_root = reposRoot;
-
-      const gitOrgUrl = await input({
-        message: 'What is the URL of the git organization?',
-        default:
-          demsEnvVars.gitOrgUrl || options.gitOrg || 'git@github.com:gbh-tech',
-      });
-      config.git.org_url = gitOrgUrl;
-
-      const repos = await input({
-        message:
-          'What are the repositories for this project? (comma-sperated list)',
-        default: demsEnvVars.repos || options.repos || 'demo-api,demo-webapp',
-      });
-      for (const repo of repos.split(',')) {
-        config.repositories.push(repo);
-        config.paths.repos[repo] = `${reposRoot.replace('-', '_')}/${repo}`;
+      // Project name
+      if (options.projectName) {
+        config.compose.project_name = options.projectName;
+      } else {
+        config.compose.project_name = await input({
+          message: 'What is the name of project DEMS will manage?',
+          default: env.projectName || cli.currentProject || 'demo',
+        });
       }
 
-      const gitRef = await input({
-        message: 'What is the default git reference (branch) to use?',
-        default: demsEnvVars.gitDefaultRef || options.gitRef || 'main',
-      });
-      config.git.default_ref = gitRef;
+      // Project config root path
+      const projectRootPath = `${cli.root}/${config.compose.project_name}`;
 
-      const dockerfile = await input({
-        message: 'What would be the Dockerfile default path?',
-        default:
-          demsEnvVars.dockerfile || options.dockerfile || 'dems.Dockerfile',
-      });
-      config.dockerfile = dockerfile;
+      // Respositories root path
+      if (options.reposRoot) {
+        config.paths.repos_root = options.reposRoot;
+      } else {
+        config.paths.repos_root = await input({
+          message: 'Where would like your repositories to be cloned?',
+          default: env.reposRoot || homedir(),
+        });
+      }
 
-      const dotEnvFile = await input({
-        message: 'What is the path for the project config .env file?',
-        default:
-          demsEnvVars.envFilePath ||
-          options.dotEnv ||
-          `${projectRootPath}/.env`,
-      });
-      config.paths.env_file = dotEnvFile;
+      // Git organization
+      if (options.gitOrg) {
+        config.git.org_url = options.gitOrg;
+      } else {
+        config.git.org_url = await input({
+          message: 'What is the URL of the git organization?',
+          default: env.gitOrgUrl || 'git@github.com:gbh-tech',
+        });
+      }
 
+      // Git repositories
+      let repos = '';
+      if (options.repos) {
+        repos = options.repos;
+      } else {
+        repos = await input({
+          message: 'What are the repos for this project? (comma-sperated)',
+          default: env.repos || 'demo-api,demo-webapp',
+        });
+      }
+      for (const repo of repos.split(',')) {
+        config.repositories.push(repo);
+        config.paths.repos[hyphenToUnderscore(repo)] =
+          `${config.paths.repos_root}/${repo}`;
+      }
+
+      // Default git reference
+      if (options.gitRef) {
+        config.git.default_ref = options.gitRef;
+      } else {
+        config.git.default_ref = await input({
+          message: 'What is the default git reference (branch) to use?',
+          default: env.gitDefaultRef || 'main',
+        });
+      }
+
+      // Dockerfile path
+      if (options.dockerfile) {
+        config.dockerfile = options.dockerfile;
+      } else {
+        config.dockerfile = await input({
+          message: 'What would be the Dockerfile default path?',
+          default: env.dockerfile || 'dems.Dockerfile',
+        });
+      }
+
+      // Project dot env file
+      if (options.dotEnv) {
+        config.paths.env_file = options.dotEnv;
+      } else {
+        config.paths.env_file = await input({
+          message: 'What is the path for the project config .env file?',
+          default: env.envFilePath || `${projectRootPath}/.env`,
+        });
+      }
+
+      // Print config JSON to console
       console.log(
         `Config file content: \n${chalk.blue(JSON.stringify(config, null, 2))}`,
       );
 
-      const confirmConfig = await confirm({
-        message: 'Create config file (.env) using provided values?',
-      });
-      if (confirmConfig) {
-        const configJson = `${projectRootPath}/config.json`;
-
-        let confirmOverride = false;
+      // Confirm config files updates
+      let confirmConfigWrite = false;
+      let confirmOverride = false;
+      const configJson = `${projectRootPath}/config.json`;
+      if (options.interactive === 'false') {
+        confirmConfigWrite = true;
+        confirmOverride = true;
+      } else {
+        confirmConfigWrite = await confirm({
+          message: 'Create config file (.env) using provided values?',
+        });
         if (isFile(configJson)) {
           confirmOverride = await confirm({
-            message: `Config file: ${configJson} already exists. Override content?`,
-            default: false,
+            message: `Config file: ${configJson} already exists. Overwrite?`,
           });
         }
+      }
 
-        fs.writeFileSync(cliConfig.currentProjectFile, currentProject);
+      // Write or update config files
+      if (confirmConfigWrite) {
+        fs.writeFileSync(cli.currentProjectFile, config.compose.project_name);
         createPath({ path: projectRootPath });
         createFile({
           file: `${projectRootPath}/config.json`,
           content: JSON.stringify(config, null, 2),
           override: confirmOverride,
         });
-        dotEnv.generate(dotEnvFile, config);
+        dotEnv.generate(config.dockerfile, config);
       }
     });
 

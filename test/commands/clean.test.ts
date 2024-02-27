@@ -1,19 +1,20 @@
-import { describe, expect, test, beforeEach } from 'bun:test';
+import { beforeEach, describe, expect, test } from 'bun:test';
+import { cleanCommand } from '../../src/commands/clean';
+import { cleanDepsCommand } from '../../src/commands/clean/deps';
 import {
   createFile,
   createPath,
   isDirectory,
   isFile,
 } from '../../src/utils/file-system';
-import { omitConsoleLogs } from '../helpers';
-import { cleanCommand } from '../../src/commands/clean';
-import { cleanDepsCommand } from '../../src/commands/clean/deps';
+import { testSetup } from '../test-setup';
+import { projectConfig } from '../../src/config/project';
 
 const ENV_FILE = './test/.env';
 const REPOS_ROOT = './test/repos';
 
 beforeEach(() => {
-  omitConsoleLogs();
+  testSetup();
   createPath({ path: REPOS_ROOT });
   createFile({ file: ENV_FILE, content: 'KEY=VALUE' });
 });
@@ -28,11 +29,13 @@ describe("Command: 'clean'", () => {
     expect(isFile(ENV_FILE)).toBeFalse();
   });
 
-  test.todo('Clean application dependencies', async () => {
+  test('Clean application dependencies', async () => {
     const result = await cleanDepsCommand().parseAsync([
       ...process.argv,
       '--force',
     ]);
-    expect(result).toBeDefined();
+    for (const repo of Object.values(projectConfig().paths.repos)) {
+      expect(isDirectory(`${repo}/node_modules`)).toBeFalse();
+    }
   });
 });

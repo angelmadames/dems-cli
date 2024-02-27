@@ -9,7 +9,10 @@ export const currentProjectCommand = () => {
     .summary('Manage DEMS current project state')
     .description('Manage the current project state of DEMS')
     .option('-s, --set <project>', 'Set current project to a new value')
-    .option('-f, --current-project-file [file]', 'Set the current project file to use')
+    .option(
+      '-f, --current-project-file [file]',
+      'Set the current project file to use',
+    )
     .action((options) => {
       const currentProjectFile =
         options.currentProjectFile || cliConfig.currentProjectFile;

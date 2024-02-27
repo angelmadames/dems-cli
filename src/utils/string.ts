@@ -1,3 +1,7 @@
+export const hyphenToUnderscore = (word: string) => {
+  return word.replace('-', '_');
+};
+
 export const capitalizeFirstLetter = (word: string): string => {
   return word.charAt(0).toUpperCase() + word.slice(1);
 };
