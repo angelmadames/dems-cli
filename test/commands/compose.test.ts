@@ -1,6 +1,15 @@
-import { describe, expect, test } from 'bun:test';
+import { beforeEach, afterAll, describe, expect, test } from 'bun:test';
 import { projectConfig } from '../../src/config/project';
 import { composeExecParams, composeFiles } from '../../src/utils/compose';
+import { testSetup, testTeardown } from '../lifecycle';
+
+beforeEach(() => {
+  testSetup();
+});
+
+afterAll(() => {
+  testTeardown();
+});
 
 describe("Command: 'compose'", () => {
   const config = projectConfig();

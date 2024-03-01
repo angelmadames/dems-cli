@@ -22,15 +22,15 @@ export const composeExec = ({
 export const composeFiles = ({
   filesDir = '.dems',
   prefix = 'compose',
+  reposRoot = projectConfig().paths.repos_root,
+  repos = projectConfig().repositories,
 }: ComposeFilesParams) => {
-  const config = projectConfig();
-
   const composeFiles: string[] = [];
   const dirs = [];
 
-  for (const dir of config.repositories) {
-    validateLocalGitRepo(`${config.paths.repos_root}/${dir}`);
-    dirs.push(`${config.paths.repos_root}/${dir}/${filesDir}`);
+  for (const dir of repos) {
+    validateLocalGitRepo(`${reposRoot}/${dir}`);
+    dirs.push(`${reposRoot}/${dir}/${filesDir}`);
   }
 
   for (const dir of dirs) {

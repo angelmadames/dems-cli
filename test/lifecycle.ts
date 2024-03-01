@@ -7,7 +7,7 @@ import { omitConsoleLogs } from './helpers';
 const PROJECT = 'test';
 
 export const testSetup = () => {
-  omitConsoleLogs();
+  // omitConsoleLogs();
   setupCommand().parse([
     ...process.argv,
     '--interactive=false',
