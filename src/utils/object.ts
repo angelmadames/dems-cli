@@ -31,7 +31,7 @@ export const replaceKeyValue = (
 ): void => {
   if (!isFile(path)) {
     if (verbose) log.error(`File ${path} is not a valid file.`);
-    process.exit(1);
+    return;
   }
   try {
     const fileContent = fs.readFileSync(path, 'utf-8');

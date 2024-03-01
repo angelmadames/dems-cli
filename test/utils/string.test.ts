@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'bun:test';
 import {
   capitalizeFirstLetter,
+  hyphenToUnderscore,
   removeBreakLines,
   removeExtraSpaces,
 } from '../../src/utils/string';
@@ -25,5 +26,12 @@ describe('Utils: string', () => {
     const noSpaceSentence = removeBreakLines(sentence);
     expect(noSpaceSentence).toBeString();
     expect(noSpaceSentence).toEqual('this is a another test');
+  });
+
+  test('converts hypen to underscore', () => {
+    const string1 = 'my-word-with-multiple-hyphens-';
+    const stringUnderscore = hyphenToUnderscore(string1);
+    expect(stringUnderscore).toContain('_');
+    expect(stringUnderscore).toEqual('my_word_with_multiple_hyphens_');
   });
 });

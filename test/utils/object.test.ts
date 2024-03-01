@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'bun:test';
+import { beforeAll, describe, expect, test } from 'bun:test';
 import fs from 'node:fs';
 import { createFile, isFile } from '../../src/utils/file-system';
 import {
@@ -8,7 +8,9 @@ import {
 } from '../../src/utils/object';
 import { omitConsoleLogs } from '../helpers';
 
-omitConsoleLogs();
+beforeAll(() => {
+  omitConsoleLogs();
+});
 
 describe('Utils: object', () => {
   const testFile = '.env.test';
@@ -27,14 +29,10 @@ describe('Utils: object', () => {
     createFile({ file: testFile, content: testFileContent });
     expect(isFile(testFile)).toBeTrue();
 
-    replaceKeysInFile(
-      testFile,
-      {
-        KEY1: 'VALUE_KEY1',
-        KEY2: 'VALUE_KEY2',
-      },
-      false,
-    );
+    replaceKeysInFile(testFile, {
+      KEY1: 'VALUE_KEY1',
+      KEY2: 'VALUE_KEY2',
+    });
 
     const replacedContent = fs.readFileSync(testFile, 'utf8');
     expect(replacedContent).toContain('VALUE_KEY1');

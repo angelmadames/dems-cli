@@ -1,5 +1,5 @@
 export const hyphenToUnderscore = (word: string) => {
-  return word.replace('-', '_');
+  return word.replaceAll('-', '_');
 };
 
 export const capitalizeFirstLetter = (word: string): string => {
