@@ -18,7 +18,7 @@ describe('Utils: object', () => {
 
   test('Replaces a key value in a file', () => {
     createFile({ file: testFile, content: testFileContent });
-    expect(isFile(testFile)).toBeTrue();
+    expect(isFile(testFile)).toBe(true);
 
     replaceKeyValue(testFile, 'KEY1', 'VALUE10');
     const replacedContent = fs.readFileSync(testFile, 'utf8');
@@ -27,7 +27,7 @@ describe('Utils: object', () => {
 
   test("Replaces various keys' values in a file", () => {
     createFile({ file: testFile, content: testFileContent });
-    expect(isFile(testFile)).toBeTrue();
+    expect(isFile(testFile)).toBe(true);
 
     replaceKeysInFile(testFile, {
       KEY1: 'VALUE_KEY1',

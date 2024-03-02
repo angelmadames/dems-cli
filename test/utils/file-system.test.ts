@@ -10,22 +10,22 @@ import {
 describe('Utils: file-system', () => {
   test('isFile returns true if file exists', () => {
     const exists = isFile('./cli.ts');
-    expect(exists).toBeTrue();
+    expect(exists).toBe(true);
   });
 
   test("isFile returns false if file doesn't exist", () => {
     const exists = isFile('./cli.not.exists.ts');
-    expect(exists).toBeFalse();
+    expect(exists).toBe(false);
   });
 
   test('isDirectory returns true if dir exists', () => {
     const exists = isDirectory('./src');
-    expect(exists).toBeTrue();
+    expect(exists).toBe(true);
   });
 
   test("isDirectory returns false if dir doesn't exist", () => {
     const exists = isDirectory('./src-that-do-not-exist');
-    expect(exists).toBeFalse();
+    expect(exists).toBe(false);
   });
 
   test('createFile & copyFile create and copy a file', () => {
@@ -35,14 +35,14 @@ describe('Utils: file-system', () => {
 
     // Create and copy file with createFile() and copyFile()
     createFile({ file: file, content: content, verbose: false });
-    expect(isFile(file)).toBeTrue();
+    expect(isFile(file)).toBe(true);
     copyFile({ source: file, target: copiedFile, verbose: false });
-    expect(isFile(copiedFile)).toBeTrue();
+    expect(isFile(copiedFile)).toBe(true);
 
     // Ensure files are deleted
     fs.rmSync(file);
     fs.rmSync(copiedFile);
-    expect(isFile(file)).toBeFalse();
-    expect(isFile(copiedFile)).toBeFalse();
+    expect(isFile(file)).toBe(false);
+    expect(isFile(copiedFile)).toBe(false);
   });
 });

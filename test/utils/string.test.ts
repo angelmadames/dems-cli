@@ -6,32 +6,47 @@ import {
   removeExtraSpaces,
 } from '../../src/utils/string';
 
-describe('Utils: string', () => {
-  test('first letter of a word is capitalized', () => {
-    const lowerWord = 'lowercase';
-    const capWord = capitalizeFirstLetter(lowerWord);
-    expect(capWord).toBeString();
-    expect(capWord).toEqual('Lowercase');
+describe('Utils (string): hyphenToUnderscore', () => {
+  test('replaces hyphens with underscores', () => {
+    expect(hyphenToUnderscore('hello-world')).toBe('hello_world');
   });
 
-  test('extra spaces are removed from a string', () => {
-    const sentence = '  this    is   a    test   ';
-    const noSpaceSentence = removeExtraSpaces(sentence);
-    expect(noSpaceSentence).toBeString();
-    expect(noSpaceSentence).toEqual('this is a test');
+  test('handles multiple hyphens', () => {
+    expect(hyphenToUnderscore('foo-bar-baz')).toBe('foo_bar_baz');
   });
 
-  test('all break lines are removed from string', () => {
-    const sentence = '\nthis \nis \na \nanother \ntest\n';
-    const noSpaceSentence = removeBreakLines(sentence);
-    expect(noSpaceSentence).toBeString();
-    expect(noSpaceSentence).toEqual('this is a another test');
+  test('does not change words without hyphens', () => {
+    expect(hyphenToUnderscore('hello')).toBe('hello');
+  });
+});
+
+describe('Utils (string): capitalizeFirstLetter', () => {
+  test('capitalizes the first letter of a word', () => {
+    expect(capitalizeFirstLetter('hello')).toBe('Hello');
   });
 
-  test('converts hypen to underscore', () => {
-    const string1 = 'my-word-with-multiple-hyphens-';
-    const stringUnderscore = hyphenToUnderscore(string1);
-    expect(stringUnderscore).toContain('_');
-    expect(stringUnderscore).toEqual('my_word_with_multiple_hyphens_');
+  test('does not change an already capitalized word', () => {
+    expect(capitalizeFirstLetter('World')).toBe('World');
+  });
+});
+
+describe('Utils (string): removeExtraSpaces', () => {
+  test('removes extra spaces from the beginning and end', () => {
+    expect(removeExtraSpaces('  hello   ')).toBe('hello');
+  });
+
+  test('replaces multiple spaces with a single space', () => {
+    expect(removeExtraSpaces('hello    world')).toBe('hello world');
+  });
+});
+
+describe('Utils (string): removeBreakLines', () => {
+  test('removes break lines from text', () => {
+    expect(removeBreakLines('hello\nworld')).toBe('helloworld');
+  });
+
+  test('handles different types of break lines', () => {
+    expect(removeBreakLines('hello\r\nworld')).toBe('helloworld');
+    expect(removeBreakLines('hello\rworld')).toBe('helloworld');
   });
 });

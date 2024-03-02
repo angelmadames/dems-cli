@@ -1,4 +1,4 @@
-import { beforeEach, afterAll, describe, expect, test } from 'bun:test';
+import { afterAll, beforeEach, describe, expect, test } from 'bun:test';
 import { projectConfig } from '../../src/config/project';
 import { composeExecParams, composeFiles } from '../../src/utils/compose';
 import { testSetup, testTeardown } from '../lifecycle';

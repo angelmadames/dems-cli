@@ -2,7 +2,6 @@ import { setupCommand } from '../src/commands/setup';
 import cliConfig from '../src/config/cli';
 import { projectConfig } from '../src/config/project';
 import { deletePath } from '../src/utils/file-system';
-import { omitConsoleLogs } from './helpers';
 
 const PROJECT = 'test';
 
