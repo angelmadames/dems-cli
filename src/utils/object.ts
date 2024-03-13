@@ -3,7 +3,6 @@ import { isFile } from './file-system';
 import log from './log';
 
 export const flattenObject = (
-  // biome-ignore lint/suspicious/noExplicitAny:
   object: Record<string, any>,
   parentKey = '',
   separator = '_',
@@ -62,7 +61,6 @@ export const replaceKeysInFile = (
     if (verbose) `File ${filePath} is not a valid file.`;
   }
 
-  // biome-ignore lint/suspicious/noExplicitAny:
   const map: Map<string, any> =
     replaceMap instanceof Map
       ? replaceMap

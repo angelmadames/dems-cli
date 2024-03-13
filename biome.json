@@ -9,6 +9,9 @@
       "recommended": true,
       "nursery": {
         "noUnusedImports": "warn"
+      },
+      "suspicious": {
+        "noExplicitAny": "off"
       }
     }
   },
