@@ -1,7 +1,7 @@
 {
   "name": "dems-cli",
   "description": "DEMS (Development Environment Management System) CLI",
-  "author": "gbh.tech",
+  "author": "Angel Adames <angeladames@hey.com>",
   "main": "dist/cli.js",
   "module": "cli.ts",
   "type": "module",
