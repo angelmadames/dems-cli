@@ -1,4 +1,4 @@
-import * as fs from 'node:fs';
+import fs from 'node:fs';
 import * as path from 'node:path';
 import { projectConfig } from '../config/project';
 import { cmd as $ } from './cmd';
