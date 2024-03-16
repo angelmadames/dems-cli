@@ -16,5 +16,4 @@ mock.module('node:fs', () => ({
     lstatSync: (path: string) => ({ isFile: () => true }),
     readFileSync: (path: string) => '',
   },
-
 }));
