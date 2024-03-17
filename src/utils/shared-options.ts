@@ -7,12 +7,6 @@ export const sharedOptions = {
       'Only print info to console about command',
     ).default(false);
   },
-  verbose() {
-    return new Option(
-      '-v, --verbose [bool]',
-      'Enable extended verbosity, show logs',
-    );
-  },
   gitRef() {
     return new Option(
       '-g, --git-ref [ref]',

@@ -25,11 +25,10 @@ export const flattenObject = (
 export const replaceKeyValue = (
   path: string,
   key: string,
-  value: string,
-  verbose = true,
+  value: string
 ): void => {
   if (!isFile(path)) {
-    if (verbose) log.error(`File ${path} is not a valid file.`);
+    log.error(`File ${path} is not a valid file.`);
     return;
   }
   try {
@@ -39,13 +38,9 @@ export const replaceKeyValue = (
       `${key}=${value}`,
     );
     fs.writeFileSync(path, updatedContent);
-    if (verbose) {
-      log.success(`File ${path} updated successfully with ${key}=${value}.`);
-    }
+    log.success(`File ${path} updated successfully with ${key}=${value}.`);
   } catch (error) {
-    if (verbose) {
-      log.error(`Error updating file ${path}. See below for more info:`);
-    }
+    log.error(`Error updating file ${path}. See below for more info:`);
     console.error(error);
   }
 };
@@ -55,10 +50,9 @@ type mapLike<T = string> = { [key: string]: T };
 export const replaceKeysInFile = (
   filePath: string,
   replaceMap: Map<string, string> | mapLike,
-  verbose = true,
 ): void => {
   if (!isFile(filePath)) {
-    if (verbose) `File ${filePath} is not a valid file.`;
+    `File ${filePath} is not a valid file.`;
   }
 
   const map: Map<string, any> =
@@ -76,11 +70,9 @@ export const replaceKeysInFile = (
       );
     }
     fs.writeFileSync(filePath, updatedContent);
-    if (verbose)
-      log.success(`File ${filePath} updated successfully with replacements.`);
+    log.success(`File ${filePath} updated successfully with replacements.`);
   } catch (error) {
-    if (verbose)
-      log.error(`Error updating file ${filePath}. See below for more info:`);
+    log.error(`Error updating file ${filePath}. See below for more info:`);
     console.error(error);
   }
 };

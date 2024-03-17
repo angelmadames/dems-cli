@@ -17,19 +17,18 @@ export const isDirectory = (path: string): boolean => {
 
 export const copyFile = ({
   source,
-  target,
-  verbose = true,
+  target
 }: SourceTargetOperation) => {
   if (isFile(target)) {
-    if (verbose) log.warning(`Path: ${target} already exists.`);
+    log.warning(`Path: ${target} already exists.`);
     return;
   }
 
   if (isFile(source)) {
     fs.copyFileSync(source, target, 0);
-    if (verbose) log.success(`File: ${source} copied to ${target}.`);
+    log.success(`File: ${source} copied to ${target}.`);
   } else {
-    if (verbose) log.error('Source is not a valid file.');
+    log.error('Source is not a valid file.');
     process.exit(1);
   }
 };
@@ -37,35 +36,30 @@ export const copyFile = ({
 export const createFile = ({
   file,
   content,
-  verbose = true,
   override = false,
 }: FileModificationOperation) => {
   if (!isFile(file) || override) {
-    if (verbose) log.info(`Creating file: ${file}...`);
+    log.info(`Creating file: ${file}...`);
     fs.writeFileSync(file, content, 'utf8');
-    if (verbose) log.success(`File: ${file} successfully created.`);
+    log.success(`File: ${file} successfully created.`);
   } else {
-    if (verbose) log.warning(`File: ${file} already exists.`);
+    log.warning(`File: ${file} already exists.`);
   }
 };
 
-export const createPath = ({
-  path,
-  verbose = true,
-}: PathModificationOperation) => {
+export const createPath = ({ path }: PathModificationOperation) => {
   if (!fs.existsSync(path)) {
-    if (verbose) log.info(`Creating path: ${path}...`);
+   log.info(`Creating path: ${path}...`);
     fs.mkdirSync(path, { recursive: true });
-    if (verbose) log.success(`Path: ${path} successfully created.`);
+   log.success(`Path: ${path} successfully created.`);
   } else {
-    if (verbose) log.warning(`Path: ${path} already exists.`);
+   log.warning(`Path: ${path} already exists.`);
   }
 };
 
 export const deletePath = async ({
   path,
   force = false,
-  verbose = true,
 }: PathModificationOperation) => {
   if (isDirectory(path)) {
     if (
@@ -73,7 +67,7 @@ export const deletePath = async ({
       (await confirm({ message: `Delete directory ${path} recursively?` }))
     ) {
       fs.rmdirSync(path, { recursive: true });
-      if (verbose) log.success(`Directory ${path} deleted.`);
+      log.success(`Directory ${path} deleted.`);
     }
   }
 
@@ -85,7 +79,7 @@ export const deletePath = async ({
       }))
     ) {
       fs.rmSync(path);
-      if (verbose) log.success(`File ${path} deleted.`);
+      log.success(`File ${path} deleted.`);
     }
   }
 

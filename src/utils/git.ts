@@ -14,7 +14,7 @@ export default class Git {
   }
 
   clone({ workingDir, repo, ref }: GitParams) {
-    createPath({ path: workingDir, verbose: false });
+    createPath({ path: workingDir });
     if (localRepoExists(this.repoPath)) {
       log.warning(`Repo ${repo} already cloned.`);
     } else {
@@ -36,13 +36,13 @@ export default class Git {
     log.success(`Repo was checked out to ref ${ref} successfully!`);
   }
 
-  remoteRepoExists(repo: string = this.repoUrl, verbose = false) {
+  remoteRepoExists(repo: string = this.repoUrl) {
     const proc = Bun.spawnSync(['git', 'ls-remote', repo], {
       stdin: 'inherit',
     });
 
     if (proc.exitCode === 0) {
-      if (verbose) log.info(`Remote repo: ${repo} is valid.`);
+      log.info(`Remote repo: ${repo} is valid.`);
     } else {
       throw new Error(`Remote repo: ${repo} is not valid or does not exist.`);
     }
