@@ -22,7 +22,6 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.6.1",
-    "@jest/globals": "^29.7.0",
     "@types/bun": "latest"
   },
   "peerDependencies": {

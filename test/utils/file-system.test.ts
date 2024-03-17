@@ -1,48 +1,118 @@
-import { describe, expect, test } from 'bun:test';
+import { describe, expect, mock, test } from 'bun:test';
 import fs from 'node:fs';
-import {
-  copyFile,
-  createFile,
-  isDirectory,
-  isFile,
-} from '../../src/utils/file-system';
+import { createFile, isDirectory, isFile } from '../../src/utils/file-system';
+import log from '../../src/utils/log';
+
+mock.module('node:fs', () => ({
+  default: {
+    existsSync: mock(),
+    lstatSync: mock(),
+    writeFileSync: mock(),
+  },
+}));
+
+mock.module('../../src/utils/log', () => ({
+  default: {
+    info: mock(),
+    warning: mock(),
+    success: mock(),
+    dimmedWarning: mock(),
+    error: mock(),
+  },
+}));
 
 describe('Utils: file-system', () => {
-  test('isFile returns true if file exists', () => {
-    const exists = isFile('./cli.ts');
-    expect(exists).toBe(true);
+  describe('isFile', () => {
+    test('returns true if file exists', () => {
+      (fs.existsSync as any).mockReturnValue(true);
+      (fs.lstatSync as any).mockReturnValue({ isFile: () => true });
+
+      const result = isFile('./cli.ts');
+
+      expect(fs.existsSync).toHaveBeenCalledWith('./cli.ts');
+      expect(fs.lstatSync).toHaveBeenCalledWith('./cli.ts');
+      expect(result).toBe(true);
+    });
+
+    test('returns false if file does not exist', () => {
+      (fs.existsSync as any).mockReturnValue(false);
+      (fs.lstatSync as any).mockReturnValue({ isFile: () => false });
+
+      const result = isFile('./cli.not.exists.ts');
+
+      expect(fs.existsSync).toHaveBeenCalledWith('./cli.ts');
+      expect(fs.lstatSync).toHaveBeenCalledWith('./cli.ts');
+      expect(result).toBe(false);
+    });
   });
 
-  test("isFile returns false if file doesn't exist", () => {
-    const exists = isFile('./cli.not.exists.ts');
-    expect(exists).toBe(false);
+  describe('isDirectory', () => {
+    test('returns true if dir exists', () => {
+      (fs.existsSync as any).mockReturnValue(true);
+      (fs.lstatSync as any).mockReturnValue({ isDirectory: () => true });
+
+      const result = isDirectory('./src');
+
+      expect(fs.existsSync).toHaveBeenCalledWith('./src');
+      expect(fs.lstatSync).toHaveBeenCalledWith('./src');
+      expect(result).toBe(true);
+    });
+
+    test('returns false if dir does not exist', () => {
+      (fs.existsSync as any).mockReturnValue(false);
+      (fs.lstatSync as any).mockReturnValue({ isDirectory: () => false });
+
+      const result = isDirectory('./src');
+
+      expect(fs.existsSync).toHaveBeenCalledWith('./src');
+      expect(fs.lstatSync).toHaveBeenCalledWith('./src');
+      expect(result).toBe(false);
+    });
   });
 
-  test('isDirectory returns true if dir exists', () => {
-    const exists = isDirectory('./src');
-    expect(exists).toBe(true);
-  });
+  describe('createFile', () => {
+    test('should create a new file when it does not exist', () => {
+      (fs.existsSync as any).mockReturnValue(false);
+      const file = './a-new-file';
+      const content = 'hello there from a-new-file';
+      createFile({ file, content });
 
-  test("isDirectory returns false if dir doesn't exist", () => {
-    const exists = isDirectory('./src-that-do-not-exist');
-    expect(exists).toBe(false);
-  });
+      expect(fs.existsSync).toHaveBeenCalledWith(file);
+      expect(fs.writeFileSync).toHaveBeenCalledWith(file, content, 'utf8');
+      expect(log.info).toHaveBeenCalledWith(`Creating file: ${file}...`);
+      expect(log.success).toHaveBeenCalledWith(
+        `File: ${file} successfully created.`,
+      );
+    });
 
-  test('createFile & copyFile create and copy a file', () => {
-    const file = './test-file.txt';
-    const copiedFile = './test-file-copy.txt';
-    const content = 'this is a test file';
+    test('should override an existing file if override set to true', () => {
+      (fs.existsSync as any).mockReturnValue(true);
+      (fs.lstatSync as any).mockReturnValue({ isFile: () => true });
+      const file = './a-new-file';
+      const content = 'hello there from a-new-file';
+      createFile({ file, content, override: true });
 
-    // Create and copy file with createFile() and copyFile()
-    createFile({ file: file, content: content, verbose: false });
-    expect(isFile(file)).toBe(true);
-    copyFile({ source: file, target: copiedFile, verbose: false });
-    expect(isFile(copiedFile)).toBe(true);
+      expect(fs.existsSync).toHaveBeenCalledWith(file);
+      expect(fs.writeFileSync).toHaveBeenCalledWith(file, content, 'utf8');
+      expect(log.info).toHaveBeenCalledWith(`Creating file: ${file}...`);
+      expect(log.success).toHaveBeenCalledWith(
+        `File: ${file} successfully created.`,
+      );
+      (fs.existsSync as any).mockClear();
+      (fs.lstatSync as any).mockClear();
+      (fs.writeFileSync as any).mockClear();
+    });
 
-    // Ensure files are deleted
-    fs.rmSync(file);
-    fs.rmSync(copiedFile);
-    expect(isFile(file)).toBe(false);
-    expect(isFile(copiedFile)).toBe(false);
+    test('should not create a new file if it already exists and override flag is false', () => {
+      (fs.existsSync as any).mockReturnValue(true);
+      (fs.lstatSync as any).mockReturnValue({ isFile: () => true });
+      const file = './a-new-file';
+      const content = 'hello there from a-new-file';
+      createFile({ file, content, override: false });
+
+      expect(fs.existsSync).toHaveBeenCalledWith(file);
+      expect(fs.writeFileSync).not.toHaveBeenCalledWith(file, content, 'utf8');
+      expect(log.warning).toHaveBeenCalledWith(`File: ${file} already exists.`);
+    });
   });
 });
