@@ -1,4 +1,4 @@
-import { describe, expect, mock, test, type jest } from 'bun:test';
+import { describe, expect, type jest, mock, test } from 'bun:test';
 import { execSync } from 'node:child_process';
 import cmd from '../../src/utils/cmd';
 import { removeExtraSpaces } from '../../src/utils/string';

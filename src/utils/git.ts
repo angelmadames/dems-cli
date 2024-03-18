@@ -1,55 +1,43 @@
+import cmd from './cmd';
 import { createPath, isDirectory } from './file-system';
 import type { GitParams } from './interfaces';
 import log from './log';
 
-export default class Git {
-  repoUrl: string;
-  repoPath: string;
-  gitRef: string;
-
-  constructor({ repo, workingDir, ref }: GitParams) {
-    this.repoPath = `${workingDir}/${repo.split('/').pop()}`;
-    this.repoUrl = repo;
-    this.gitRef = ref;
-  }
-
-  clone({ workingDir, repo, ref }: GitParams) {
-    createPath({ path: workingDir });
-    if (localRepoExists(this.repoPath)) {
-      log.warning(`Repo ${repo} already cloned.`);
-    } else {
-      Bun.spawnSync(['git', 'clone', `${repo}.git`, '-b', ref], {
-        stdin: 'inherit',
-        cwd: workingDir,
-      });
-
-      log.success(`Repo ${repo} was cloned successfully!`);
-    }
-  }
-
-  checkout({ workingDir, ref }: Pick<GitParams, 'workingDir' | 'ref'>) {
-    if (!localRepoExists(workingDir)) {
-      log.error(`Repo does not exist at: ${workingDir}`);
-      throw new Error('Repo not found.');
-    }
-    Bun.spawnSync(['git', `-C ${workingDir}`, 'checkout', `${ref}`]);
-    log.success(`Repo was checked out to ref ${ref} successfully!`);
-  }
-
-  remoteRepoExists(repo: string = this.repoUrl) {
-    const proc = Bun.spawnSync(['git', 'ls-remote', repo], {
-      stdin: 'inherit',
+const git = {
+  clone({ path, repo, ref }: GitParams) {
+    if (!isDirectory(path)) createPath({ path });
+    const repoPath = getRepoPath({
+      path,
+      repo,
     });
 
-    if (proc.exitCode === 0) {
-      log.info(`Remote repo: ${repo} is valid.`);
+    if (localRepoExists({ path: repoPath })) {
+      log.warning(`Repo ${repo} already cloned.`);
     } else {
-      throw new Error(`Remote repo: ${repo} is not valid or does not exist.`);
+      cmd.run(`git -C ${path} clone ${repo}.git -b ${ref}`);
+      log.success(`Repo ${repo} was cloned successfully!`);
     }
-  }
-}
+  },
 
-export const localRepoExists = (path: string) => {
+  checkout({ path, ref }: Omit<GitParams, 'repo'>) {
+    if (!localRepoExists({ path })) {
+      log.error(`${path} is not a valid Git repository.`);
+      throw new Error(`Repo not found in ${path}.`);
+    }
+    cmd.run(`git -C ${path} checkout ${ref}`);
+    log.success(`Repo was checked out to ref ${ref} successfully!`);
+  },
+};
+
+export const getRepoName = ({ repo }: Pick<GitParams, 'repo'>) => {
+  return repo.split('/').pop();
+};
+
+export const getRepoPath = ({ path, repo }: Omit<GitParams, 'ref'>): string => {
+  return `${path}/${getRepoName({ repo })}`;
+};
+
+export const localRepoExists = ({ path }: Pick<GitParams, 'path'>) => {
   return isDirectory(`${path}/.git`);
 };
 
@@ -67,3 +55,17 @@ export const validateLocalGitRepo = (path: string) => {
     throw new Error(`Local path ${path} is not a valid git repository.`);
   }
 };
+
+export const remoteRepoExists = ({ repo }: Pick<GitParams, 'repo'>) => {
+  const proc = Bun.spawnSync(['git', 'ls-remote', repo], {
+    stdin: 'inherit',
+  });
+
+  if (proc.exitCode === 0) {
+    log.info(`Remote repo: ${repo} is valid.`);
+  } else {
+    throw new Error(`Remote repo: ${repo} is not valid or does not exist.`);
+  }
+};
+
+export default git;

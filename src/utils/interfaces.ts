@@ -14,12 +14,6 @@ export interface PathModificationOperation {
   force?: boolean;
 }
 
-export interface GitParams {
-  workingDir: string;
-  repo: string;
-  ref: string;
-}
-
 export interface ComposeFilesParams {
   prefix?: string;
   filesDir?: string;
@@ -31,4 +25,10 @@ export interface ComposeExecParams {
   envFiles?: Array<string>;
   files?: Array<string>;
   cmd: Array<string>;
+}
+
+export interface GitParams {
+  repo: string;
+  path: string;
+  ref: string;
 }

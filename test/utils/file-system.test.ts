@@ -1,11 +1,11 @@
-import { describe, expect, mock, test, jest, beforeEach } from 'bun:test';
+import { beforeEach, describe, expect, jest, mock, test } from 'bun:test';
 import fs from 'node:fs';
 import {
+  copyFile,
   createFile,
+  createPath,
   isDirectory,
   isFile,
-  copyFile,
-  createPath,
 } from '../../src/utils/file-system';
 import log from '../../src/utils/log';
 
@@ -160,7 +160,9 @@ describe('Utils: file-system', () => {
       copyFile({ source, target });
 
       expect(fs.copyFileSync).toHaveBeenCalledWith(source, target, 0);
-      expect(log.success).toHaveBeenCalledWith(`File: ${source} copied to ${target}.`);
+      expect(log.success).toHaveBeenCalledWith(
+        `File: ${source} copied to ${target}.`,
+      );
     });
 
     test('logs warning if target file already exists', () => {
@@ -172,7 +174,9 @@ describe('Utils: file-system', () => {
 
       copyFile({ source, target });
 
-      expect(log.warning).toHaveBeenCalledWith(`Path: ${target} already exists.`);
+      expect(log.warning).toHaveBeenCalledWith(
+        `Path: ${target} already exists.`,
+      );
       expect(fs.copyFileSync).not.toHaveBeenCalled();
     });
   });
@@ -184,7 +188,9 @@ describe('Utils: file-system', () => {
       createPath({ path: 'test-path' });
 
       expect(fs.existsSync).toHaveBeenCalledWith('test-path');
-      expect(fs.mkdirSync).toHaveBeenCalledWith('test-path', { recursive: true });
+      expect(fs.mkdirSync).toHaveBeenCalledWith('test-path', {
+        recursive: true,
+      });
     });
 
     test('logs a warning if the directory already exists', () => {
@@ -195,7 +201,9 @@ describe('Utils: file-system', () => {
 
       expect(fs.existsSync).toHaveBeenCalledWith('test-path');
       expect(fs.mkdirSync).not.toHaveBeenCalled();
-      expect(log.warning).toHaveBeenCalledWith('Path: test-path already exists.');
+      expect(log.warning).toHaveBeenCalledWith(
+        'Path: test-path already exists.',
+      );
     });
   });
 });
