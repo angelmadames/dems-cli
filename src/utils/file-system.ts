@@ -7,18 +7,15 @@ import type {
 } from './interfaces';
 import log from './log';
 
-export const isFile = (path: string): boolean => {
+export const isFile = (path: string) => {
   return fs.existsSync(path) && fs.lstatSync(path).isFile();
 };
 
-export const isDirectory = (path: string): boolean => {
+export const isDirectory = (path: string) => {
   return fs.existsSync(path) && fs.lstatSync(path).isDirectory();
 };
 
-export const copyFile = ({
-  source,
-  target
-}: SourceTargetOperation) => {
+export const copyFile = ({ source, target }: SourceTargetOperation) => {
   if (isFile(target)) {
     log.warning(`Path: ${target} already exists.`);
     return;
@@ -29,7 +26,7 @@ export const copyFile = ({
     log.success(`File: ${source} copied to ${target}.`);
   } else {
     log.error('Source is not a valid file.');
-    process.exit(1);
+    throw new Error('Could not perform file copy operation.');
   }
 };
 
@@ -48,12 +45,12 @@ export const createFile = ({
 };
 
 export const createPath = ({ path }: PathModificationOperation) => {
-  if (!fs.existsSync(path)) {
-   log.info(`Creating path: ${path}...`);
+  if (!isDirectory(path)) {
+    log.info(`Creating path: ${path}...`);
     fs.mkdirSync(path, { recursive: true });
-   log.success(`Path: ${path} successfully created.`);
+    log.success(`Path: ${path} successfully created.`);
   } else {
-   log.warning(`Path: ${path} already exists.`);
+    log.warning(`Path: ${path} already exists.`);
   }
 };
 

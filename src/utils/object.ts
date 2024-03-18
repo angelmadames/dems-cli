@@ -25,7 +25,7 @@ export const flattenObject = (
 export const replaceKeyValue = (
   path: string,
   key: string,
-  value: string
+  value: string,
 ): void => {
   if (!isFile(path)) {
     log.error(`File ${path} is not a valid file.`);

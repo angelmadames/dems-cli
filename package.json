@@ -21,14 +21,14 @@
     "test": "bun test"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.6.1",
-    "@types/bun": "latest"
+    "@biomejs/biome": "^1.6.1"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
   "dependencies": {
     "@inquirer/prompts": "^4.3.0",
+    "bun-types": "^1.0.32",
     "chalk": "^5.3.0",
     "commander": "^12.0.0"
   }

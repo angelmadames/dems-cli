@@ -1,4 +1,4 @@
-import { describe, expect, mock, test } from 'bun:test';
+import { describe, expect, mock, test, type jest } from 'bun:test';
 import { execSync } from 'node:child_process';
 import cmd from '../../src/utils/cmd';
 import { removeExtraSpaces } from '../../src/utils/string';
@@ -25,7 +25,7 @@ describe('Utils: cmd', () => {
     test('calls execSync with formatted command & return the output', () => {
       const command = '   ls   -l   ';
       const output = 'file1\nfile2';
-      (execSync as any).mockReturnValue(output);
+      (execSync as jest.Mock).mockReturnValue(output);
       const result = cmd.runIt(command);
 
       expect(execSync).toHaveBeenCalledWith(removeExtraSpaces(command), {
