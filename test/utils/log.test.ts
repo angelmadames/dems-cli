@@ -1,34 +1,43 @@
-import { beforeAll, describe, expect, test } from 'bun:test';
+import { describe, expect, mock, test, jest, beforeEach } from 'bun:test';
 import log from '../../src/utils/log';
-import { omitConsoleLogs } from '../helpers';
+
+mock.module('../../src/utils/log', () => ({
+  default: {
+    info: mock(),
+    warning: mock(),
+    dimmedWarning: mock(),
+    success: mock(),
+    error: mock(),
+  },
+}));
 
 describe('Utils: log', () => {
-  beforeAll(() => {
-    omitConsoleLogs();
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
-  test('should log info message', () => {
-    const info = log.info(['info'], 'optional');
-    expect(info).toBeUndefined();
+  test('should log info message in blue color', () => {
+    log.info('info message');
+    expect(log.info).toHaveBeenCalledWith('info message');
   });
 
-  test('should log success message', () => {
-    const success = log.success(['success'], 'optional');
-    expect(success).toBeUndefined();
+  test('should log success message in green color', () => {
+    log.success('success message');
+    expect(log.success).toHaveBeenCalledWith('success message');
   });
 
-  test('should log warning message', () => {
-    const warning = log.warning(['warning'], 'optional');
-    expect(warning).toBeUndefined();
+  test('should log warning message in yellow color', () => {
+    log.warning('warning message');
+    expect(log.warning).toHaveBeenCalledWith('warning message');
   });
 
-  test('should log dimmed warning message', () => {
-    const dimmedWarning = log.dimmedWarning(['dimmed warning'], 'optional');
-    expect(dimmedWarning).toBeUndefined();
+  test('should log dimmed warning message in dim yellow color', () => {
+    log.dimmedWarning('dimmed warning message');
+    expect(log.dimmedWarning).toHaveBeenCalledWith('dimmed warning message');
   });
 
-  test('should log error message', () => {
-    const error = log.error(['error'], 'optional');
-    expect(error).toBeUndefined();
+  test('should log error message in red color', () => {
+    log.error('error message');
+    expect(log.error).toHaveBeenCalledWith('error message');
   });
 });
