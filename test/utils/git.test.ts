@@ -1,25 +1,57 @@
-import { describe, expect, test } from 'bun:test';
-import Git from '../../src/utils/git';
+import { describe, expect, test, mock, jest, beforeEach } from 'bun:test';
+import fs from 'node:fs';
+import git, { localRepoExists } from '../../src/utils/git';
+import cmd from '../../src/utils/cmd';
+import log from '../../src/utils/log';
+
+mock.module('node:fs', () => ({
+  default: {
+    existsSync: mock(),
+    lstatSync: mock(),
+    mkdirSync: mock(),
+  },
+}));
+
+mock.module('../../src/utils/log', () => ({
+  default: {
+    info: mock(),
+    warning: mock(),
+    success: mock(),
+    error: mock(),
+  },
+}));
+
+mock.module('../../src/utils/cmd', () => ({
+  default: {
+    run: mock(),
+    runIt: mock()
+  },
+}));
+
+mock.module('../../src/utils/git', () => ({
+  localRepoExists: mock(),
+}));
 
 describe('Utils: git', () => {
-  test('should return undefined if repo exists on remote', () => {
-    const git = new Git({
-      repo: 'https://github.com/gbh-tech/demo-api',
-      workingDir: './',
-      ref: 'main',
-    });
-    expect(git.remoteRepoExists()).toBeUndefined();
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
-  test('should throw Error if repo does not exist on remote', () => {
-    const git = new Git({
-      repo: 'https://github.com/gbh-tech/unknown-repo',
-      workingDir: './',
-      ref: 'main',
-    });
+  describe('clone', () => {
+    test('clones the repo if it does not exist locally', () => {
+      const path = 'test-path';
+      const repo = 'test-repo';
+      const ref = 'main';
 
-    expect(() => {
-      git.remoteRepoExists();
-    }).toThrow(Error);
+      (fs.existsSync as jest.Mock).mockReturnValue(false);
+      (fs.lstatSync as jest.Mock).mockReturnValue({ isDirectory: () => false });
+      (localRepoExists as jest.Mock).mockReturnValue(false);
+
+      git.clone({ path, repo, ref });
+
+      expect(localRepoExists).toHaveBeenCalledWith({ path: 'test-path/test-repo' });
+      expect(cmd.run).toHaveBeenCalledWith('git -C test-path clone test-repo.git -b main');
+      expect(log.success).toHaveBeenCalledWith('Repo test-repo was cloned successfully!');
+    });
   });
 });

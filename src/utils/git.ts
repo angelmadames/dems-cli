@@ -10,7 +10,6 @@ const git = {
       path,
       repo,
     });
-
     if (localRepoExists({ path: repoPath })) {
       log.warning(`Repo ${repo} already cloned.`);
     } else {
