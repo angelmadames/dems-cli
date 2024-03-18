@@ -1,7 +1,7 @@
-import { describe, expect, test, mock, jest, beforeEach } from 'bun:test';
+import { beforeEach, describe, expect, jest, mock, test } from 'bun:test';
 import fs from 'node:fs';
-import git, { localRepoExists } from '../../src/utils/git';
 import cmd from '../../src/utils/cmd';
+import git, { localRepoExists } from '../../src/utils/git';
 import log from '../../src/utils/log';
 
 mock.module('node:fs', () => ({
@@ -24,7 +24,7 @@ mock.module('../../src/utils/log', () => ({
 mock.module('../../src/utils/cmd', () => ({
   default: {
     run: mock(),
-    runIt: mock()
+    runIt: mock(),
   },
 }));
 
@@ -49,9 +49,15 @@ describe('Utils: git', () => {
 
       git.clone({ path, repo, ref });
 
-      expect(localRepoExists).toHaveBeenCalledWith({ path: 'test-path/test-repo' });
-      expect(cmd.run).toHaveBeenCalledWith('git -C test-path clone test-repo.git -b main');
-      expect(log.success).toHaveBeenCalledWith('Repo test-repo was cloned successfully!');
+      expect(localRepoExists).toHaveBeenCalledWith({
+        path: 'test-path/test-repo',
+      });
+      expect(cmd.run).toHaveBeenCalledWith(
+        'git -C test-path clone test-repo.git -b main',
+      );
+      expect(log.success).toHaveBeenCalledWith(
+        'Repo test-repo was cloned successfully!',
+      );
     });
   });
 });

@@ -1,47 +1,40 @@
 import fs from 'node:fs';
 import { homedir } from 'node:os';
-import { exit } from 'node:process';
 import { isFile } from '../utils/file-system';
+import type { CLIConfig } from '../utils/interfaces';
 import log from '../utils/log';
 
-class CLIConfig {
-  root: string;
-  file: string;
-  currentProject: string;
-  currentProjectFile: string;
+const rootPath = process.env.DEMS_CLI_ROOT ?? `${homedir()}/.dems`;
+const filePath = process.env.DEMS_CLI_CONFIG_FILE ?? `${rootPath}/config.json`;
 
-  constructor() {
-    this.root = process.env.DEMS_CLI_ROOT ?? `${homedir()}/.dems`;
-    this.file = process.env.DEMS_CLI_CONFIG_FILE ?? `${this.root}/config.json`;
-    this.currentProjectFile = this.selectCurrentProjectFile();
-    this.currentProject = this.selectCurrentProject();
+export const currentProjectFile = (file = `${rootPath}/current-project`) => {
+  let projectFile = '';
+
+  if (isFile(file)) {
+    projectFile = file;
+  } else {
+    log.error(`Project file ${file} could not be found.\nDoes it exists?`);
+    throw new Error('Could not select or determine the current project file.');
   }
 
-  selectCurrentProjectFile(
-    currentProjectFile = `${this.root}/current-project`,
-  ) {
-    let selectedProjectFile = '';
+  return process.env.DEMS_CURRENT_PROJECT_FILE ?? projectFile;
+};
 
-    if (isFile(currentProjectFile)) {
-      selectedProjectFile = currentProjectFile;
-    } else {
-      log.error('Current Project file could not be found. Does it exists?');
-      exit(1);
-    }
+export const currentProject = (currentFile = currentProjectFile()) => {
+  let selectedProjectByFile = '';
 
-    return process.env.DEMS_CURRENT_PROJECT_FILE ?? selectedProjectFile;
+  if (isFile(currentFile)) {
+    selectedProjectByFile = fs.readFileSync(currentFile, 'utf8');
   }
 
-  selectCurrentProject(currentFile = this.currentProjectFile) {
-    let selectedProjectByFile = '';
+  return process.env.DEMS_CURRENT_PROJECT ?? selectedProjectByFile;
+};
 
-    if (isFile(currentFile)) {
-      selectedProjectByFile = fs.readFileSync(currentFile, 'utf8');
-    }
+const cliConfig: CLIConfig = {
+  root: rootPath,
+  file: filePath,
+  currentProjectFile: currentProjectFile(),
+  currentProject: currentProject(),
+};
 
-    return process.env.DEMS_CURRENT_PROJECT ?? selectedProjectByFile;
-  }
-}
-
-const cliConfig = new CLIConfig();
 export default cliConfig;

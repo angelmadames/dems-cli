@@ -1,3 +1,10 @@
+export interface CLIConfig {
+  root: string;
+  file: string;
+  currentProject: string;
+  currentProjectFile: string;
+}
+
 export interface SourceTargetOperation {
   source: string;
   target: string;
