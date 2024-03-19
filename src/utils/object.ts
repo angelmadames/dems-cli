@@ -31,6 +31,7 @@ export const replaceKeyValue = (
     log.error(`File ${path} is not a valid file.`);
     return;
   }
+
   try {
     const fileContent = fs.readFileSync(path, 'utf-8');
     const updatedContent = fileContent.replace(
@@ -41,7 +42,7 @@ export const replaceKeyValue = (
     log.success(`File ${path} updated successfully with ${key}=${value}.`);
   } catch (error) {
     log.error(`Error updating file ${path}. See below for more info:`);
-    console.error(error);
+    throw new Error(`Error: ${error}`);
   }
 };
 
@@ -52,7 +53,8 @@ export const replaceKeysInFile = (
   replaceMap: Map<string, string> | mapLike,
 ): void => {
   if (!isFile(filePath)) {
-    `File ${filePath} is not a valid file.`;
+    log.error(`File ${filePath} is not a valid file.`);
+    return;
   }
 
   const map: Map<string, any> =
@@ -73,6 +75,6 @@ export const replaceKeysInFile = (
     log.success(`File ${filePath} updated successfully with replacements.`);
   } catch (error) {
     log.error(`Error updating file ${filePath}. See below for more info:`);
-    console.error(error);
+    throw new Error(`Error: ${error}`);
   }
 };
