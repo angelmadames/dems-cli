@@ -243,7 +243,9 @@ describe('Utils: file-system', () => {
       await deletePath({ path: 'test-dir' });
 
       expect(fs.existsSync).toHaveBeenCalledWith('test-dir');
-      expect(confirm).toHaveBeenCalledWith({ message: 'Delete directory test-dir recursively?' });
+      expect(confirm).toHaveBeenCalledWith({
+        message: 'Delete directory test-dir recursively?',
+      });
       expect(fs.rmdirSync).not.toHaveBeenCalled();
       expect(fs.rmSync).not.toHaveBeenCalled();
     });
@@ -259,7 +261,9 @@ describe('Utils: file-system', () => {
       await deletePath({ path: 'test-file.txt' });
 
       expect(fs.existsSync).toHaveBeenCalledWith('test-file.txt');
-      expect(confirm).toHaveBeenCalledWith({ message: 'Delete file test-file.txt?' });
+      expect(confirm).toHaveBeenCalledWith({
+        message: 'Delete file test-file.txt?',
+      });
       expect(fs.rmdirSync).not.toHaveBeenCalled();
       expect(fs.rmSync).not.toHaveBeenCalled();
     });
