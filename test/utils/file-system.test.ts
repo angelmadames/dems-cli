@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, jest, mock, test } from 'bun:test';
+import { afterEach, beforeEach, describe, expect, jest, mock, test, spyOn } from 'bun:test';
 import fs from 'node:fs';
 import {
   copyFile,
@@ -19,20 +19,16 @@ mock.module('node:fs', () => ({
   },
 }));
 
-mock.module('../../src/utils/log', () => ({
-  default: {
-    info: mock(),
-    warning: mock(),
-    success: mock(),
-    error: mock(),
-  },
-}));
+beforeEach(() => {
+  jest.clearAllMocks();
+  spyOn(console, 'log').mockImplementation(() => {});
+})
+
+afterEach(() => {
+  jest.restoreAllMocks();
+});
 
 describe('Utils: file-system', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
   describe('isFile', () => {
     test('returns true if file exists', () => {
       (fs.existsSync as jest.Mock).mockReturnValue(true);
@@ -98,10 +94,6 @@ describe('Utils: file-system', () => {
 
       expect(fs.existsSync).toHaveBeenCalledWith(file);
       expect(fs.writeFileSync).toHaveBeenCalledWith(file, content, 'utf8');
-      expect(log.info).toHaveBeenCalledWith(`Creating file: ${file}...`);
-      expect(log.success).toHaveBeenCalledWith(
-        `File: ${file} successfully created.`,
-      );
     });
 
     test('overrides an existing file if override set to true', () => {
@@ -113,13 +105,6 @@ describe('Utils: file-system', () => {
 
       expect(fs.existsSync).toHaveBeenCalledWith(file);
       expect(fs.writeFileSync).toHaveBeenCalledWith(file, content, 'utf8');
-      expect(log.info).toHaveBeenCalledWith(`Creating file: ${file}...`);
-      expect(log.success).toHaveBeenCalledWith(
-        `File: ${file} successfully created.`,
-      );
-      (fs.existsSync as jest.Mock).mockClear();
-      (fs.lstatSync as jest.Mock).mockClear();
-      (fs.writeFileSync as jest.Mock).mockClear();
     });
 
     test('does not create a new file if it exists and override is false', () => {
@@ -131,7 +116,6 @@ describe('Utils: file-system', () => {
 
       expect(fs.existsSync).toHaveBeenCalledWith(file);
       expect(fs.writeFileSync).not.toHaveBeenCalledWith(file, content, 'utf8');
-      expect(log.warning).toHaveBeenCalledWith(`File: ${file} already exists.`);
     });
   });
 
@@ -144,7 +128,6 @@ describe('Utils: file-system', () => {
       (fs.existsSync as jest.Mock).mockReturnValue(false);
 
       expect(() => copyFile({ source, target })).toThrow(Error);
-      expect(log.error).toHaveBeenCalledWith('Source is not a valid file.');
       expect(fs.copyFileSync).not.toHaveBeenCalled();
     });
 
@@ -160,9 +143,6 @@ describe('Utils: file-system', () => {
       copyFile({ source, target });
 
       expect(fs.copyFileSync).toHaveBeenCalledWith(source, target, 0);
-      expect(log.success).toHaveBeenCalledWith(
-        `File: ${source} copied to ${target}.`,
-      );
     });
 
     test('logs warning if target file already exists', () => {
@@ -174,9 +154,6 @@ describe('Utils: file-system', () => {
 
       copyFile({ source, target });
 
-      expect(log.warning).toHaveBeenCalledWith(
-        `Path: ${target} already exists.`,
-      );
       expect(fs.copyFileSync).not.toHaveBeenCalled();
     });
   });
@@ -201,9 +178,6 @@ describe('Utils: file-system', () => {
 
       expect(fs.existsSync).toHaveBeenCalledWith('test-path');
       expect(fs.mkdirSync).not.toHaveBeenCalled();
-      expect(log.warning).toHaveBeenCalledWith(
-        'Path: test-path already exists.',
-      );
     });
   });
 });

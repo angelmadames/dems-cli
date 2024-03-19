@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, jest, mock, test } from 'bun:test';
+import { afterEach, describe, expect, jest, mock, test } from 'bun:test';
 import fs from 'node:fs';
 import { isFile } from '../../src/utils/file-system';
 import log from '../../src/utils/log';
@@ -31,7 +31,7 @@ mock.module('../../src/utils/log', () => ({
 }));
 
 describe('Utils: object', () => {
-  beforeEach(() => {
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
@@ -92,7 +92,7 @@ describe('Utils: object', () => {
   });
 
   describe('replaceKeysInFile', () => {
-    beforeEach(() => {
+    afterEach(() => {
       jest.clearAllMocks();
     });
 

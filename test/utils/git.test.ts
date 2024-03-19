@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, jest, mock, test } from 'bun:test';
+import { afterEach, describe, expect, jest, mock, test } from 'bun:test';
 import fs from 'node:fs';
 import cmd from '../../src/utils/cmd';
 import git, { localRepoExists } from '../../src/utils/git';
@@ -33,7 +33,7 @@ mock.module('../../src/utils/git', () => ({
 }));
 
 describe('Utils: git', () => {
-  beforeEach(() => {
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
