@@ -1,43 +1,55 @@
-import { beforeEach, describe, expect, jest, mock, test } from 'bun:test';
+import { beforeEach, afterEach, describe, expect, test, jest, mock, spyOn } from 'bun:test';
 import log from '../../src/utils/log';
+import chalk from 'chalk';
 
-mock.module('../../src/utils/log', () => ({
+mock.module('chalk', () => ({
   default: {
-    info: mock(),
-    warning: mock(),
-    dimmedWarning: mock(),
-    success: mock(),
-    error: mock(),
-  },
+    blue: mock().mockReturnValue('blue-text'),
+    green: mock().mockReturnValue('green-text'),
+    yellow: mock().mockReturnValue('yellow-text'),
+    dim: {
+      yellow: mock().mockReturnValue('dim-yellow-text'),
+    },
+    red: mock().mockReturnValue('red-text'),
+  }
 }));
 
-describe('Utils: log', () => {
+describe('log', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    spyOn(console, 'log').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   test('should log info message in blue color', () => {
     log.info('info message');
-    expect(log.info).toHaveBeenCalledWith('info message');
+    expect(chalk.blue).toHaveBeenCalledWith('info message');
+    expect(console.log).toHaveBeenCalledWith('blue-text');
   });
 
   test('should log success message in green color', () => {
     log.success('success message');
-    expect(log.success).toHaveBeenCalledWith('success message');
+    expect(chalk.green).toHaveBeenCalledWith('success message');
+    expect(console.log).toHaveBeenCalledWith('green-text');
   });
 
   test('should log warning message in yellow color', () => {
     log.warning('warning message');
-    expect(log.warning).toHaveBeenCalledWith('warning message');
+    expect(chalk.yellow).toHaveBeenCalledWith('warning message');
+    expect(console.log).toHaveBeenCalledWith('yellow-text');
   });
 
   test('should log dimmed warning message in dim yellow color', () => {
     log.dimmedWarning('dimmed warning message');
-    expect(log.dimmedWarning).toHaveBeenCalledWith('dimmed warning message');
+    expect(chalk.dim.yellow).toHaveBeenCalledWith('dimmed warning message');
+    expect(console.log).toHaveBeenCalledWith('dim-yellow-text');
   });
 
   test('should log error message in red color', () => {
     log.error('error message');
-    expect(log.error).toHaveBeenCalledWith('error message');
+    expect(chalk.red).toHaveBeenCalledWith('error message');
+    expect(console.log).toHaveBeenCalledWith('red-text');
   });
 });
