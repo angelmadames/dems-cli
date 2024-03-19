@@ -127,7 +127,9 @@ describe('Utils: object', () => {
 
       replaceKeysInFile(filePath, replaceMap);
 
-      expect(log.error).toHaveBeenCalledWith('File test-file-path is not a valid file.');
+      expect(log.error).toHaveBeenCalledWith(
+        'File test-file-path is not a valid file.',
+      );
       expect(log.success).not.toHaveBeenCalled();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
     });
@@ -142,7 +144,9 @@ describe('Utils: object', () => {
       });
 
       expect(() => replaceKeysInFile(filePath, replaceMap)).toThrow(Error);
-      expect(log.error).toHaveBeenCalledWith('Error updating file test-file-path. See below for more info:');
+      expect(log.error).toHaveBeenCalledWith(
+        'Error updating file test-file-path. See below for more info:',
+      );
       expect(log.success).not.toHaveBeenCalled();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
     });

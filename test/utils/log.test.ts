@@ -1,6 +1,14 @@
-import { beforeEach, afterEach, describe, expect, test, jest, spyOn } from 'bun:test';
-import log from '../../src/utils/log';
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  jest,
+  spyOn,
+  test,
+} from 'bun:test';
 import chalk from 'chalk';
+import log from '../../src/utils/log';
 
 describe('log', () => {
   beforeEach(() => {
@@ -28,7 +36,9 @@ describe('log', () => {
 
   test('should log dimmed warning message in dim yellow color', () => {
     log.dimmedWarning('dimmed warning message');
-    expect(console.log).toHaveBeenCalledWith(chalk.dim.yellow('dimmed warning message'));
+    expect(console.log).toHaveBeenCalledWith(
+      chalk.dim.yellow('dimmed warning message'),
+    );
   });
 
   test('should log error message in red color', () => {
