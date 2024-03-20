@@ -36,6 +36,7 @@ beforeEach(() => {
 
 afterEach(() => {
   jest.clearAllMocks();
+  jest.restoreAllMocks();
 });
 
 describe('Utils: git', () => {
@@ -145,5 +146,9 @@ describe('Utils: git', () => {
       expect(fs.existsSync).toHaveBeenCalledWith(`${path}/.git`);
       expect(fs.lstatSync).toHaveBeenCalledWith(`${path}/.git`);
     });
+
+    test('validates local git repository', () => {});
+
+    test('validates that the repository exists in remote', () => {});
   });
 });
