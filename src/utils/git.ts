@@ -1,4 +1,4 @@
-import { spawnSync } from 'bun';
+import { $ } from 'bun';
 import cmd from './cmd';
 import { createPath, isDirectory } from './file-system';
 import type { GitParams } from './interfaces';
@@ -41,31 +41,26 @@ export const localRepoExists = ({ path }: Pick<GitParams, 'path'>) => {
   return isDirectory(`${path}/.git`);
 };
 
-export const validateLocalGitRepo = (path: string) => {
-  try {
-    const gitStatus = spawnSync(['git', 'status'], {
-      cwd: path,
-    });
+export const validateLocalGitRepo = async (path: string) => {
+  const { exitCode } = await $`git -C ${path} status`.quiet();
 
-    if (gitStatus.exitCode === 0) {
-      return;
-    }
-  } catch (cause) {
-    console.error(cause);
-    throw new Error(`Local path ${path} is not a valid git repository.`);
+  if (exitCode === 0) {
+    log.info(`Local repo: ${path} exists and is valid.`);
+    return;
   }
+
+  throw new Error(`Local path ${path} is not a valid git repository.`);
 };
 
-export const remoteRepoExists = ({ repo }: Pick<GitParams, 'repo'>) => {
-  const proc = spawnSync(['git', 'ls-remote', repo], {
-    stdin: 'inherit',
-  });
+export const remoteRepoExists = async ({ repo }: Pick<GitParams, 'repo'>) => {
+  const { exitCode } = await $`git ls-remote ${repo}`.quiet();
 
-  if (proc.exitCode === 0) {
-    log.info(`Remote repo: ${repo} is valid.`);
-  } else {
-    throw new Error(`Remote repo: ${repo} is not valid or does not exist.`);
+  if (exitCode === 0) {
+    log.info(`Remote repo: ${repo} exists in remote.`);
+    return;
   }
+
+  throw new Error(`Remote repo: ${repo} is not valid or does not exist.`);
 };
 
 export default git;

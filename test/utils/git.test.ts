@@ -14,6 +14,8 @@ import git, {
   getRepoName,
   getRepoPath,
   localRepoExists,
+  remoteRepoExists,
+  validateLocalGitRepo,
 } from '../../src/utils/git';
 
 mock.module('node:fs', () => ({
@@ -147,8 +149,14 @@ describe('Utils: git', () => {
       expect(fs.lstatSync).toHaveBeenCalledWith(`${path}/.git`);
     });
 
-    test('validates local git repository', () => {});
+    test('throws an error if the path is not a valid git repository', () => {
+      const path = '/path/to/repo';
+      expect(async () => await validateLocalGitRepo(path)).toThrow(Error);
+    });
 
-    test('validates that the repository exists in remote', () => {});
+    test('throws an error if the remote git repository does not exist', () => {
+      const repo = 'git@github.com/no-org/no-repo.git';
+      expect(async () => await remoteRepoExists({ repo })).toThrow(Error);
+    });
   });
 });
