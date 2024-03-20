@@ -1,3 +1,4 @@
+import { spawnSync } from 'bun';
 import cmd from './cmd';
 import { createPath, isDirectory } from './file-system';
 import type { GitParams } from './interfaces';
@@ -42,7 +43,7 @@ export const localRepoExists = ({ path }: Pick<GitParams, 'path'>) => {
 
 export const validateLocalGitRepo = (path: string) => {
   try {
-    const gitStatus = Bun.spawnSync(['git', 'status'], {
+    const gitStatus = spawnSync(['git', 'status'], {
       cwd: path,
     });
 
@@ -56,7 +57,7 @@ export const validateLocalGitRepo = (path: string) => {
 };
 
 export const remoteRepoExists = ({ repo }: Pick<GitParams, 'repo'>) => {
-  const proc = Bun.spawnSync(['git', 'ls-remote', repo], {
+  const proc = spawnSync(['git', 'ls-remote', repo], {
     stdin: 'inherit',
   });
 
