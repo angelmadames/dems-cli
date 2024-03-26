@@ -45,8 +45,7 @@ export const composeFiles = ({
   return composeFiles;
 };
 
-export const composeExecParams = () => {
-  const config = projectConfig();
+export const composeExecParams = (config = projectConfig()) => {
   const params = [];
 
   params.push(`--project-name ${config.compose.project_name}`);
