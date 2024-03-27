@@ -1,12 +1,22 @@
-import { describe, expect, mock, test, jest, spyOn, beforeEach, afterEach } from 'bun:test';
-import { composeExecParams } from '../../src/utils/compose';
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  jest,
+  mock,
+  spyOn,
+  test,
+} from 'bun:test';
 import fs from 'node:fs';
 import type { DEMSProjectConfig } from '../../src/config/dems';
+import { composeExecParams, composeFiles } from '../../src/utils/compose';
 
 mock.module('node:fs', () => ({
   default: {
     existsSync: mock(),
     lstatSync: mock(),
+    readdirSync: mock(),
   },
 }));
 
@@ -17,14 +27,14 @@ const testConfigJson: DEMSProjectConfig = {
   paths: {
     env_file: '/path/to/env_file',
     repos_root: '/path/to/repos_root',
-    repos: {}
+    repos: {},
   },
   repositories: ['repo1', 'repo2'],
   dockerfile: '',
   git: {
     org_url: '',
-    default_ref: ''
-  }
+    default_ref: '',
+  },
 };
 
 beforeEach(() => {
@@ -50,6 +60,31 @@ describe('Utils: compose', () => {
       ];
 
       const params = composeExecParams(testConfigJson);
+
+      expect(params).toEqual(expectedParams);
+    });
+  });
+});
+
+describe('Utils: compose', () => {
+  describe('composeFiles', () => {
+    test('should return an array of compose files with --file flag', () => {
+      (fs.readdirSync as jest.Mock).mockReturnValue([
+        'compose1.yml',
+        'compose2.yml',
+      ]);
+
+      const expectedParams = [
+        '--file /path/to/repos_root/repo1/.dems/compose1.yml',
+        '--file /path/to/repos_root/repo1/.dems/compose2.yml',
+        '--file /path/to/repos_root/repo2/.dems/compose1.yml',
+        '--file /path/to/repos_root/repo2/.dems/compose2.yml',
+      ];
+
+      const params = composeFiles({
+        repos: testConfigJson.repositories,
+        reposRoot: testConfigJson.paths.repos_root,
+      });
 
       expect(params).toEqual(expectedParams);
     });

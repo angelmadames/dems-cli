@@ -1,4 +1,4 @@
-import * as fs from 'node:fs';
+import fs from 'node:fs';
 import * as path from 'node:path';
 import { projectConfig } from '../config/project';
 import { cmd as $ } from './cmd';
@@ -36,7 +36,7 @@ export const composeFiles = ({
   for (const dir of dirs) {
     const files = fs.readdirSync(dir);
     for (const file of files) {
-      if (file.match(`${prefix}*.yml`)) {
+      if (file.match(`^.*${prefix}.*\.yml$`)) {
         composeFiles.push(`--file ${path.join(dir, file)}`);
       }
     }
