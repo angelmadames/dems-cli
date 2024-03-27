@@ -1,24 +1,8 @@
-import {
-  afterEach,
-  beforeEach,
-  describe,
-  expect,
-  jest,
-  spyOn,
-  test,
-} from 'bun:test';
+import { describe, expect, test } from 'bun:test';
 import chalk from 'chalk';
 import log from '../../src/utils/log';
 
 describe('log', () => {
-  beforeEach(() => {
-    spyOn(console, 'log').mockImplementation(() => {});
-  });
-
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
   test('should log info message in blue color', () => {
     log.info('info message');
     expect(console.log).toHaveBeenCalledWith(chalk.blue('info message'));

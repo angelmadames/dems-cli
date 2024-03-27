@@ -1,24 +1,7 @@
-import {
-  afterEach,
-  beforeEach,
-  describe,
-  expect,
-  jest,
-  mock,
-  spyOn,
-  test,
-} from 'bun:test';
+import { describe, expect, type jest, test } from 'bun:test';
 import fs from 'node:fs';
 import type { DEMSProjectConfig } from '../../src/config/dems';
 import { composeExecParams, composeFiles } from '../../src/utils/compose';
-
-mock.module('node:fs', () => ({
-  default: {
-    existsSync: mock(),
-    lstatSync: mock(),
-    readdirSync: mock(),
-  },
-}));
 
 const testConfigJson: DEMSProjectConfig = {
   compose: {
@@ -36,15 +19,6 @@ const testConfigJson: DEMSProjectConfig = {
     default_ref: '',
   },
 };
-
-beforeEach(() => {
-  spyOn(console, 'log').mockImplementation(() => {});
-});
-
-afterEach(() => {
-  jest.clearAllMocks();
-  jest.restoreAllMocks();
-});
 
 describe('Utils: compose', () => {
   describe('composeExecParams', () => {
@@ -69,6 +43,8 @@ describe('Utils: compose', () => {
 describe('Utils: compose', () => {
   describe('composeFiles', () => {
     test('should return an array of compose files with --file flag', () => {
+      (fs.existsSync as jest.Mock).mockReturnValue(true);
+      (fs.lstatSync as jest.Mock).mockReturnValue({ isFile: () => true });
       (fs.readdirSync as jest.Mock).mockReturnValue([
         'compose1.yml',
         'compose2.yml',

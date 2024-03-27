@@ -1,13 +1,4 @@
-import {
-  afterEach,
-  beforeEach,
-  describe,
-  expect,
-  jest,
-  mock,
-  spyOn,
-  test,
-} from 'bun:test';
+import { describe, expect, type jest, test } from 'bun:test';
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import git, {
@@ -17,29 +8,6 @@ import git, {
   remoteRepoExists,
   validateLocalGitRepo,
 } from '../../src/utils/git';
-
-mock.module('node:fs', () => ({
-  default: {
-    existsSync: mock(),
-    lstatSync: mock(),
-    mkdirSync: mock(),
-  },
-}));
-
-mock.module('node:child_process', () => ({
-  execSync: mock(() => {
-    return;
-  }),
-}));
-
-beforeEach(() => {
-  spyOn(console, 'log').mockImplementation(() => {});
-});
-
-afterEach(() => {
-  jest.clearAllMocks();
-  jest.restoreAllMocks();
-});
 
 describe('Utils: git', () => {
   describe('clone', () => {

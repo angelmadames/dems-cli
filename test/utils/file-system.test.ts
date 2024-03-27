@@ -1,13 +1,4 @@
-import {
-  afterEach,
-  beforeEach,
-  describe,
-  expect,
-  jest,
-  mock,
-  spyOn,
-  test,
-} from 'bun:test';
+import { describe, expect, type jest, mock, test } from 'bun:test';
 import fs from 'node:fs';
 import { confirm } from '@inquirer/prompts';
 import {
@@ -19,30 +10,9 @@ import {
   isFile,
 } from '../../src/utils/file-system';
 
-mock.module('node:fs', () => ({
-  default: {
-    copyFileSync: mock(),
-    existsSync: mock(),
-    lstatSync: mock(),
-    mkdirSync: mock(),
-    rmdirSync: mock(),
-    rmSync: mock(),
-    writeFileSync: mock(),
-  },
-}));
-
 mock.module('@inquirer/prompts', () => ({
   confirm: mock(),
 }));
-
-beforeEach(() => {
-  spyOn(console, 'log').mockImplementation(() => {});
-});
-
-afterEach(() => {
-  jest.clearAllMocks();
-  jest.restoreAllMocks();
-});
 
 describe('Utils: file-system', () => {
   describe('isFile', () => {

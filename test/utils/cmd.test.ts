@@ -1,13 +1,7 @@
-import { describe, expect, type jest, mock, test } from 'bun:test';
+import { describe, expect, type jest, test } from 'bun:test';
 import { execSync } from 'node:child_process';
 import cmd from '../../src/utils/cmd';
 import { removeExtraSpaces } from '../../src/utils/string';
-
-mock.module('node:child_process', () => ({
-  execSync: mock(() => {
-    return;
-  }),
-}));
 
 describe('Utils: cmd', () => {
   describe('run', () => {

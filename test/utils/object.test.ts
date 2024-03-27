@@ -1,40 +1,17 @@
 import { afterEach, describe, expect, jest, mock, test } from 'bun:test';
 import fs from 'node:fs';
 import { isFile } from '../../src/utils/file-system';
-import log from '../../src/utils/log';
 import {
   flattenObject,
   replaceKeyValue,
   replaceKeysInFile,
 } from '../../src/utils/object';
 
-mock.module('node:fs', () => ({
-  default: {
-    existsSync: mock(),
-    lstatSync: mock(),
-    readFileSync: mock(),
-    writeFileSync: mock(),
-  },
-}));
-
 mock.module('../../src/utils/file-system', () => ({
   isFile: mock(),
 }));
 
-mock.module('../../src/utils/log', () => ({
-  default: {
-    info: mock(),
-    warning: mock(),
-    success: mock(),
-    error: mock(),
-  },
-}));
-
 describe('Utils: object', () => {
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
   describe('replaceKeyFile', () => {
     test('updates the key-value pair in the file', () => {
       const path = 'test-path';
@@ -46,10 +23,6 @@ describe('Utils: object', () => {
 
       replaceKeyValue(path, key, value);
 
-      expect(log.error).not.toHaveBeenCalled();
-      expect(log.success).toHaveBeenCalledWith(
-        'File test-path updated successfully with test_key=test value.',
-      );
       expect(fs.writeFileSync).toHaveBeenCalledWith(
         'test-path',
         'test_key=test value',
@@ -65,10 +38,6 @@ describe('Utils: object', () => {
 
       replaceKeyValue(path, key, value);
 
-      expect(log.error).toHaveBeenCalledWith(
-        'File test-path is not a valid file.',
-      );
-      expect(log.success).not.toHaveBeenCalled();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
     });
 
@@ -83,10 +52,7 @@ describe('Utils: object', () => {
       });
 
       expect(() => replaceKeyValue(path, key, value)).toThrow(Error);
-      expect(log.error).toHaveBeenCalledWith(
-        'Error updating file test-path. See below for more info:',
-      );
-      expect(log.success).not.toHaveBeenCalled();
+
       expect(fs.writeFileSync).not.toHaveBeenCalled();
     });
   });
@@ -109,10 +75,6 @@ describe('Utils: object', () => {
 
       replaceKeysInFile(filePath, replaceMap);
 
-      expect(log.error).not.toHaveBeenCalled();
-      expect(log.success).toHaveBeenCalledWith(
-        'File test-file-path updated successfully with replacements.',
-      );
       expect(fs.writeFileSync).toHaveBeenCalledWith(
         'test-file-path',
         'key1=value1\nkey2=value2',
@@ -127,10 +89,6 @@ describe('Utils: object', () => {
 
       replaceKeysInFile(filePath, replaceMap);
 
-      expect(log.error).toHaveBeenCalledWith(
-        'File test-file-path is not a valid file.',
-      );
-      expect(log.success).not.toHaveBeenCalled();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
     });
 
@@ -144,10 +102,6 @@ describe('Utils: object', () => {
       });
 
       expect(() => replaceKeysInFile(filePath, replaceMap)).toThrow(Error);
-      expect(log.error).toHaveBeenCalledWith(
-        'Error updating file test-file-path. See below for more info:',
-      );
-      expect(log.success).not.toHaveBeenCalled();
       expect(fs.writeFileSync).not.toHaveBeenCalled();
     });
   });

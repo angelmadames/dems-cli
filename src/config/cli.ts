@@ -13,7 +13,7 @@ export const currentProjectFile = (file = `${rootPath}/current-project`) => {
   if (isFile(file)) {
     projectFile = file;
   } else {
-    log.error(`Project file ${file} could not be found.\nDoes it exists?`);
+    log.error(`Project file ${file} could not be found. Does it exists?`);
     throw new Error('Could not select or determine the current project file.');
   }
 
