@@ -31,7 +31,7 @@ export interface ComposeFilesParams {
 export interface ComposeExecParams {
   envFiles?: Array<string>;
   files?: Array<string>;
-  cmd: Array<string>;
+  command: Array<string>;
 }
 
 export interface GitParams {

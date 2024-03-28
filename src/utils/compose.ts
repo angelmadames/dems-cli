@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { projectConfig } from '../config/project';
-import { cmd as $ } from './cmd';
+import cmd from './cmd';
 import { isFile } from './file-system';
 import { validateLocalGitRepo } from './git';
 import type { ComposeExecParams, ComposeFilesParams } from './interfaces';
@@ -9,13 +9,16 @@ import type { ComposeExecParams, ComposeFilesParams } from './interfaces';
 export const composeExec = ({
   envFiles = composeExecParams(),
   files = composeFiles({}),
-  cmd,
+  command,
 }: ComposeExecParams) => {
-  let command = ['docker', 'compose'];
-  command = command.concat(envFiles).concat(files).concat(cmd);
+  let composeCommand = ['docker', 'compose'];
+  composeCommand = composeCommand
+    .concat(envFiles)
+    .concat(files)
+    .concat(command);
   // @TODO: Use native Bun.spawnSync when they support stdio with 'inherit'.
   // const result = Bun.spawnSync(command.join(' ').split(' '));
-  const result = $.run(command.join(' '));
+  const result = cmd.run(composeCommand.join(' '));
   return result;
 };
 
