@@ -20,9 +20,7 @@ beforeAll(() => {
   }));
 
   mock.module('node:child_process', () => ({
-    execSync: mock(() => {
-      return;
-    }),
+    execSync: mock(),
   }));
 });
 

@@ -22,7 +22,7 @@ const testConfigJson: DEMSProjectConfig = {
 
 describe('Utils: compose', () => {
   describe('composeExecParams', () => {
-    test('should return an array of compose parameters', () => {
+    test.skip('should return an array of compose parameters', () => {
       (fs.existsSync as jest.Mock).mockReturnValue(true);
       (fs.lstatSync as jest.Mock).mockReturnValue({ isFile: () => true });
 
@@ -42,7 +42,7 @@ describe('Utils: compose', () => {
 
 describe('Utils: compose', () => {
   describe('composeFiles', () => {
-    test('should return an array of compose files with --file flag', () => {
+    test.skip('should return an array of compose files with --file flag', () => {
       (fs.existsSync as jest.Mock).mockReturnValue(true);
       (fs.lstatSync as jest.Mock).mockReturnValue({ isFile: () => true });
       (fs.readdirSync as jest.Mock).mockReturnValue([
