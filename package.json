@@ -1,5 +1,6 @@
 {
   "name": "dems-cli",
+  "version": "0.0.1",
   "description": "DEMS (Development Environment Management System) CLI",
   "author": "Angel Adames <angeladames@hey.com>",
   "main": "dist/cli.js",
