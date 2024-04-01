@@ -4,18 +4,18 @@ import { deletePath } from '../../utils/file-system';
 import log from '../../utils/log';
 import sharedOptions from '../../utils/shared-options';
 
-export const cleanDepsCommand = () => {
+export const cleanDotEnvCommand = () => {
   const command = new Command();
   command
-    .name('deps')
-    .summary('Cleanup repositories dependencies (node_modules).')
-    .description('Cleans all repos dependencies locally installed.')
+    .name('dot-env')
+    .summary('Cleanup repositories dot env files (.env).')
+    .description(
+      'Removes the dot env files (.env) for all the DEMS-managed repositories configured.',
+    )
     .addOption(sharedOptions.force())
     .action(async (options) => {
       const config = projectConfig();
-      log.info(
-        'Cleaning all local dependencies for configured applications...',
-      );
+      log.info('Removing dot env files for managed repositories...');
 
       if (options.force) {
         log.warning('User interactivity disabled due to --force flag.');
@@ -23,15 +23,15 @@ export const cleanDepsCommand = () => {
 
       for (const repo of Object.values(config.paths.repos)) {
         await deletePath({
-          path: `${repo}/node_modules`,
+          path: `${repo}/.env`,
           force: options.force,
         });
       }
 
-      log.success('Dependencies cleanup task completed.');
+      log.success('dot env files (.env) removed for managed repositories.');
     });
 
   return command;
 };
 
-export default cleanDepsCommand();
+export default cleanDotEnvCommand();
