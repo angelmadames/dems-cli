@@ -1,7 +1,9 @@
 import { Command } from 'commander';
 import { projectConfig } from '../../config/project';
+import { noIndent } from '../../utils/string';
 import { cleanDepsCommand } from './deps';
 import { cleanDotEnvCommand } from './dot-env';
+import { cleanReposCommand } from './repos';
 
 export const cleanCommand = () => {
   const command = new Command();
@@ -11,11 +13,14 @@ export const cleanCommand = () => {
     .name('clean')
     .summary('Cleanup DEMS-managed resources')
     .description(
-      'Cleans all configured resources and services initialized\n' +
-        'by DEMS. Resets your local development environment.',
+      noIndent(`
+        Cleans all configured resources and services initialized
+        by DEMS. Resets your local development environment.
+      `),
     )
     .addCommand(cleanDepsCommand())
-    .addCommand(cleanDotEnvCommand());
+    .addCommand(cleanDotEnvCommand())
+    .addCommand(cleanReposCommand());
 
   return command;
 };

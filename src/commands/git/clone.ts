@@ -2,7 +2,9 @@ import chalk from 'chalk';
 import { Command } from 'commander';
 import { projectConfig } from '../../config/project';
 import git from '../../utils/git';
+import log from '../../utils/log';
 import sharedOptions from '../../utils/shared-options';
+import { noIndent } from '../../utils/string';
 
 export const gitCloneCommand = () => {
   const command = new Command();
@@ -10,24 +12,25 @@ export const gitCloneCommand = () => {
 
   command
     .name('clone')
+    .summary('Clones all managed repositories using the specified git ref.')
     .description(
-      'Clones all configured git repositories defined in the config.json\n' +
-        "file in the root directory. Uses 'git clone' strategy.",
+      noIndent(`
+        Clones all managed git repositories. The 'git clone' command will be
+        run for each repository defined in the config.json file of the current
+        project.
+      `),
     )
     .addOption(sharedOptions.gitRef().default(config.git.default_ref))
-    .addOption(sharedOptions.reposRoot().default(config.paths.repos_root))
-    .addOption(sharedOptions.gitOrg().default(config.git.org_url))
-    .addOption(sharedOptions.repos().default(config.repositories))
     .action((options) => {
-      console.log(`Git org    > ${chalk.bold(options.gitOrg)}`);
-      console.log(`Git ref    > ${chalk.bold(options.gitRef)}`);
-      console.log(`Repos path > ${chalk.bold(options.reposRoot)}`);
+      log.info(`Git Org    > ${chalk.bold(config.git.org_url)}`);
+      log.info(`Git Ref    > ${chalk.bold(options.gitRef)}`);
+      log.info(`Repos Path > ${chalk.bold(config.paths.repos_root)}`);
 
-      for (const repo of options.repos) {
-        const repoUrl = `${options.gitOrg}/${repo}`;
+      for (const repo of config.repositories) {
+        const repoUrl = `${config.git.org_url}/${repo}`;
         git.clone({
           ref: options.gitRef,
-          path: options.reposRoot,
+          path: config.paths.repos_root,
           repo: repoUrl,
         });
       }

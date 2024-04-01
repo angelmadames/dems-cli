@@ -1,8 +1,8 @@
-import chalk from 'chalk';
 import { Command } from 'commander';
 import { projectConfig } from '../../config/project';
 import git from '../../utils/git';
 import sharedOptions from '../../utils/shared-options';
+import { noIndent } from '../../utils/string';
 
 export const gitCheckoutCommand = () => {
   const command = new Command();
@@ -10,21 +10,19 @@ export const gitCheckoutCommand = () => {
 
   command
     .name('checkout')
+    .summary('Checkout all repositories to a specific git branch or tag.')
     .description(
-      'Checkout all configured git repositories defined in the config.json\n' +
-        ', to the specified git ref.',
+      noIndent(`
+        Checkout to an specific git ref (branch, tag) to all managed
+        repositories. The 'git checkout' command will be run in all
+        repositories defined in the config.json file of the current project.
+     `),
     )
     .addOption(sharedOptions.gitRef().default(config.git.default_ref))
-    .addOption(sharedOptions.reposRoot().default(config.paths.repos_root))
-    .addOption(sharedOptions.repos().default(config.repositories))
     .action((options) => {
-      console.log(`Git org    > ${chalk.bold(options.gitOrg)}`);
-      console.log(`Git ref    > ${chalk.bold(options.gitRef)}`);
-      console.log(`Repos path > ${chalk.bold(options.reposRoot)}`);
-
-      for (const repo of options.repos) {
+      for (const repoPath of Object.values(config.paths.repos)) {
         git.checkout({
-          path: `${options.reposRoot}/${repo}`,
+          path: repoPath,
           ref: options.gitRef,
         });
       }
