@@ -72,7 +72,7 @@ describe('Utils: git', () => {
 
       expect(fs.existsSync).toHaveBeenLastCalledWith(`${path}/.git`);
       expect(fs.lstatSync).toHaveBeenLastCalledWith(`${path}/.git`);
-      expect(execSync).toHaveBeenCalledWith(`git -C ${path} checkout main`, {
+      expect(execSync).toHaveBeenCalledWith(`git -C ${path} checkout ${ref}`, {
         stdio: 'inherit',
         encoding: 'utf-8',
       });
@@ -89,6 +89,27 @@ describe('Utils: git', () => {
 
       expect(() => git.checkout({ path, ref })).toThrow(Error);
       expect(execSync).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('branch', () => {
+    test('creates a new branch in the repo', () => {
+      const path = 'test-path/test-repo';
+      const ref = 'test-branch';
+
+      (fs.existsSync as jest.Mock).mockReturnValue(true);
+      (fs.lstatSync as jest.Mock).mockReturnValue({
+        isDirectory: () => true,
+      });
+
+      git.branch({ path, ref });
+
+      expect(fs.existsSync).toHaveBeenLastCalledWith(`${path}/.git`);
+      expect(fs.lstatSync).toHaveBeenLastCalledWith(`${path}/.git`);
+      expect(execSync).toHaveBeenCalledWith(`git -C ${path} checkout -b ${ref}`, {
+        stdio: 'inherit',
+        encoding: 'utf-8',
+      });
     });
   });
 

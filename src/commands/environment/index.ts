@@ -6,8 +6,6 @@ import log from '../../utils/log';
 
 export const environmentCommand = () => {
   const command = new Command();
-  const config = projectConfig();
-
   command
     .name('environment')
     .alias('env')

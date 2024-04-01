@@ -27,6 +27,15 @@ const git = {
     cmd.run(`git -C ${path} checkout ${ref}`);
     log.success(`Repo was checked out to ref ${ref} successfully!`);
   },
+
+  branch({ path, ref }: Omit<GitParams, 'repo'>) {
+    if (!localRepoExists({ path })) {
+      log.error(`${path} is not a valid Git repository.`);
+      throw new Error(`Repo not found in ${path}.`);
+    }
+    cmd.run(`git -C ${path} checkout -b ${ref}`);
+    log.success(`Branch ${ref} was created successfully!`);
+  }
 };
 
 export const getRepoName = ({ repo }: Pick<GitParams, 'repo'>) => {
