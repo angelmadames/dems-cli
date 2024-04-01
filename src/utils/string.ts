@@ -13,3 +13,7 @@ export const removeExtraSpaces = (text: string): string => {
 export const removeBreakLines = (text: string): string => {
   return text.replace(/(\r\n|\r|\n)/g, '');
 };
+
+export const noIndent = (text: string) => {
+  return text.replace(/(\n)\s+/g, '$1').trim();
+};

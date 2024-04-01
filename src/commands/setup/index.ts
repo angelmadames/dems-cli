@@ -9,7 +9,7 @@ import dotEnv from '../../utils/env';
 import { createFile, createPath, isFile } from '../../utils/file-system';
 import log from '../../utils/log';
 import sharedOptions from '../../utils/shared-options';
-import { hyphenToUnderscore } from '../../utils/string';
+import { hyphenToUnderscore, noIndent } from '../../utils/string';
 
 const cliInit = () => {
   log.info('Initializing DEMS CLI...');
@@ -28,10 +28,12 @@ export const setupCommand = () => {
     .aliases(['init', 'configure'])
     .summary('Setup DEMS CLI for a new project')
     .description(
-      'Initializes a new configuration for a new local project using DEMS.\n' +
-        'It generates the default config files and prepares for the setup command.\n' +
-        'The initialization command depends on the Compose files being previously\n' +
-        'setup at every repository specified.',
+      noIndent(`
+        Initializes a new configuration for a new local project using DEMS.
+        It generates the default config files and prepares for the setup command.
+        The initialization command depends on the Compose files being previously
+        setup at every repository specified.
+      `),
     )
     .option('-p, --project-name [project-name]', 'Set project name')
     .option('-e, --dot-env [path]', 'Project config dot env file')
