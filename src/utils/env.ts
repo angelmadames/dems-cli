@@ -1,7 +1,7 @@
 import * as fs from 'node:fs';
-import log from '../utils/log';
-import { flattenObject } from '../utils/object';
-import type { DEMSProjectConfig } from './dems';
+import type { DEMSProjectConfig } from '../config/dems';
+import log from './log';
+import { flattenObject } from './object';
 
 export const dotEnv = {
   generate(envFilePath: string, config: DEMSProjectConfig): void {

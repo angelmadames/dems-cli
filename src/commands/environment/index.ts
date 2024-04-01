@@ -1,6 +1,6 @@
 import { Command } from 'commander';
-import dotEnv from '../../config/env';
 import { projectConfig, projectEnvVars } from '../../config/project';
+import dotEnv from '../../utils/env';
 import { copyFile } from '../../utils/file-system';
 import log from '../../utils/log';
 

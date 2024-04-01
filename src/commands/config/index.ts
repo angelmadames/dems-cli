@@ -9,6 +9,10 @@ export const configCommand = () => {
   const command = new Command();
   command
     .name('config')
+    .summary('Manage the DEMS configuration')
+    .description(
+      'Manages and displays the DEMS configuration currently in-use.',
+    )
     .option('-g, --generate', 'Generate CLI config file')
     .addCommand(currentProjectCommand())
     .addCommand(projectConfigCommand())

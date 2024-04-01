@@ -5,7 +5,7 @@ import chalk from 'chalk';
 import { Command } from 'commander';
 import cliConfig from '../../config/cli';
 import { defaultConfig, demsEnvVars } from '../../config/dems';
-import dotEnv from '../../config/env';
+import dotEnv from '../../utils/env';
 import { createFile, createPath, isFile } from '../../utils/file-system';
 import log from '../../utils/log';
 import sharedOptions from '../../utils/shared-options';
