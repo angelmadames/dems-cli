@@ -27,7 +27,7 @@ export const composeCommand = () => {
       }
 
       composeExec({
-        cmd: composeArgs,
+        command: composeArgs,
       });
     });
 
@@ -35,8 +35,3 @@ export const composeCommand = () => {
 };
 
 export default composeCommand();
-
-// Execute script only if called directly
-if (import.meta.path === Bun.main) {
-  composeCommand().parse();
-}

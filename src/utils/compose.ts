@@ -63,15 +63,3 @@ export const composeExecParams = (config = projectConfig()) => {
 
   return params;
 };
-
-// Execute script only if called directly
-if (import.meta.path === Bun.main) {
-  console.log(JSON.stringify(composeExecParams(), null, 2));
-  console.log(
-    JSON.stringify(
-      composeFiles({ prefix: 'compose', filesDir: '.dems' }),
-      null,
-      2,
-    ),
-  );
-}

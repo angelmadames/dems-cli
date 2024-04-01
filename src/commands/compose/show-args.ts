@@ -25,8 +25,3 @@ export const composeShowArgsCommand = () => {
 };
 
 export default composeShowArgsCommand();
-
-// Execute script only if called directly
-if (import.meta.path === Bun.main) {
-  composeShowArgsCommand().parse();
-}

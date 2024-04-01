@@ -12,7 +12,7 @@
   },
   "scripts": {
     "build": "bun build --target=bun ./cli.ts --outdir dist/",
-    "compile": "bun build --compile ./cli.ts --outfile ./dems",
+    "compile": "bun build --compile --minify --sourcemap ./cli.ts --outfile ./dems",
     "format": "biome format src/ test/ --write",
     "format:ci": "biome format src/ test/",
     "lint": "biome lint src/ test/ --apply",

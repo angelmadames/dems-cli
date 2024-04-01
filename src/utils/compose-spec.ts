@@ -6,8 +6,3 @@ const downloadComposeSpecJSON = (
 ) => {
   console.log(url.toString());
 };
-
-// Execute script only if called directly
-if (import.meta.path === Bun.main) {
-  downloadComposeSpecJSON();
-}
