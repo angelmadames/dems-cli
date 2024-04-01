@@ -106,10 +106,13 @@ describe('Utils: git', () => {
 
       expect(fs.existsSync).toHaveBeenLastCalledWith(`${path}/.git`);
       expect(fs.lstatSync).toHaveBeenLastCalledWith(`${path}/.git`);
-      expect(execSync).toHaveBeenCalledWith(`git -C ${path} checkout -b ${ref}`, {
-        stdio: 'inherit',
-        encoding: 'utf-8',
-      });
+      expect(execSync).toHaveBeenCalledWith(
+        `git -C ${path} checkout -b ${ref}`,
+        {
+          stdio: 'inherit',
+          encoding: 'utf-8',
+        },
+      );
     });
   });
 

@@ -1,7 +1,7 @@
 import { Command } from 'commander';
+import { gitBranchCommand } from './branch';
 import { gitCheckoutCommand } from './checkout';
 import { gitCloneCommand } from './clone';
-import { gitBranchCommand } from './branch';
 
 export const gitCommand = () => {
   const command = new Command();
@@ -11,7 +11,7 @@ export const gitCommand = () => {
     .description('All git commands abstracted by DEMS')
     .addCommand(gitCloneCommand())
     .addCommand(gitCheckoutCommand())
-    .addCommand(gitBranchCommand())
+    .addCommand(gitBranchCommand());
 
   return command;
 };

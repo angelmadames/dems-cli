@@ -35,7 +35,7 @@ const git = {
     }
     cmd.run(`git -C ${path} checkout -b ${ref}`);
     log.success(`Branch ${ref} was created successfully!`);
-  }
+  },
 };
 
 export const getRepoName = ({ repo }: Pick<GitParams, 'repo'>) => {
