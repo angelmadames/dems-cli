@@ -11,6 +11,7 @@ export const cleanReposCommand = () => {
   const command = new Command();
   command
     .name('repos')
+    .aliases(['repositories', 'repo'])
     .summary("Remove the current project's git repositories.")
     .description(
       noIndent(`

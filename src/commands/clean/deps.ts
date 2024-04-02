@@ -8,6 +8,7 @@ export const cleanDepsCommand = () => {
   const command = new Command();
   command
     .name('deps')
+    .aliases(['dependencies'])
     .summary('Cleanup repositories dependencies (node_modules).')
     .description('Cleans all repos dependencies locally installed.')
     .addOption(sharedOptions.force())

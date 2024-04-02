@@ -8,6 +8,7 @@ export const cleanDotEnvCommand = () => {
   const command = new Command();
   command
     .name('dot-env')
+    .aliases(['env', 'dotenv'])
     .summary('Cleanup repositories dot env files (.env).')
     .description(
       'Removes the dot env files (.env) for all the DEMS-managed repositories configured.',

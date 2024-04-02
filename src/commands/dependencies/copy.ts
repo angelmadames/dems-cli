@@ -17,7 +17,7 @@ export const depsCopyCommand = () => {
       const config = projectConfig();
       for (const repo of config.repositories) {
         composeExec({
-          cmd: [
+          command: [
             'cp',
             `${repo.replace(
               `${config.compose.project_name}-`,
