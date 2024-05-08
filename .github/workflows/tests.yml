@@ -21,6 +21,8 @@ jobs:
 
       - name: 🟢 Configure Bun on runner
         uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
 
       - name: 📦 Install package dependencies using lockfile
         run: bun install --frozen-lockfile
