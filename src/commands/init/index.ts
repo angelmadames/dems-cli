@@ -21,11 +21,11 @@ const cliInit = () => {
   });
 };
 
-export const setupCommand = () => {
+export const initCommand = () => {
   const command = new Command();
   command
-    .name('setup')
-    .aliases(['init', 'configure'])
+    .name('init')
+    .aliases(['configure'])
     .summary('Setup DEMS CLI for a new project')
     .description(
       noIndent(`
@@ -48,7 +48,7 @@ export const setupCommand = () => {
       true,
     )
     .action(async (options) => {
-      log.info('Welcome to DEMS setup process for a new project!');
+      log.info('Welcome to DEMS initialization process!');
       cliInit();
       const config = defaultConfig;
       const env = demsEnvVars;
@@ -172,4 +172,4 @@ export const setupCommand = () => {
   return command;
 };
 
-export default setupCommand();
+export default initCommand();
