@@ -18,7 +18,7 @@ export const gitCheckoutCommand = () => {
         repositories defined in the config.json file of the current project.
      `),
     )
-    .addOption(sharedOptions.gitRef().default(config.git.default_ref))
+    .addOption(sharedOptions.gitRef.default(config.git.default_ref))
     .action((options) => {
       for (const repoPath of Object.values(config.paths.repos)) {
         git.checkout({

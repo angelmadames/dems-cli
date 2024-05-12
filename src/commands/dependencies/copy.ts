@@ -4,7 +4,6 @@ import { composeExec } from '../../utils/compose';
 
 export const depsCopyCommand = () => {
   const command = new Command();
-  const config = projectConfig();
 
   command
     .name('copy')

@@ -31,13 +31,3 @@ export const defaultConfig: DEMSProjectConfig = {
     default_ref: '',
   },
 };
-
-export const demsEnvVars = {
-  projectName: process.env.DEMS_CURRENT_PROJECT,
-  repos: process.env.DEMS_PROJECT_REPOS,
-  reposRoot: process.env.DEMS_PROJECT_REPOSITORIES_ROOT,
-  gitDefaultRef: process.env.DEMS_GIT_DEFAULT_REF,
-  gitOrgUrl: process.env.DEMS_GIT_ORG_URL,
-  dockerfile: process.env.DEMS_DOCKERFILE,
-  envFilePath: process.env.DEMS_PROJECT_ENV_FILE,
-};

@@ -11,7 +11,7 @@ export const cleanDepsCommand = () => {
     .aliases(['dependencies'])
     .summary('Cleanup repositories dependencies (node_modules).')
     .description('Cleans all repos dependencies locally installed.')
-    .addOption(sharedOptions.force())
+    .addOption(sharedOptions.force)
     .action(async (options) => {
       const config = projectConfig();
       log.info(

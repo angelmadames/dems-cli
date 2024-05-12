@@ -13,7 +13,7 @@ export const cleanDotEnvCommand = () => {
     .description(
       'Removes the dot env files (.env) for all the DEMS-managed repositories configured.',
     )
-    .addOption(sharedOptions.force())
+    .addOption(sharedOptions.force)
     .action(async (options) => {
       const config = projectConfig();
       log.info('Removing dot env files for managed repositories...');

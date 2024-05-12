@@ -20,7 +20,7 @@ export const gitCloneCommand = () => {
         project.
       `),
     )
-    .addOption(sharedOptions.gitRef().default(config.git.default_ref))
+    .addOption(sharedOptions.gitRef.default(config.git.default_ref))
     .action((options) => {
       log.info(`Git Org    > ${chalk.bold(config.git.org_url)}`);
       log.info(`Git Ref    > ${chalk.bold(options.gitRef)}`);

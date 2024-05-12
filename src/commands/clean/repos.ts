@@ -19,7 +19,7 @@ export const cleanReposCommand = () => {
         root path managed by DEMS. This action is irreversible.
       `),
     )
-    .addOption(sharedOptions.force())
+    .addOption(sharedOptions.force)
     .action(async (options) => {
       const config = projectConfig();
       log.info("Removing the current project's git repositories...");

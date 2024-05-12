@@ -54,7 +54,6 @@ export const validateLocalGitRepo = async (path: string) => {
   const { exitCode } = await $`git -C ${path} status`.quiet();
 
   if (exitCode === 0) {
-    log.info(`Local repo: ${path} exists and is valid.`);
     return;
   }
 
