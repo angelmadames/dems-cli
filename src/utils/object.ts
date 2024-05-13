@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import { isFile } from './file-system';
-import log from './log';
+import logger from './log';
 
 export const flattenObject = (
   object: Record<string, any>,
@@ -28,7 +28,7 @@ export const replaceKeyValue = (
   value: string,
 ): void => {
   if (!isFile(path)) {
-    log.error(`File ${path} is not a valid file.`);
+    logger.error(`File ${path} is not a valid file.`);
     return;
   }
 
@@ -39,9 +39,9 @@ export const replaceKeyValue = (
       `${key}=${value}`,
     );
     fs.writeFileSync(path, updatedContent);
-    log.success(`File ${path} updated successfully with ${key}=${value}.`);
+    logger.info(`File ${path} updated successfully with ${key}=${value}.`);
   } catch (error) {
-    log.error(`Error updating file ${path}. See below for more info:`);
+    logger.error(`Error updating file ${path}. See below for more info:`);
     throw new Error(`Error: ${error}`);
   }
 };
@@ -53,7 +53,7 @@ export const replaceKeysInFile = (
   replaceMap: Map<string, string> | mapLike,
 ): void => {
   if (!isFile(filePath)) {
-    log.error(`File ${filePath} is not a valid file.`);
+    logger.error(`File ${filePath} is not a valid file.`);
     return;
   }
 
@@ -72,9 +72,9 @@ export const replaceKeysInFile = (
       );
     }
     fs.writeFileSync(filePath, updatedContent);
-    log.success(`File ${filePath} updated successfully with replacements.`);
+    logger.info(`File ${filePath} updated successfully with replacements.`);
   } catch (error) {
-    log.error(`Error updating file ${filePath}. See below for more info:`);
+    logger.error(`Error updating file ${filePath}. See below for more info:`);
     throw new Error(`Error: ${error}`);
   }
 };

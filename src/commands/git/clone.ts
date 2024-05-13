@@ -2,9 +2,9 @@ import chalk from 'chalk';
 import { Command } from 'commander';
 import { projectConfig } from '../../config/project';
 import git from '../../utils/git';
-import log from '../../utils/log';
 import sharedOptions from '../../utils/shared-options';
 import { noIndent } from '../../utils/string';
+import logger from '../../utils/log';
 
 export const gitCloneCommand = () => {
   const command = new Command();
@@ -22,9 +22,9 @@ export const gitCloneCommand = () => {
     )
     .addOption(sharedOptions.gitRef.default(config.git.default_ref))
     .action((options) => {
-      log.info(`Git Org    > ${chalk.bold(config.git.org_url)}`);
-      log.info(`Git Ref    > ${chalk.bold(options.gitRef)}`);
-      log.info(`Repos Path > ${chalk.bold(config.paths.repos_root)}`);
+      logger.info(`Git Org    > ${chalk.bold(config.git.org_url)}`);
+      logger.info(`Git Ref    > ${chalk.bold(options.gitRef)}`);
+      logger.info(`Repos Path > ${chalk.bold(config.paths.repos_root)}`);
 
       for (const repo of config.repositories) {
         const repoUrl = `${config.git.org_url}/${repo}`;

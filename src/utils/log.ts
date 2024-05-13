@@ -1,25 +1,16 @@
-import chalk from 'chalk';
+import pino from 'pino';
 
-const log = {
-  info: (text?: any, ...optionalParams: any[]) => {
-    return console.log(chalk.blue(text), ...optionalParams);
-  },
-
-  success: (text?: any, ...optionalParams: any[]) => {
-    return console.log(chalk.green(text), ...optionalParams);
-  },
-
-  warning: (text?: any, ...optionalParams: any[]) => {
-    return console.log(chalk.yellow(text), ...optionalParams);
-  },
-
-  dimmedWarning: (text?: any, ...optionalParams: any[]) => {
-    return console.log(chalk.dim.yellow(text), ...optionalParams);
-  },
-
-  error: (text?: any, ...optionalParams: any[]) => {
-    return console.log(chalk.red(text), ...optionalParams);
-  },
+export const formatLog = (text: string): string => {
+  return text.trim().replace(/\s+/g, ' ');
 };
 
-export default log;
+const logger = pino({
+  transport: {
+    target: 'pino-pretty',
+    options: {
+      colorize: true,
+    },
+  },
+});
+
+export default logger;

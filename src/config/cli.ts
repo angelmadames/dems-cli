@@ -15,7 +15,7 @@ export const currentProjectFile = (file = `${rootPath}/current-project`) => {
   // @TODO: Tests fail on CI if the following block is uncommented.
   // Not sure why, but it seems to be related to the way the mock is set up.
   // else {
-  // log.error(`Project file ${file} could not be found. Does it exists?`);
+  // logger.error(`Project file ${file} could not be found. Does it exists?`);
   // throw new Error('Could not select or determine the current project file.');
   //}
 

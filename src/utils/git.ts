@@ -12,29 +12,29 @@ const git = {
       repo,
     });
     if (localRepoExists({ path: repoPath })) {
-      log.warning(`Repo ${repo} already cloned.`);
+      logger.warn(`Repo ${repo} already cloned.`);
     } else {
       cmd.run(`git -C ${path} clone ${repo}.git -b ${ref}`);
-      log.success(`Repo ${repo} was cloned successfully!`);
+      logger.info(`Repo ${repo} was cloned successfully!`);
     }
   },
 
   checkout({ path, ref }: Omit<GitParams, 'repo'>) {
     if (!localRepoExists({ path })) {
-      log.error(`${path} is not a valid Git repository.`);
+      logger.error(`${path} is not a valid Git repository.`);
       throw new Error(`Repo not found in ${path}.`);
     }
     cmd.run(`git -C ${path} checkout ${ref}`);
-    log.success(`Repo was checked out to ref ${ref} successfully!`);
+    logger.info(`Repo was checked out to ref ${ref} successfully!`);
   },
 
   branch({ path, ref }: Omit<GitParams, 'repo'>) {
     if (!localRepoExists({ path })) {
-      log.error(`${path} is not a valid Git repository.`);
+      logger.error(`${path} is not a valid Git repository.`);
       throw new Error(`Repo not found in ${path}.`);
     }
     cmd.run(`git -C ${path} checkout -b ${ref}`);
-    log.success(`Branch ${ref} was created successfully!`);
+    logger.info(`Branch ${ref} was created successfully!`);
   },
 };
 
@@ -64,7 +64,7 @@ export const remoteRepoExists = async ({ repo }: Pick<GitParams, 'repo'>) => {
   const { exitCode } = await $`git ls-remote ${repo}`.quiet();
 
   if (exitCode === 0) {
-    log.info(`Remote repo: ${repo} exists in remote.`);
+    logger.info(`Remote repo: ${repo} exists in remote.`);
     return;
   }
 

@@ -1,8 +1,8 @@
 import { Command } from 'commander';
 import { projectConfig } from '../../config/project';
 import { deletePath } from '../../utils/file-system';
-import log from '../../utils/log';
 import sharedOptions from '../../utils/shared-options';
+import logger from '../../utils/log';
 
 export const cleanDotEnvCommand = () => {
   const command = new Command();
@@ -16,10 +16,10 @@ export const cleanDotEnvCommand = () => {
     .addOption(sharedOptions.force)
     .action(async (options) => {
       const config = projectConfig();
-      log.info('Removing dot env files for managed repositories...');
+      logger.info('Removing dot env files for managed repositories...');
 
       if (options.force) {
-        log.warning('User interactivity disabled due to --force flag.');
+        logger.warn('User interactivity disabled due to --force flag.');
       }
 
       for (const repo of Object.values(config.paths.repos)) {
@@ -29,7 +29,7 @@ export const cleanDotEnvCommand = () => {
         });
       }
 
-      log.success('dot env files (.env) removed for managed repositories.');
+      logger.info('dot env files (.env) removed for managed repositories.');
     });
 
   return command;

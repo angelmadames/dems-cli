@@ -1,8 +1,8 @@
 import { Command } from 'commander';
 import { projectConfig } from '../../config/project';
 import { composeExec } from '../../utils/compose';
-import log from '../../utils/log';
 import { composeShowArgsCommand } from './show-args';
+import logger from '../../utils/log';
 
 export const composeCommand = () => {
   const command = new Command();
@@ -19,10 +19,8 @@ export const composeCommand = () => {
     .argument('[composeArgs...]', 'Compose arguments to use')
     .allowUnknownOption()
     .action((composeArgs) => {
-      const config = projectConfig();
-
       if (composeArgs.length === 0) {
-        log.error('A Compose command needs to be specified.');
+        logger.error('A Compose command needs to be specified.');
         process.exit(1);
       }
 

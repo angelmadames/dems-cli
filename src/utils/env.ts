@@ -12,8 +12,8 @@ export const dotEnv = {
         .join('\n');
 
       fs.writeFileSync(envFilePath, envContents);
-      log.info(`.env file was generated in: ${config.paths.env_file}.`);
-      log.success('Dot env (.env) file generated!');
+      logger.info(`.env file was generated in: ${config.paths.env_file}.`);
+      logger.info('Dot env (.env) file generated!');
     } catch (error) {
       console.error(
         'There was an error trying to generate the dot env (.env) file: ',

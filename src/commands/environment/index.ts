@@ -2,7 +2,7 @@ import { Command } from 'commander';
 import { projectConfig, projectEnvVars } from '../../config/project';
 import dotEnv from '../../utils/env';
 import { copyFile } from '../../utils/file-system';
-import log from '../../utils/log';
+import logger from '../../utils/log';
 
 export const environmentCommand = () => {
   const command = new Command();
@@ -38,7 +38,7 @@ export const environmentCommand = () => {
       }
 
       if (options.generateDotEnv) {
-        log.info("Generating project's dot env file...");
+        logger.info("Generating project's dot env file...");
         dotEnv.generate(config.paths.env_file, config);
         return;
       }

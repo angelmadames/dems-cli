@@ -7,8 +7,8 @@ export const initCommandOptions = {
   ),
 
   dotEnvFile: new Option(
-    '-p, --project-name [project-name]',
-    'Set project name',
+    '-e, --env-file [env-file]',
+    'Set env file',
   ),
 
   dockerfile: new Option(

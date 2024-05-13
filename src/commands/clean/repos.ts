@@ -3,9 +3,9 @@ import { Command } from 'commander';
 import cliConfig from '../../config/cli';
 import { projectConfig } from '../../config/project';
 import { deletePath } from '../../utils/file-system';
-import log from '../../utils/log';
 import sharedOptions from '../../utils/shared-options';
 import { noIndent } from '../../utils/string';
+import logger from '../../utils/log';
 
 export const cleanReposCommand = () => {
   const command = new Command();
@@ -22,16 +22,16 @@ export const cleanReposCommand = () => {
     .addOption(sharedOptions.force)
     .action(async (options) => {
       const config = projectConfig();
-      log.info("Removing the current project's git repositories...");
-      log.info(`Current project: ${chalk.bold(cliConfig.currentProject)}`);
+      logger.info("Removing the current project's git repositories...");
+      logger.info(`Current project: ${chalk.bold(cliConfig.currentProject)}`);
 
       if (options.force) {
-        log.warning('User interactivity disabled due to --force flag.');
+        logger.warn('User interactivity disabled due to --force flag.');
       }
 
-      log.warning('The repositories that will be removed are:');
+      logger.warn('The repositories that will be removed are:');
       for (const repo of config.repositories) {
-        log.warning(`  - ${repo}`);
+        logger.warn(`  - ${repo}`);
       }
 
       for (const repo of Object.values(config.paths.repos)) {
@@ -41,7 +41,7 @@ export const cleanReposCommand = () => {
         });
       }
 
-      log.success(
+      logger.info(
         'All managed git repositories directories have been removed.',
       );
     });

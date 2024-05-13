@@ -1,9 +1,9 @@
 import cliConfig from '../../config/cli';
 import { createFile, createPath } from '../../utils/file-system';
-import log from '../../utils/log';
+import logger from '../../utils/log';
 
 export const initializeCLI = () => {
-  log.info('Initializing DEMS CLI...');
+  logger.info('Initializing DEMS CLI...');
 
   createPath({ path: cliConfig.root });
   createFile({ file: cliConfig.file, content: JSON.stringify(cliConfig) });

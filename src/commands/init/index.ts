@@ -7,10 +7,11 @@ import cliConfig from '../../config/cli';
 import { defaultConfig } from '../../config/dems';
 import dotEnv from '../../utils/env';
 import { createFile, createPath, isFile } from '../../utils/file-system';
-import log from '../../utils/log';
 import sharedOptions from '../../utils/shared-options';
 import { hyphenToUnderscore, noIndent } from '../../utils/string';
 import initCommandOptions from './options';
+import logger from '../../utils/log';
+import { initializeCLI } from './cli';
 
 export const initCommand = () => {
   const command = new Command();
@@ -38,7 +39,7 @@ export const initCommand = () => {
       const config = defaultConfig;
       const cli = cliConfig;
 
-      log.info('Welcome to DEMS!');
+      logger.info('Welcome to DEMS!');
       initializeCLI();
 
       // Project name
@@ -160,6 +161,3 @@ export const initCommand = () => {
 };
 
 export default initCommand();
-function initializeCLI() {
-  throw new Error('Function not implemented.');
-}

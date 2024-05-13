@@ -1,8 +1,8 @@
 import { Command } from 'commander';
 import { projectConfig } from '../../config/project';
 import { deletePath } from '../../utils/file-system';
-import log from '../../utils/log';
 import sharedOptions from '../../utils/shared-options';
+import logger from '../../utils/log';
 
 export const cleanDepsCommand = () => {
   const command = new Command();
@@ -14,12 +14,12 @@ export const cleanDepsCommand = () => {
     .addOption(sharedOptions.force)
     .action(async (options) => {
       const config = projectConfig();
-      log.info(
+      logger.info(
         'Cleaning all local dependencies for configured applications...',
       );
 
       if (options.force) {
-        log.warning('User interactivity disabled due to --force flag.');
+        logger.warn('User interactivity disabled due to --force flag.');
       }
 
       for (const repo of Object.values(config.paths.repos)) {
@@ -29,7 +29,7 @@ export const cleanDepsCommand = () => {
         });
       }
 
-      log.success('Dependencies cleanup task completed.');
+      logger.info('Dependencies cleanup task completed.');
     });
 
   return command;

@@ -1,11 +1,9 @@
 import { Command } from 'commander';
-import { projectConfig } from '../../config/project';
 import { composeExecParams, composeFiles } from '../../utils/compose';
-import log from '../../utils/log';
+import logger from '../../utils/log';
 
 export const composeShowArgsCommand = () => {
   const command = new Command();
-  const config = projectConfig();
 
   command
     .name('show-args')
@@ -15,9 +13,9 @@ export const composeShowArgsCommand = () => {
         'docker compose command for DEMS.',
     )
     .action(() => {
-      log.info('Compose command params:');
+      logger.info('Compose command params:');
       console.log(JSON.stringify(composeExecParams(), null, 2));
-      log.info('Compose files params:');
+      logger.info('Compose files params:');
       console.log(JSON.stringify(composeFiles({}), null, 2));
     });
 

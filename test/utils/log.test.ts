@@ -4,17 +4,17 @@ import log from '../../src/utils/log';
 
 describe('log', () => {
   test('should log info message in blue color', () => {
-    log.info('info message');
+    logger.info('info message');
     expect(console.log).toHaveBeenCalledWith(chalk.blue('info message'));
   });
 
   test('should log success message in green color', () => {
-    log.success('success message');
+    logger.info('success message');
     expect(console.log).toHaveBeenCalledWith(chalk.green('success message'));
   });
 
   test('should log warning message in yellow color', () => {
-    log.warning('warning message');
+    logger.warn('warning message');
     expect(console.log).toHaveBeenCalledWith(chalk.yellow('warning message'));
   });
 
@@ -26,7 +26,7 @@ describe('log', () => {
   });
 
   test('should log error message in red color', () => {
-    log.error('error message');
+    logger.error('error message');
     expect(console.log).toHaveBeenCalledWith(chalk.red('error message'));
   });
 });
