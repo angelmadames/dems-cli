@@ -6,10 +6,7 @@ export const initCommandOptions = {
     'Set project name',
   ),
 
-  dotEnvFile: new Option(
-    '-e, --env-file [env-file]',
-    'Set env file',
-  ),
+  dotEnvFile: new Option('-e, --env-file [env-file]', 'Set env file'),
 
   dockerfile: new Option(
     '-d, --dockerfile [dockerfile]',

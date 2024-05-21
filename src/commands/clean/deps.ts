@@ -1,8 +1,8 @@
 import { Command } from 'commander';
 import { projectConfig } from '../../config/project';
 import { deletePath } from '../../utils/file-system';
-import sharedOptions from '../../utils/shared-options';
 import logger from '../../utils/log';
+import sharedOptions from '../../utils/shared-options';
 
 export const cleanDepsCommand = () => {
   const command = new Command();

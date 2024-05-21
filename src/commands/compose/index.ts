@@ -1,8 +1,8 @@
 import { Command } from 'commander';
 import { projectConfig } from '../../config/project';
 import { composeExec } from '../../utils/compose';
-import { composeShowArgsCommand } from './show-args';
 import logger from '../../utils/log';
+import { composeShowArgsCommand } from './show-args';
 
 export const composeCommand = () => {
   const command = new Command();

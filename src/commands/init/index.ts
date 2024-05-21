@@ -7,11 +7,11 @@ import cliConfig from '../../config/cli';
 import { defaultConfig } from '../../config/dems';
 import dotEnv from '../../utils/env';
 import { createFile, createPath, isFile } from '../../utils/file-system';
+import logger from '../../utils/log';
 import sharedOptions from '../../utils/shared-options';
 import { hyphenToUnderscore, noIndent } from '../../utils/string';
-import initCommandOptions from './options';
-import logger from '../../utils/log';
 import { initializeCLI } from './cli';
+import initCommandOptions from './options';
 
 export const initCommand = () => {
   const command = new Command();
@@ -21,11 +21,11 @@ export const initCommand = () => {
     .summary('Setup DEMS CLI for a new project')
     .description(
       noIndent(`
-        Initializes a new configuration for a new local project using DEMS.
-        It generates the default config files and prepares for the setup command.
-        The initialization command depends on the Compose files being previously
-        setup at every repository specified.
-      `),
+      Initializes a new configuration for a new local project using DEMS.
+      It generates the default config files and prepares for the setup command.
+      The initialization command depends on the Compose files being previously
+      setup at every repository specified.
+    `),
     )
     .addOption(initCommandOptions.dockerfile)
     .addOption(initCommandOptions.dotEnvFile)

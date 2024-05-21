@@ -2,9 +2,9 @@ import chalk from 'chalk';
 import { Command } from 'commander';
 import { projectConfig } from '../../config/project';
 import git from '../../utils/git';
+import logger from '../../utils/log';
 import sharedOptions from '../../utils/shared-options';
 import { noIndent } from '../../utils/string';
-import logger from '../../utils/log';
 
 export const gitCloneCommand = () => {
   const command = new Command();

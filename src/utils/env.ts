@@ -1,6 +1,5 @@
 import * as fs from 'node:fs';
 import type { DEMSProjectConfig } from '../config/dems';
-import log from './log';
 import { flattenObject } from './object';
 
 export const dotEnv = {
