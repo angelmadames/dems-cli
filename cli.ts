@@ -10,6 +10,7 @@ import { dependenciesCommand } from './src/commands/dependencies';
 import { gitCommand } from './src/commands/git';
 import { noIndent } from './src/utils/string';
 import { name, version, description } from './package.json';
+import { projectCommand } from './src/commands/project';
 
 const cli = new Command();
 
@@ -23,12 +24,13 @@ cli
     Docker, Docker Compose, and the power of Bun to automate the
     initialization of a project and all of its respositories.
   `))
+  .addCommand(projectCommand())
   .addCommand(configCommand())
-  .addCommand(initCommand())
-  .addCommand(gitCommand())
-  .addCommand(cleanCommand())
-  .addCommand(environmentCommand())
-  .addCommand(composeCommand())
-  .addCommand(dependenciesCommand())
+  // .addCommand(initCommand())
+  // .addCommand(gitCommand())
+  // .addCommand(cleanCommand())
+  // .addCommand(environmentCommand())
+  // .addCommand(composeCommand())
+  // .addCommand(dependenciesCommand())
 
 cli.parse();

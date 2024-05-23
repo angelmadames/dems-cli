@@ -13,7 +13,7 @@ export interface SourceTargetOperation {
 export interface FileModificationOperation {
   file: string;
   content: string;
-  override?: boolean;
+  overwrite?: boolean;
 }
 
 export interface PathModificationOperation {

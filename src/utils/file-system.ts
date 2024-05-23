@@ -33,9 +33,9 @@ export const copyFile = ({ source, target }: SourceTargetOperation) => {
 export const createFile = ({
   file,
   content,
-  override = false,
+  overwrite = false,
 }: FileModificationOperation) => {
-  if (!isFile(file) || override) {
+  if (!isFile(file) || overwrite) {
     logger.info(`Creating file: ${file}...`);
     fs.writeFileSync(file, content, 'utf8');
     logger.info(`File: ${file} successfully created.`);

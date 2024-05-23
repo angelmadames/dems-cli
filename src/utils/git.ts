@@ -2,6 +2,7 @@ import { $ } from 'bun';
 import cmd from './cmd';
 import { createPath, isDirectory } from './file-system';
 import type { GitParams } from './interfaces';
+import logger from './log';
 
 const git = {
   clone({ path, repo, ref }: GitParams) {

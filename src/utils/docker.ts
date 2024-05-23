@@ -1,13 +1,10 @@
-import { projectConfig } from '../config/project';
-
 export const dockerRun = (
   cmd: string,
   volume: string,
   image: string,
   workDir = '/usr/app',
 ): void => {
-  const config = projectConfig();
-  const result = Bun.spawnSync([
+  Bun.spawnSync([
     'docker',
     'run',
     '--rm',

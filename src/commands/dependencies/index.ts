@@ -1,11 +1,9 @@
 import { Command } from 'commander';
-import { projectConfig } from '../../config/project';
 import { cleanDepsCommand } from '../clean/deps';
 import { depsCopyCommand } from './copy';
 
 export const dependenciesCommand = () => {
   const command = new Command();
-  const config = projectConfig();
 
   command
     .name('dependencies')
