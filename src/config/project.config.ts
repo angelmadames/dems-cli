@@ -42,7 +42,7 @@ interface ProjectConfigSpec {
   }
 }
 
-const projectConfig = {
+export const projectConfig = {
   default(): ProjectConfigSpec {
     return {
       projectName: 'demo',
@@ -78,18 +78,18 @@ const projectConfig = {
     return JSON.parse(fs.readFileSync(configFile).toString())
   },
 
-  check(configFile = PROJECT_CONFIG_FILE) {
-    if (isFile(configFile)) return
-    logger.warn('Project config file does not exist or is not a valid file.')
-    logger.warn("Run 'dems setup' to create it.")
-    process.exit(1)
-  },
-
-  generate(config: ProjectConfigSpec) {
+  save(config: ProjectConfigSpec) {
     createPath({ path: PROJECT_CONFIG_ROOT })
     createFile({
       file: `${config.projectRootPath}/config.json`,
       content: JSON.stringify(config),
     })
+  },
+
+  check(configFile = PROJECT_CONFIG_FILE) {
+    if (isFile(configFile)) return
+    logger.warn('Project config file does not exist or is not a valid file.')
+    logger.warn("Run 'dems setup' to create it.")
+    process.exit(1)
   },
 }

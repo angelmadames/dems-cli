@@ -8,7 +8,7 @@ function viewProjectConfigCommand() {
     .aliases(['get', 'show'])
     .summary('Shows the current project config')
     .action(() => {
-      console.log(projectConfig.getConfigContent())
+      console.log(projectConfig.get())
     })
 }
 
@@ -18,7 +18,7 @@ function generateProjectConfigCommand() {
     .alias('create')
     .summary('Generate a new deafult project config')
     .action(() => {
-      projectConfig.generate()
+      projectConfig.save(projectConfig.default())
     })
 }
 
@@ -27,9 +27,6 @@ function removeProjectConfigCommand() {
     .name('remove')
     .alias('delete')
     .summary('Removes the config for the current project')
-    .action(() => {
-      projectConfig.remove()
-    })
 }
 
 export function projectConfigCommand() {

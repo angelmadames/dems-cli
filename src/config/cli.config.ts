@@ -66,6 +66,11 @@ export const cliConfig = {
     process.exit(1)
   },
 
+  get(configFile = CONFIG_FILE_PATH): CLIConfigSpec {
+    this.check(CONFIG_FILE_PATH)
+    return JSON.parse(fs.readFileSync(configFile).toString())
+  },
+
   save(config: CLIConfigSpec) {
     if (isFile(CONFIG_FILE_PATH)) {
       logger.error('New DEMS CLI config file could not be created.')
@@ -74,11 +79,6 @@ export const cliConfig = {
     }
 
     fs.writeFileSync(CONFIG_FILE_PATH, JSON.stringify(config, null, 2))
-  },
-
-  get(configFile = CONFIG_FILE_PATH): CLIConfigSpec {
-    this.check(CONFIG_FILE_PATH)
-    return JSON.parse(fs.readFileSync(configFile).toString())
   },
 
   check(configFile = CONFIG_FILE_PATH) {
