@@ -1,4 +1,4 @@
-import { Option } from 'commander';
+import { Option } from 'commander'
 
 export const initCommandOptions = {
   projectName: new Option(
@@ -17,6 +17,6 @@ export const initCommandOptions = {
     '-i, --interactive [boolean]',
     'Run the command in interactive mode',
   ).default(true),
-};
+}
 
-export default initCommandOptions;
+export default initCommandOptions

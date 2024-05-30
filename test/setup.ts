@@ -1,4 +1,4 @@
-import { afterEach, beforeAll, beforeEach, jest, mock, spyOn } from 'bun:test';
+import { afterEach, beforeAll, beforeEach, jest, mock, spyOn } from 'bun:test'
 
 beforeAll(() => {
   mock.module('node:fs', () => ({
@@ -13,7 +13,7 @@ beforeAll(() => {
       readFileSync: mock(),
       writeFileSync: mock(),
     },
-  }));
+  }))
 
   mock.module('../src/config/cli', () => ({
     currentProject: () => 'test-project',
@@ -24,7 +24,7 @@ beforeAll(() => {
       root: '/path/to/root',
       file: '/path/to/file',
     },
-  }));
+  }))
 
   mock.module('../src/config/project', () => ({
     projectConfig: () => ({
@@ -43,22 +43,22 @@ beforeAll(() => {
         default_ref: '',
       },
     }),
-  }));
+  }))
 
   mock.module('@inquirer/prompts', () => ({
     confirm: mock(),
-  }));
+  }))
 
   mock.module('node:child_process', () => ({
     execSync: mock(),
-  }));
-});
+  }))
+})
 
 beforeEach(() => {
-  spyOn(console, 'log').mockImplementation(() => {});
-});
+  spyOn(console, 'log').mockImplementation(() => {})
+})
 
 afterEach(() => {
-  jest.clearAllMocks();
-  jest.restoreAllMocks();
-});
+  jest.clearAllMocks()
+  jest.restoreAllMocks()
+})

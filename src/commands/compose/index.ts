@@ -1,12 +1,12 @@
-import { Command } from 'commander';
-import { projectConfig } from '../../config/project';
-import { composeExec } from '../../utils/compose';
-import logger from '../../utils/log';
-import { composeShowArgsCommand } from './show-args';
+import { Command } from 'commander'
+import { projectConfig } from '../../config/project'
+import { composeExec } from '../../utils/compose'
+import logger from '../../utils/log'
+import { composeShowArgsCommand } from './show-args'
 
 export const composeCommand = () => {
-  const command = new Command();
-  const config = projectConfig();
+  const command = new Command()
+  const config = projectConfig()
 
   command
     .name('compose')
@@ -20,16 +20,16 @@ export const composeCommand = () => {
     .allowUnknownOption()
     .action((composeArgs) => {
       if (composeArgs.length === 0) {
-        logger.error('A Compose command needs to be specified.');
-        process.exit(1);
+        logger.error('A Compose command needs to be specified.')
+        process.exit(1)
       }
 
       composeExec({
         command: composeArgs,
-      });
-    });
+      })
+    })
 
-  return command;
-};
+  return command
+}
 
-export default composeCommand();
+export default composeCommand()

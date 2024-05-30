@@ -12,5 +12,5 @@ export const dockerRun = (
     `-w ${workDir}`,
     image,
     cmd,
-  ]);
-};
+  ])
+}

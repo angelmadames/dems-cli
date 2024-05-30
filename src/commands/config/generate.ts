@@ -1,5 +1,5 @@
-import { Command } from 'commander';
-import CLIConfig from '../../config/cli.config';
+import { Command } from 'commander'
+import { cliConfig } from '../../config/cli.config'
 
 export function generateConfigCommand() {
   return new Command()
@@ -7,6 +7,6 @@ export function generateConfigCommand() {
     .alias('create')
     .summary('Generates default DEMS config file')
     .action(() => {
-      CLIConfig.generate();
-    });
+      cliConfig.save(cliConfig.default())
+    })
 }

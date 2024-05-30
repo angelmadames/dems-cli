@@ -1,9 +1,9 @@
-import { Command } from 'commander';
-import { projectConfig } from '../../config/project';
-import { composeExec } from '../../utils/compose';
+import { Command } from 'commander'
+import { projectConfig } from '../../config/project'
+import { composeExec } from '../../utils/compose'
 
 export const depsCopyCommand = () => {
-  const command = new Command();
+  const command = new Command()
 
   command
     .name('copy')
@@ -13,7 +13,7 @@ export const depsCopyCommand = () => {
         'IDE features such as IntelliSense.',
     )
     .action(() => {
-      const config = projectConfig();
+      const config = projectConfig()
       for (const repo of config.repositories) {
         composeExec({
           command: [
@@ -24,11 +24,11 @@ export const depsCopyCommand = () => {
             )}:/usr/app/node_modules`,
             `${config.paths.repos[repo.replace('-', '_')]}/node_modules`,
           ],
-        });
+        })
       }
-    });
+    })
 
-  return command;
-};
+  return command
+}
 
-export default depsCopyCommand();
+export default depsCopyCommand()

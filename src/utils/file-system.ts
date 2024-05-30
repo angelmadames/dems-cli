@@ -1,34 +1,34 @@
-import fs from 'node:fs';
-import { confirm } from '@inquirer/prompts';
+import fs from 'node:fs'
+import { confirm } from '@inquirer/prompts'
 import type {
   FileModificationOperation,
   PathModificationOperation,
   SourceTargetOperation,
-} from './interfaces';
-import logger from './log';
+} from './interfaces'
+import logger from './log'
 
 export const isFile = (path: string) => {
-  return fs.existsSync(path) && fs.lstatSync(path).isFile();
-};
+  return fs.lstatSync(path).isFile()
+}
 
 export const isDirectory = (path: string) => {
-  return fs.existsSync(path) && fs.lstatSync(path).isDirectory();
-};
+  return fs.lstatSync(path).isDirectory()
+}
 
 export const copyFile = ({ source, target }: SourceTargetOperation) => {
   if (isFile(target)) {
-    logger.warn(`Path: ${target} already exists.`);
-    return;
+    logger.warn(`Path: ${target} already exists.`)
+    return
   }
 
   if (isFile(source)) {
-    fs.copyFileSync(source, target, 0);
-    logger.info(`File: ${source} copied to ${target}.`);
+    fs.copyFileSync(source, target, 0)
+    logger.info(`File: ${source} copied to ${target}.`)
   } else {
-    logger.error('Source is not a valid file.');
-    throw new Error('Could not perform file copy operation.');
+    logger.error('Source is not a valid file.')
+    throw new Error('Could not perform file copy operation.')
   }
-};
+}
 
 export const createFile = ({
   file,
@@ -36,23 +36,23 @@ export const createFile = ({
   overwrite = false,
 }: FileModificationOperation) => {
   if (!isFile(file) || overwrite) {
-    logger.info(`Creating file: ${file}...`);
-    fs.writeFileSync(file, content, 'utf8');
-    logger.info(`File: ${file} successfully created.`);
+    logger.info(`Creating file: ${file}...`)
+    fs.writeFileSync(file, content, 'utf8')
+    logger.info(`File: '${file}' successfully created.`)
   } else {
-    logger.warn(`File: ${file} already exists.`);
+    logger.warn(`File: '${file}' already exists.`)
   }
-};
+}
 
 export const createPath = ({ path }: PathModificationOperation) => {
   if (!isDirectory(path)) {
-    logger.info(`Creating path: ${path}...`);
-    fs.mkdirSync(path, { recursive: true });
-    logger.info(`Path: ${path} successfully created.`);
+    logger.info(`Creating path: ${path}...`)
+    fs.mkdirSync(path, { recursive: true })
+    logger.info(`Path: '${path}' successfully created.`)
   } else {
-    logger.warn(`Path: ${path} already exists.`);
+    logger.warn(`Path: '${path}' already exists.`)
   }
-};
+}
 
 export const deletePath = async ({
   path,
@@ -63,8 +63,8 @@ export const deletePath = async ({
       force ||
       (await confirm({ message: `Delete directory ${path} recursively?` }))
     ) {
-      fs.rmdirSync(path, { recursive: true });
-      logger.info(`Directory ${path} deleted.`);
+      fs.rmdirSync(path, { recursive: true })
+      logger.info(`Directory ${path} deleted.`)
     }
   }
 
@@ -75,10 +75,10 @@ export const deletePath = async ({
         message: `Delete file ${path}?`,
       }))
     ) {
-      fs.rmSync(path);
-      logger.info(`File ${path} deleted.`);
+      fs.rmSync(path)
+      logger.info(`File ${path} deleted.`)
     }
   }
 
-  return;
-};
+  return
+}

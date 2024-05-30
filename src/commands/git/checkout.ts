@@ -1,12 +1,12 @@
-import { Command } from 'commander';
-import { projectConfig } from '../../config/project';
-import git from '../../utils/git';
-import sharedOptions from '../../utils/shared-options';
-import { noIndent } from '../../utils/string';
+import { Command } from 'commander'
+import { projectConfig } from '../../config/project'
+import git from '../../utils/git'
+import sharedOptions from '../../utils/shared-options'
+import { noIndent } from '../../utils/string'
 
 export const gitCheckoutCommand = () => {
-  const command = new Command();
-  const config = projectConfig();
+  const command = new Command()
+  const config = projectConfig()
 
   command
     .name('checkout')
@@ -24,11 +24,11 @@ export const gitCheckoutCommand = () => {
         git.checkout({
           path: repoPath,
           ref: options.gitRef,
-        });
+        })
       }
-    });
+    })
 
-  return command;
-};
+  return command
+}
 
-export default gitCheckoutCommand();
+export default gitCheckoutCommand()

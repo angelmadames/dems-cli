@@ -1,4 +1,4 @@
-import { Option } from 'commander';
+import { Option } from 'commander'
 
 export const sharedOptions = {
   info: new Option(
@@ -30,6 +30,6 @@ export const sharedOptions = {
     '-f, --force',
     'Prevents user interactivity and assumes default values',
   ).default(false),
-};
+}
 
-export default sharedOptions;
+export default sharedOptions

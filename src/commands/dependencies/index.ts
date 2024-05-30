@@ -1,9 +1,9 @@
-import { Command } from 'commander';
-import { cleanDepsCommand } from '../clean/deps';
-import { depsCopyCommand } from './copy';
+import { Command } from 'commander'
+import { cleanDepsCommand } from '../clean/deps'
+import { depsCopyCommand } from './copy'
 
 export const dependenciesCommand = () => {
-  const command = new Command();
+  const command = new Command()
 
   command
     .name('dependencies')
@@ -11,9 +11,9 @@ export const dependenciesCommand = () => {
     .summary('Manages application dependencies locally')
     .description('Allows management of applicacion dependencies')
     .addCommand(depsCopyCommand())
-    .addCommand(cleanDepsCommand().name('clean'));
+    .addCommand(cleanDepsCommand().name('clean'))
 
-  return command;
-};
+  return command
+}
 
-export default dependenciesCommand();
+export default dependenciesCommand()

@@ -1,11 +1,11 @@
-import { Command } from 'commander';
-import { projectConfig } from '../../config/project';
-import { deletePath } from '../../utils/file-system';
-import logger from '../../utils/log';
-import sharedOptions from '../../utils/shared-options';
+import { Command } from 'commander'
+import { projectConfig } from '../../config/project'
+import { deletePath } from '../../utils/file-system'
+import logger from '../../utils/log'
+import sharedOptions from '../../utils/shared-options'
 
 export const cleanDepsCommand = () => {
-  const command = new Command();
+  const command = new Command()
   command
     .name('deps')
     .aliases(['dependencies'])
@@ -13,26 +13,26 @@ export const cleanDepsCommand = () => {
     .description('Cleans all repos dependencies locally installed.')
     .addOption(sharedOptions.force)
     .action(async (options) => {
-      const config = projectConfig();
+      const config = projectConfig()
       logger.info(
         'Cleaning all local dependencies for configured applications...',
-      );
+      )
 
       if (options.force) {
-        logger.warn('User interactivity disabled due to --force flag.');
+        logger.warn('User interactivity disabled due to --force flag.')
       }
 
       for (const repo of Object.values(config.paths.repos)) {
         await deletePath({
           path: `${repo}/node_modules`,
           force: options.force,
-        });
+        })
       }
 
-      logger.info('Dependencies cleanup task completed.');
-    });
+      logger.info('Dependencies cleanup task completed.')
+    })
 
-  return command;
-};
+  return command
+}
 
-export default cleanDepsCommand();
+export default cleanDepsCommand()

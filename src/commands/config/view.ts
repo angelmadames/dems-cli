@@ -1,12 +1,12 @@
-import { Command } from 'commander';
-import CLIConfig from '../../config/cli.config';
+import { Command } from 'commander'
+import { cliConfig } from '../../config/cli.config'
 
 export function viewConfigCommand() {
   return new Command()
     .name('view')
-    .alias('get')
+    .aliases(['get', 'show'])
     .summary('Shows the DEMS config file ')
     .action(() => {
-      console.log(JSON.parse(CLIConfig.get().toString()));
-    });
+      console.log(cliConfig.get())
+    })
 }

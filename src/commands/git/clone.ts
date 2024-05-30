@@ -1,14 +1,14 @@
-import chalk from 'chalk';
-import { Command } from 'commander';
-import { projectConfig } from '../../config/project';
-import git from '../../utils/git';
-import logger from '../../utils/log';
-import sharedOptions from '../../utils/shared-options';
-import { noIndent } from '../../utils/string';
+import chalk from 'chalk'
+import { Command } from 'commander'
+import { projectConfig } from '../../config/project'
+import git from '../../utils/git'
+import logger from '../../utils/log'
+import sharedOptions from '../../utils/shared-options'
+import { noIndent } from '../../utils/string'
 
 export const gitCloneCommand = () => {
-  const command = new Command();
-  const config = projectConfig();
+  const command = new Command()
+  const config = projectConfig()
 
   command
     .name('clone')
@@ -22,21 +22,21 @@ export const gitCloneCommand = () => {
     )
     .addOption(sharedOptions.gitRef.default(config.git.default_ref))
     .action((options) => {
-      logger.info(`Git Org    > ${chalk.bold(config.git.org_url)}`);
-      logger.info(`Git Ref    > ${chalk.bold(options.gitRef)}`);
-      logger.info(`Repos Path > ${chalk.bold(config.paths.repos_root)}`);
+      logger.info(`Git Org    > ${chalk.bold(config.git.org_url)}`)
+      logger.info(`Git Ref    > ${chalk.bold(options.gitRef)}`)
+      logger.info(`Repos Path > ${chalk.bold(config.paths.repos_root)}`)
 
       for (const repo of config.repositories) {
-        const repoUrl = `${config.git.org_url}/${repo}`;
+        const repoUrl = `${config.git.org_url}/${repo}`
         git.clone({
           ref: options.gitRef,
           path: config.paths.repos_root,
           repo: repoUrl,
-        });
+        })
       }
-    });
+    })
 
-  return command;
-};
+  return command
+}
 
-export default gitCloneCommand();
+export default gitCloneCommand()

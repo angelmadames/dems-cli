@@ -1,5 +1,4 @@
-import { Command } from 'commander';
-import CLIConfig from '../../config/cli.config';
+import { Command } from 'commander'
 
 export function setActiveProjectCommand() {
   return new Command()
@@ -8,6 +7,6 @@ export function setActiveProjectCommand() {
     .summary('Set current active project')
     .argument('<project>', 'The project name to set as active')
     .action((project) => {
-      CLIConfig.setActiveProject(project);
-    });
+      CLIConfig.setActiveProject(project)
+    })
 }

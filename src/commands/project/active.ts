@@ -1,6 +1,6 @@
-import { Command } from 'commander';
-import CLIConfig from '../../config/cli.config';
-import logger from '../../utils/log';
+import { Command } from 'commander'
+import { cliConfig } from '../../config/cli.config'
+import logger from '../../utils/log'
 
 export function activeProjectCommand() {
   return new Command()
@@ -8,6 +8,6 @@ export function activeProjectCommand() {
     .alias('current')
     .summary('Manages the current active project')
     .action(() => {
-      logger.info(`Active project is: ${CLIConfig.activeProject()}.`);
-    });
+      logger.info(`Active project is: ${cliConfig.activeProject()}.`)
+    })
 }

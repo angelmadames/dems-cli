@@ -1,11 +1,11 @@
-import { Command } from 'commander';
-import { projectConfig, projectEnvVars } from '../../config/project';
-import dotEnv from '../../utils/env';
-import { copyFile } from '../../utils/file-system';
-import logger from '../../utils/log';
+import { Command } from 'commander'
+import { projectConfig, projectEnvVars } from '../../config/project'
+import dotEnv from '../../utils/env'
+import { copyFile } from '../../utils/file-system'
+import logger from '../../utils/log'
 
 export const environmentCommand = () => {
-  const command = new Command();
+  const command = new Command()
   command
     .name('environment')
     .alias('env')
@@ -24,29 +24,29 @@ export const environmentCommand = () => {
       "Copy the .env.example file of the current project's repositories",
     )
     .action(async (options) => {
-      const config = projectConfig();
+      const config = projectConfig()
 
       if (options.copyExampleFiles) {
         for (const repo of config.repositories) {
-          const repoPath = `${config.paths.repos_root}/${repo}`;
+          const repoPath = `${config.paths.repos_root}/${repo}`
           copyFile({
             source: `${repoPath}/.env.example`,
             target: `${repoPath}/.env`,
-          });
+          })
         }
-        return;
+        return
       }
 
       if (options.generateDotEnv) {
-        logger.info("Generating project's dot env file...");
-        dotEnv.generate(config.paths.env_file, config);
-        return;
+        logger.info("Generating project's dot env file...")
+        dotEnv.generate(config.paths.env_file, config)
+        return
       }
 
-      console.log(projectEnvVars());
-    });
+      console.log(projectEnvVars())
+    })
 
-  return command;
-};
+  return command
+}
 
-export default environmentCommand();
+export default environmentCommand()

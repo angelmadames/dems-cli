@@ -1,103 +1,90 @@
-import fs from 'node:fs';
-import { homedir } from 'node:os';
-import { createFile, isFile } from '../utils/file-system';
-import logger from '../utils/log';
+import fs from 'node:fs'
+import { homedir } from 'node:os'
+import { join } from 'node:path'
+import { isFile } from '../utils/file-system'
+import logger from '../utils/log'
 
-export interface CLIConfigSpec {
-  /**
-   * The system path where all DEMS-related files will live.
-   * It will be used to store config and data files.
-   */
-  rootPath: string;
+export const CONFIG_PATH = join(homedir(), '.dems')
+export const CONFIG_FILE_PATH = join(CONFIG_PATH, 'config.json')
+export const ACTIVE_PROJECT_FILE = join(CONFIG_PATH, 'active-project')
+export const DEMS_FILES_PATH = '.dems'
+export const PROJECT_ENV_FILE = '.env'
 
-  /**
-   * The DEMS config file (config.json). Relative to DEMS root path.
-   */
-  configFile: string;
+interface CLIConfigSpec {
+  // The system path where all DEMS-related files will live.
+  // It will be used to store config and data files.
+  rootPath: string
 
-  /**
-   * Active project file is read by DEMS to determine the current project.
-   */
-  activeProjectFile: string;
+  // The DEMS config file (config.json). Relative to DEMS root path.
+  configFile: string
 
-  /**
-   * The application configuration needed by DEMS is expected to be inside each
-   * application repository. The DEMS file path is the relative path of each
-   * application repository where DEMS-files will be stored.
-   */
-  filesPath: string;
+  // Active project file is read by DEMS to determine the current project.
+  activeProjectFile: string
 
-  /**
-   * All docker compose commands run by DEMS will have the --env-file [path].
-   * The env file will be appended to docker compose commands.
-   */
-  envFile: string;
+  // The application configuration needed by DEMS is expected to be inside each
+  // application repository. The DEMS file path is the relative path of each
+  // application repository where DEMS-files will be stored.
+  filesPath: string
 
-  /**
-   * The Dockerfile name that DEMS will try to use to provision the application
-   * services. The path is relative to `rootPath`.
-   */
-  dockerfile: string;
+  // All docker compose commands run by DEMS will have the --env-file [path].
+  // The env file will be appended to docker compose commands.
+  envFile: string
 }
 
-class CLIConfig implements Partial<CLIConfigSpec> {
-  rootPath = `${homedir()}/.dems`;
-  configFile = `${this.rootPath}/config.json`;
-  activeProjectFile = `${this.rootPath}/active-project`;
-  filesPath = '.dems';
-  envFile = '.env';
-  dockerfile = `${this.filesPath}/Dockerfile`;
-
+export const cliConfig = {
   default(): CLIConfigSpec {
     return {
-      rootPath: this.rootPath,
-      configFile: this.configFile,
-      activeProjectFile: this.activeProjectFile,
-      filesPath: this.filesPath,
-      envFile: this.envFile,
-      dockerfile: this.dockerfile,
-    };
-  }
+      rootPath: CONFIG_PATH,
+      configFile: CONFIG_FILE_PATH,
+      activeProjectFile: ACTIVE_PROJECT_FILE,
+      filesPath: DEMS_FILES_PATH,
+      envFile: PROJECT_ENV_FILE,
+    }
+  },
 
-  generate(config: CLIConfigSpec = this.default()) {
-    createFile({
-      file: `${config.rootPath}/config.json`,
-      content: JSON.stringify(config, null, 2),
-    });
-  }
-
-  get(configFile = this.configFile) {
-    this.checkConfigFile();
-    return fs.readFileSync(this.configFile);
-  }
-
-  activeProject() {
-    this.checkActiveProjectFile();
-    return fs.readFileSync(this.activeProjectFile).toString();
-  }
+  activeProject(activeProjectFile = ACTIVE_PROJECT_FILE) {
+    this.check(activeProjectFile)
+    return fs.readFileSync(activeProjectFile).toString()
+  },
 
   setActiveProject(project: string) {
-    this.checkActiveProjectFile();
-    fs.writeFileSync(this.activeProjectFile, project);
-    logger.info(`Active project set to: '${project}'`);
-  }
+    this.check(ACTIVE_PROJECT_FILE)
+    fs.writeFileSync(ACTIVE_PROJECT_FILE, project)
+    logger.info(`Active project set to: '${project}'`)
+  },
 
-  private checkActiveProjectFile() {
-    if (!isFile(this.activeProjectFile)) {
-      logger.error(
-        'Active project file does not exist or is not a valid file.',
-      );
-      process.exit(1);
+  load(): CLIConfigSpec {
+    if (isFile(CONFIG_FILE_PATH)) {
+      const data = fs.readFileSync(CONFIG_FILE_PATH, 'utf-8')
+      return JSON.parse(data) as CLIConfigSpec
     }
-  }
 
-  private checkConfigFile() {
-    if (!isFile(this.configFile)) {
-      logger.warn('DEMS config file does not exist or is not a valid file.');
-      logger.warn("Run 'dems install' or 'dems config generate' to create it.");
-      process.exit(1);
+    logger.error(
+      `DEMS CLI config file does not exist or could not be found at ${CONFIG_PATH}.`,
+    )
+    logger.error('Did you run `dems install`?')
+    process.exit(1)
+  },
+
+  save(config: CLIConfigSpec) {
+    if (isFile(CONFIG_FILE_PATH)) {
+      logger.error('New DEMS CLI config file could not be created.')
+      logger.error('Config file already exists!')
+      process.exit(1)
     }
-  }
+
+    fs.writeFileSync(CONFIG_FILE_PATH, JSON.stringify(config, null, 2))
+  },
+
+  get(configFile = CONFIG_FILE_PATH): CLIConfigSpec {
+    this.check(CONFIG_FILE_PATH)
+    return JSON.parse(fs.readFileSync(configFile).toString())
+  },
+
+  check(configFile = CONFIG_FILE_PATH) {
+    if (isFile(configFile)) return
+    logger.warn('DEMS config file does not exist or is not a valid file.')
+    logger.warn("Run 'dems install' or 'dems config generate' to create it.")
+    process.exit(1)
+  },
 }
-
-export default new CLIConfig();

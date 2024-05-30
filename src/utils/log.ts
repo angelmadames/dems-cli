@@ -1,8 +1,8 @@
-import pino from 'pino';
+import pino from 'pino'
 
 export const formatLog = (text: string): string => {
-  return text.trim().replace(/\s+/g, ' ');
-};
+  return text.trim().replace(/\s+/g, ' ')
+}
 
 const logger = pino({
   transport: {
@@ -11,6 +11,6 @@ const logger = pino({
       colorize: true,
     },
   },
-});
+})
 
-export default logger;
+export default logger
