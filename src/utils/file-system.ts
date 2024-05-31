@@ -8,11 +8,11 @@ import type {
 import logger from './log'
 
 export const isFile = (path: string) => {
-  return fs.lstatSync(path).isFile()
+  return fs.existsSync(path) && fs.lstatSync(path).isFile()
 }
 
 export const isDirectory = (path: string) => {
-  return fs.lstatSync(path).isDirectory()
+  return fs.existsSync(path) && fs.lstatSync(path).isDirectory()
 }
 
 export const copyFile = ({ source, target }: SourceTargetOperation) => {

@@ -1,7 +1,7 @@
 import { Command } from 'commander'
 import { activeProjectCommand } from './active'
 import { projectConfigCommand } from './config'
-import { removeProjectCommand } from './remove'
+import { removeProjectCommand } from './config/remove'
 import { setActiveProjectCommand } from './set'
 
 export function projectCommand() {

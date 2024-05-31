@@ -1,7 +1,13 @@
 import fs from 'node:fs'
 import { homedir } from 'node:os'
 import { join } from 'node:path'
-import { createFile, createPath, isFile } from '../utils/file-system'
+import {
+  createFile,
+  createPath,
+  deletePath,
+  isDirectory,
+  isFile,
+} from '../utils/file-system'
 import logger from '../utils/log'
 import { CONFIG_PATH, cliConfig } from './cli.config'
 
@@ -84,6 +90,17 @@ export const projectConfig = {
       file: `${config.projectRootPath}/config.json`,
       content: JSON.stringify(config),
     })
+  },
+
+  remove(project: string) {
+    const projectPath = join(CONFIG_PATH, project)
+    if (isDirectory(projectPath)) {
+      deletePath({ path: projectPath, force: true })
+      return
+    }
+
+    logger.warn(`Config path for '${project}' is not a valid directory.`)
+    logger.warn(`Project '${project}' is most likely not initialized.`)
   },
 
   check(configFile = PROJECT_CONFIG_FILE) {
