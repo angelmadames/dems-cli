@@ -1,7 +1,7 @@
 import { Command } from 'commander'
-import git from '../../utils/git'
-import { projectConfig } from '../../config/project.config'
 import { cliConfig } from '../../config/cli.config'
+import { projectConfig } from '../../config/project.config'
+import git from '../../utils/git'
 
 export function gitBranchCommand() {
   return new Command()

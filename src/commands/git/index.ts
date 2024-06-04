@@ -1,7 +1,7 @@
 import { Command } from 'commander'
-import { gitCloneCommand } from './clone'
-import { gitCheckoutCommand } from './checkout'
 import { gitBranchCommand } from './branch'
+import { gitCheckoutCommand } from './checkout'
+import { gitCloneCommand } from './clone'
 
 export function gitCommand() {
   return new Command()

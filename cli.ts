@@ -26,7 +26,7 @@ cli
   .addCommand(projectCommand())
   .addCommand(configCommand())
   .addCommand(gitCommand())
-  // .addCommand(cleanCommand())
+  .addCommand(cleanCommand())
   // .addCommand(environmentCommand())
   // .addCommand(composeCommand())
   // .addCommand(dependenciesCommand())

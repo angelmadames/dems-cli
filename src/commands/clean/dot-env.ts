@@ -1,12 +1,13 @@
+import { join } from 'node:path'
 import { Command } from 'commander'
-import { projectConfig } from '../../config/project'
+import { cliConfig } from '../../config/cli.config'
+import { projectConfig } from '../../config/project.config'
 import { deletePath } from '../../utils/file-system'
 import logger from '../../utils/log'
 import sharedOptions from '../../utils/shared-options'
 
-export const cleanDotEnvCommand = () => {
-  const command = new Command()
-  command
+export function cleanDotEnvCommand() {
+  return new Command()
     .name('dot-env')
     .aliases(['env', 'dotenv'])
     .summary('Cleanup repositories dot env files (.env).')
@@ -15,24 +16,22 @@ export const cleanDotEnvCommand = () => {
     )
     .addOption(sharedOptions.force)
     .action(async (options) => {
-      const config = projectConfig()
+      const config = projectConfig.load()
+      const configCLI = cliConfig.load()
+
       logger.info('Removing dot env files for managed repositories...')
 
       if (options.force) {
         logger.warn('User interactivity disabled due to --force flag.')
       }
 
-      for (const repo of Object.values(config.paths.repos)) {
+      for (const repo in config.repositories) {
         await deletePath({
-          path: `${repo}/.env`,
+          path: join(configCLI.reposPath, repo, '.env'),
           force: options.force,
         })
       }
 
       logger.info('dot env files (.env) removed for managed repositories.')
     })
-
-  return command
 }
-
-export default cleanDotEnvCommand()

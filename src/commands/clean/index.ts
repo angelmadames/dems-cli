@@ -1,15 +1,11 @@
 import { Command } from 'commander'
-import { projectConfig } from '../../config/project'
 import { noIndent } from '../../utils/string'
 import { cleanDepsCommand } from './deps'
 import { cleanDotEnvCommand } from './dot-env'
 import { cleanReposCommand } from './repos'
 
-export const cleanCommand = () => {
-  const command = new Command()
-  const config = projectConfig()
-
-  command
+export function cleanCommand() {
+  return new Command()
     .name('clean')
     .summary('Cleanup DEMS-managed resources')
     .description(
@@ -21,8 +17,4 @@ export const cleanCommand = () => {
     .addCommand(cleanDepsCommand())
     .addCommand(cleanDotEnvCommand())
     .addCommand(cleanReposCommand())
-
-  return command
 }
-
-export default cleanCommand()

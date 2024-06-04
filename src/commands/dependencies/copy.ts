@@ -1,34 +1,35 @@
+import { join } from 'node:path'
 import { Command } from 'commander'
-import { projectConfig } from '../../config/project'
+import { cliConfig } from '../../config/cli.config'
+import { projectConfig } from '../../config/project.config'
 import { composeExec } from '../../utils/compose'
+import { noIndent } from '../../utils/string'
 
-export const depsCopyCommand = () => {
-  const command = new Command()
-
-  command
+export function depsCopyCommand() {
+  return new Command()
     .name('copy')
     .summary('Copy dependencies from containers to local repository')
     .description(
-      'Copy dependencies from containers to local repository to enable\n' +
-        'IDE features such as IntelliSense.',
+      noIndent(`
+        Copy dependencies from containers to local repository to enable
+        IDE features such as IntelliSense.
+    `),
     )
     .action(() => {
-      const config = projectConfig()
-      for (const repo of config.repositories) {
+      const config = projectConfig.load()
+      const configCLI = cliConfig.load()
+
+      for (const repo in config.repositories) {
         composeExec({
           command: [
             'cp',
             `${repo.replace(
-              `${config.compose.project_name}-`,
+              `${config.projectName}-`,
               '',
             )}:/usr/app/node_modules`,
-            `${config.paths.repos[repo.replace('-', '_')]}/node_modules`,
+            join(configCLI.reposPath, repo, 'node_modules'),
           ],
         })
       }
     })
-
-  return command
 }
-
-export default depsCopyCommand()
