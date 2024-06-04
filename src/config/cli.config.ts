@@ -7,6 +7,7 @@ import logger from '../utils/log'
 export const CONFIG_PATH = join(homedir(), '.dems')
 export const CONFIG_FILE_PATH = join(CONFIG_PATH, 'config.json')
 export const ACTIVE_PROJECT_FILE = join(CONFIG_PATH, 'active-project')
+export const DEMS_REPOS_PATH = join(homedir(), 'repos')
 export const DEMS_FILES_PATH = '.dems'
 export const PROJECT_ENV_FILE = '.env'
 
@@ -20,6 +21,9 @@ interface CLIConfigSpec {
 
   // Active project file is read by DEMS to determine the current project.
   activeProjectFile: string
+
+  // The path where all git repositories will be cloned by DEMS.
+  reposPath: string
 
   // The application configuration needed by DEMS is expected to be inside each
   // application repository. The DEMS file path is the relative path of each
@@ -37,6 +41,7 @@ export const cliConfig = {
       rootPath: CONFIG_PATH,
       configFile: CONFIG_FILE_PATH,
       activeProjectFile: ACTIVE_PROJECT_FILE,
+      reposPath: DEMS_REPOS_PATH,
       filesPath: DEMS_FILES_PATH,
       envFile: PROJECT_ENV_FILE,
     }

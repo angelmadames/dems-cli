@@ -1,26 +1,21 @@
 import { Command } from 'commander'
-import { projectConfig } from '../../config/project'
 import git from '../../utils/git'
+import { projectConfig } from '../../config/project.config'
+import { cliConfig } from '../../config/cli.config'
 
-export const gitBranchCommand = () => {
-  const command = new Command()
-  const config = projectConfig()
-
-  command
+export function gitBranchCommand() {
+  return new Command()
     .name('branch')
-    .description('Creates a new git branch in all available repositories.')
+    .summary('Creates a new git branch in all available repositories.')
     .argument('<ref>', 'The name of the branch to create.')
     .action((ref) => {
-      const { repositories } = config
-      for (const repo of repositories) {
+      const { repositories } = projectConfig.load()
+
+      for (const repo of Object.values(repositories)) {
         git.branch({
-          path: `${config.paths.repos_root}/${repo}`,
+          path: `${cliConfig.load().reposPath}/${repo}`,
           ref,
         })
       }
     })
-
-  return command
 }
-
-export default gitBranchCommand()

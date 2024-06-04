@@ -1,14 +1,10 @@
 import { Command } from 'commander'
-import { projectConfig } from '../../config/project'
-import git from '../../utils/git'
-import sharedOptions from '../../utils/shared-options'
+import { projectConfig } from '../../config/project.config'
+import git, { getRepoNameFromURL } from '../../utils/git'
 import { noIndent } from '../../utils/string'
 
-export const gitCheckoutCommand = () => {
-  const command = new Command()
-  const config = projectConfig()
-
-  command
+export function gitCheckoutCommand() {
+  return new Command()
     .name('checkout')
     .summary('Checkout all repositories to a specific git branch or tag.')
     .description(
@@ -18,17 +14,14 @@ export const gitCheckoutCommand = () => {
         repositories defined in the config.json file of the current project.
      `),
     )
-    .addOption(sharedOptions.gitRef.default(config.git.default_ref))
     .action((options) => {
-      for (const repoPath of Object.values(config.paths.repos)) {
+      const config = projectConfig.load()
+
+      for (const repo of Object.values(config.repositories)) {
         git.checkout({
-          path: repoPath,
-          ref: options.gitRef,
+          path: getRepoNameFromURL(repo),
+          ref: config.git.defaultRef,
         })
       }
     })
-
-  return command
 }
-
-export default gitCheckoutCommand()

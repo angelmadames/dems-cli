@@ -11,4 +11,5 @@ export function projectConfigCommand() {
     .addCommand(viewProjectConfigCommand())
     .addCommand(generateProjectConfigCommand())
     .addCommand(removeProjectCommand())
+  // @TODO: Add sub-command 'add-repo'.
 }

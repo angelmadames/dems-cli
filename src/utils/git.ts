@@ -1,3 +1,4 @@
+import { join } from 'node:path'
 import { $ } from 'bun'
 import cmd from './cmd'
 import { createPath, isDirectory } from './file-system'
@@ -7,29 +8,29 @@ import logger from './log'
 const git = {
   clone({ path, repo, ref }: GitParams) {
     if (!isDirectory(path)) createPath({ path })
-    const repoPath = getRepoPath({
-      path,
-      repo,
-    })
-    if (localRepoExists({ path: repoPath })) {
+
+    const repoPath = join(path, getRepoNameFromURL(repo))
+
+    if (localRepoExists(repoPath)) {
       logger.warn(`Repo ${repo} already cloned.`)
     } else {
-      cmd.run(`git -C ${path} clone ${repo}.git -b ${ref}`)
-      logger.info(`Repo ${repo} was cloned successfully!`)
+      cmd.run(`git -C ${path} clone ${repo} -b ${ref}`)
+      logger.info(`Repo '${repo}' was cloned su ccessfully!`)
     }
   },
 
   checkout({ path, ref }: Omit<GitParams, 'repo'>) {
-    if (!localRepoExists({ path })) {
-      logger.error(`${path} is not a valid Git repository.`)
-      throw new Error(`Repo not found in ${path}.`)
+    if (!localRepoExists(path)) {
+      logger.error(`Repo was not found in path '${path}'.`)
+      process.exit(1)
     }
+
     cmd.run(`git -C ${path} checkout ${ref}`)
     logger.info(`Repo was checked out to ref ${ref} successfully!`)
   },
 
   branch({ path, ref }: Omit<GitParams, 'repo'>) {
-    if (!localRepoExists({ path })) {
+    if (!localRepoExists(path)) {
       logger.error(`${path} is not a valid Git repository.`)
       throw new Error(`Repo not found in ${path}.`)
     }
@@ -38,25 +39,18 @@ const git = {
   },
 }
 
-export const getRepoName = ({ repo }: Pick<GitParams, 'repo'>) => {
-  return repo.split('/').pop()
+export function getRepoNameFromURL(gitURL: string): string {
+  const name = gitURL.split('/').at(-1) || ''
+  return name.replace('.git', '')
 }
 
-export const getRepoPath = ({ path, repo }: Omit<GitParams, 'ref'>): string => {
-  return `${path}/${getRepoName({ repo })}`
-}
-
-export const localRepoExists = ({ path }: Pick<GitParams, 'path'>) => {
-  return isDirectory(`${path}/.git`)
+export function localRepoExists(repoPath: string) {
+  return isDirectory(`${repoPath}/.git`)
 }
 
 export const validateLocalGitRepo = async (path: string) => {
   const { exitCode } = await $`git -C ${path} status`.quiet()
-
-  if (exitCode === 0) {
-    return
-  }
-
+  if (exitCode === 0) return
   throw new Error(`Local path ${path} is not a valid git repository.`)
 }
 

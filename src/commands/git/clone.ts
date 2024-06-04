@@ -1,16 +1,12 @@
-import chalk from 'chalk'
 import { Command } from 'commander'
-import { projectConfig } from '../../config/project'
+import { cliConfig } from '../../config/cli.config'
+import { projectConfig } from '../../config/project.config'
 import git from '../../utils/git'
 import logger from '../../utils/log'
-import sharedOptions from '../../utils/shared-options'
 import { noIndent } from '../../utils/string'
 
-export const gitCloneCommand = () => {
-  const command = new Command()
-  const config = projectConfig()
-
-  command
+export function gitCloneCommand() {
+  return new Command()
     .name('clone')
     .summary('Clones all managed repositories using the specified git ref.')
     .description(
@@ -20,23 +16,19 @@ export const gitCloneCommand = () => {
         project.
       `),
     )
-    .addOption(sharedOptions.gitRef.default(config.git.default_ref))
     .action((options) => {
-      logger.info(`Git Org    > ${chalk.bold(config.git.org_url)}`)
-      logger.info(`Git Ref    > ${chalk.bold(options.gitRef)}`)
-      logger.info(`Repos Path > ${chalk.bold(config.paths.repos_root)}`)
+      const config = projectConfig.load()
+      const configCLI = cliConfig.load()
 
-      for (const repo of config.repositories) {
-        const repoUrl = `${config.git.org_url}/${repo}`
+      logger.info(`Project GitHub organization >> '${config.git.org}'`)
+      logger.info(`Current project git ref >> '${config.git.defaultRef}'`)
+
+      for (const repo of Object.values(config.repositories)) {
         git.clone({
-          ref: options.gitRef,
-          path: config.paths.repos_root,
-          repo: repoUrl,
+          path: configCLI.reposPath,
+          repo: repo,
+          ref: config.git.defaultRef,
         })
       }
     })
-
-  return command
 }
-
-export default gitCloneCommand()

@@ -1,19 +1,13 @@
 import { Command } from 'commander'
-import { gitBranchCommand } from './branch'
-import { gitCheckoutCommand } from './checkout'
 import { gitCloneCommand } from './clone'
+import { gitCheckoutCommand } from './checkout'
+import { gitBranchCommand } from './branch'
 
-export const gitCommand = () => {
-  const command = new Command()
-
-  command
+export function gitCommand() {
+  return new Command()
     .name('git')
-    .description('All git commands abstracted by DEMS')
+    .summary('Convinient git command abstractions for DEMS')
     .addCommand(gitCloneCommand())
     .addCommand(gitCheckoutCommand())
     .addCommand(gitBranchCommand())
-
-  return command
 }
-
-export default gitCommand()
