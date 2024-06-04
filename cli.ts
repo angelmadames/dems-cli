@@ -2,7 +2,6 @@
 
 import { Command } from 'commander';
 import { configCommand } from './src/commands/config';
-import { initCommand } from './src/commands/init';
 import { cleanCommand } from './src/commands/clean';
 import { environmentCommand } from './src/commands/environment';
 import { composeCommand } from './src/commands/compose';
@@ -26,7 +25,6 @@ cli
   `))
   .addCommand(projectCommand())
   .addCommand(configCommand())
-  // .addCommand(initCommand())
   // .addCommand(gitCommand())
   // .addCommand(cleanCommand())
   // .addCommand(environmentCommand())

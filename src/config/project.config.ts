@@ -17,7 +17,7 @@ const PROJECT_CONFIG_FILE = join(PROJECT_CONFIG_ROOT, 'config.json')
 
 interface ProjectConfigSpec {
   // The project name determines how docker compose services will be prefixed,
-  // thus maintaining complete isolation with other services deployed locally.
+  // thus maintaining compslete isolation with other services deployed locally.
   // It also servers as a unique reference across DEMS tasks.
   projectName: string
 
@@ -57,7 +57,7 @@ export const projectConfig = {
       dockerfile: 'Dockerfile',
       repositories: {
         'demo-api': join(homedir(), 'repos', 'demo', 'demo-api'),
-        'demo-webapp': join(homedir(), 'repos', 'demo', 'demo-api'),
+        'demo-webapp': join(homedir(), 'repos', 'demo', 'demo-web'),
       },
       git: {
         org: 'gbh-tech',
@@ -85,10 +85,10 @@ export const projectConfig = {
   },
 
   save(config: ProjectConfigSpec) {
-    createPath({ path: PROJECT_CONFIG_ROOT })
+    createPath({ path: config.projectRootPath })
     createFile({
       file: `${config.projectRootPath}/config.json`,
-      content: JSON.stringify(config),
+      content: JSON.stringify(config, null, 2),
     })
   },
 

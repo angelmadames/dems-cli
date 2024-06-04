@@ -1,4 +1,5 @@
 import { Command } from 'commander'
+import { cliConfig } from '../../config/cli.config'
 
 export function setActiveProjectCommand() {
   return new Command()
@@ -7,6 +8,6 @@ export function setActiveProjectCommand() {
     .summary('Set current active project')
     .argument('<project>', 'The project name to set as active')
     .action((project) => {
-      CLIConfig.setActiveProject(project)
+      cliConfig.setActiveProject(project)
     })
 }
