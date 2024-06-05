@@ -25,8 +25,8 @@ export const copyFile = ({ source, target }: SourceTargetOperation) => {
     fs.copyFileSync(source, target, 0)
     logger.info(`File: ${source} copied to ${target}.`)
   } else {
+    logger.error('Could not perform file copy operation.')
     logger.error('Source is not a valid file.')
-    throw new Error('Could not perform file copy operation.')
   }
 }
 

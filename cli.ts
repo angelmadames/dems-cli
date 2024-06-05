@@ -11,9 +11,7 @@ import { noIndent } from './src/utils/string';
 import { name, version, description } from './package.json';
 import { projectCommand } from './src/commands/project';
 
-const cli = new Command();
-
-cli
+const cli = new Command()
   .name(name)
   .version(version)
   .summary(description)

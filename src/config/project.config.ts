@@ -84,6 +84,25 @@ export const projectConfig = {
     return JSON.parse(fs.readFileSync(configFile).toString())
   },
 
+  repoList() {
+    return Object.keys(this.load().repositories)
+  },
+
+  repoURLs() {
+    return Object.values(this.load().repositories)
+  },
+
+  reposPaths() {
+    const paths = []
+    const configCLI = cliConfig.load()
+
+    for (const repo in this.load().repositories) {
+      paths.push(join(configCLI.reposPath, repo))
+    }
+
+    return paths
+  },
+
   save(config: ProjectConfigSpec) {
     createPath({ path: config.projectRootPath })
     createFile({
