@@ -9,9 +9,8 @@ export const CONFIG_FILE_PATH = join(CONFIG_PATH, 'config.json')
 export const ACTIVE_PROJECT_FILE = join(CONFIG_PATH, 'active-project')
 export const DEMS_REPOS_PATH = join(homedir(), 'repos')
 export const DEMS_FILES_PATH = '.dems'
-export const PROJECT_ENV_FILE = '.env'
 
-interface CLIConfigSpec {
+export interface CLIConfigSpec {
   // The system path where all DEMS-related files will live.
   // It will be used to store config and data files.
   rootPath: string
@@ -29,10 +28,6 @@ interface CLIConfigSpec {
   // application repository. The DEMS file path is the relative path of each
   // application repository where DEMS-files will be stored.
   filesPath: string
-
-  // All docker compose commands run by DEMS will have the --env-file [path].
-  // The env file will be appended to docker compose commands.
-  envFile: string
 }
 
 export const cliConfig = {
@@ -43,7 +38,6 @@ export const cliConfig = {
       activeProjectFile: ACTIVE_PROJECT_FILE,
       reposPath: DEMS_REPOS_PATH,
       filesPath: DEMS_FILES_PATH,
-      envFile: PROJECT_ENV_FILE,
     }
   },
 

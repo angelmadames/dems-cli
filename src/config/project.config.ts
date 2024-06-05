@@ -14,8 +14,9 @@ import { CONFIG_PATH, cliConfig } from './cli.config'
 const CURRENT_PROJECT = cliConfig.activeProject()
 const PROJECT_CONFIG_ROOT = join(CONFIG_PATH, CURRENT_PROJECT)
 const PROJECT_CONFIG_FILE = join(PROJECT_CONFIG_ROOT, 'config.json')
+const PROJECT_ENV_FILE = join(PROJECT_CONFIG_ROOT, '.env')
 
-interface ProjectConfigSpec {
+export interface ProjectConfigSpec {
   // The project name determines how docker compose services will be prefixed,
   // thus maintaining compslete isolation with other services deployed locally.
   // It also servers as a unique reference across DEMS tasks.
@@ -34,6 +35,10 @@ interface ProjectConfigSpec {
   // files directory.
   dockerfile: string
 
+  // All docker compose commands run by DEMS will have the --env-file [path].
+  // The env file will be appended to docker compose commands.
+  envFile: string
+
   // The repositories object is a refernce to the application repositories,
   // their names (key) and path (value). This is required for DEMS to be aware
   // of the desired state of applications to be managed.
@@ -47,7 +52,6 @@ interface ProjectConfigSpec {
     defaultRef: string
   }
 }
-
 export const projectConfig = {
   default(): ProjectConfigSpec {
     return {
@@ -55,6 +59,7 @@ export const projectConfig = {
       projectRootPath: PROJECT_CONFIG_ROOT,
       configFile: PROJECT_CONFIG_FILE,
       dockerfile: 'Dockerfile',
+      envFile: PROJECT_ENV_FILE,
       repositories: {
         'demo-api': join(homedir(), 'repos', 'demo', 'demo-api'),
         'demo-webapp': join(homedir(), 'repos', 'demo', 'demo-web'),

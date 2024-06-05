@@ -1,19 +1,30 @@
-export const hyphenToUnderscore = (word: string) => {
+export function hyphenToUnderscore(word: string) {
   return word.replaceAll('-', '_')
 }
 
-export const capitalizeFirstLetter = (word: string): string => {
+export function capitalizeFirstLetter(word: string) {
   return word.charAt(0).toUpperCase() + word.slice(1)
 }
 
-export const removeExtraSpaces = (text: string): string => {
+export function removeExtraSpaces(text: string) {
   return text.trim().replace(/\s+/g, ' ')
 }
 
-export const removeBreakLines = (text: string): string => {
+export function removeBreakLines(text: string) {
   return text.replace(/(\r\n|\r|\n)/g, '')
 }
 
-export const noIndent = (text: string) => {
+export function noIndent(text: string) {
   return text.replace(/(\n)\s+/g, '$1').trim()
+}
+
+export function toUpperSnakeCase(str: string) {
+  return (
+    str
+      // Convert camelCase to snake_case
+      .replace(/([a-z])([A-Z])/g, '$1_$2')
+      // Replace hyphens with underscores
+      .replace(/-/g, '_')
+      .toUpperCase()
+  )
 }

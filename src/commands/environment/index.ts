@@ -1,6 +1,5 @@
 import { join } from 'node:path'
 import { Command } from 'commander'
-import { cliConfig } from '../../config/cli.config'
 import { projectConfig } from '../../config/project.config'
 import dotEnv from '../../utils/env'
 import { copyFile } from '../../utils/file-system'
@@ -41,11 +40,10 @@ export function environmentCommand() {
       }
 
       if (options.generateDotEnv) {
-        const configCLI = cliConfig.load()
+        const config = projectConfig.load()
         logger.info("Generating project's dot env file...")
-        dotEnv.generate(configCLI.envFile, config)
+        dotEnv.generate(config.envFile, config)
         return
       }
     })
 }
-
