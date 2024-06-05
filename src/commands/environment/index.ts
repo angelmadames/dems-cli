@@ -1,7 +1,7 @@
 import { join } from 'node:path'
 import { Command } from 'commander'
 import { projectConfig } from '../../config/project.config'
-import dotEnv from '../../utils/env'
+import { dotEnv } from '../../utils/env'
 import { copyFile } from '../../utils/file-system'
 import logger from '../../utils/log'
 import { noIndent } from '../../utils/string'
@@ -27,8 +27,6 @@ export function environmentCommand() {
       "Copy the .env.example file of the current project's repositories",
     )
     .action((options) => {
-      const config = projectConfig.load()
-
       if (options.copyExampleFiles) {
         for (const path of projectConfig.reposPaths()) {
           copyFile({
