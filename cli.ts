@@ -27,8 +27,8 @@ cli
   .addCommand(configCommand())
   .addCommand(gitCommand())
   .addCommand(cleanCommand())
-  // .addCommand(environmentCommand())
-  // .addCommand(composeCommand())
-  // .addCommand(dependenciesCommand())
+  .addCommand(environmentCommand())
+  .addCommand(composeCommand())
+  .addCommand(dependenciesCommand())
 
 cli.parse();

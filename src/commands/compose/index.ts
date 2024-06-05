@@ -1,14 +1,10 @@
 import { Command } from 'commander'
-import { projectConfig } from '../../config/project'
 import { composeExec } from '../../utils/compose'
 import logger from '../../utils/log'
 import { composeShowArgsCommand } from './show-args'
 
-export const composeCommand = () => {
-  const command = new Command()
-  const config = projectConfig()
-
-  command
+export function composeCommand() {
+  return new Command()
     .name('compose')
     .summary('Container orchestration command for DEMS')
     .description(
@@ -28,8 +24,4 @@ export const composeCommand = () => {
         command: composeArgs,
       })
     })
-
-  return command
 }
-
-export default composeCommand()

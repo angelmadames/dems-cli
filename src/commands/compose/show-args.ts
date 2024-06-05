@@ -2,10 +2,8 @@ import { Command } from 'commander'
 import { composeExecParams, composeFiles } from '../../utils/compose'
 import logger from '../../utils/log'
 
-export const composeShowArgsCommand = () => {
-  const command = new Command()
-
-  command
+export function composeShowArgsCommand() {
+  return new Command()
     .name('show-args')
     .summary('Show args for DEMS-custom Compose command')
     .description(
@@ -18,8 +16,4 @@ export const composeShowArgsCommand = () => {
       logger.info('Compose files params:')
       console.log(JSON.stringify(composeFiles({}), null, 2))
     })
-
-  return command
 }
-
-export default composeShowArgsCommand()

@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
-import { projectConfig } from '../config/project'
+import { cliConfig } from '../config/cli.config'
+import { projectConfig } from '../config/project.config'
 import cmd from './cmd'
 import { isFile } from './file-system'
 import { validateLocalGitRepo } from './git'
@@ -22,8 +23,8 @@ export const composeExec = ({
 export const composeFiles = ({
   filesDir = '.dems',
   prefix = 'compose',
-  reposRoot = projectConfig().paths.repos_root,
-  repos = projectConfig().repositories,
+  reposRoot = cliConfig.load().reposPath,
+  repos = Object.values(projectConfig.load().repositories),
 }: ComposeFilesParams) => {
   const composeFiles: string[] = []
   const dirs = []
