@@ -1,9 +1,9 @@
 import { Command } from 'commander'
 import { cliConfig } from '../../config/cli.config'
 import { projectConfig } from '../../config/project.config'
+import { composeExec } from '../../utils/compose'
 import logger from '../../utils/log'
 import sharedOptions from '../../utils/shared-options'
-import { composeExec } from '../../utils/compose'
 
 export function cleanComposeServicesCommand() {
   return new Command()
@@ -23,17 +23,15 @@ export function cleanComposeServicesCommand() {
 
       try {
         await composeExec({
-          command: [
-            'down',
-            '--volumes',
-            '--remove-orphans'
-          ]
+          command: ['down', '--volumes', '--remove-orphans'],
         })
       } catch (error) {
         logger.warn('Could not remove running services.')
         logger.warn('Probably there are no services running.')
       }
 
-      logger.info('All Docker Compose services were removed alongside their volumes.')
+      logger.info(
+        'All Docker Compose services were removed alongside their volumes.',
+      )
     })
 }

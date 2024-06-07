@@ -1,10 +1,10 @@
 import { Command } from 'commander'
 import { noIndent } from '../../utils/string'
+import { cleanAllCommand } from './all'
+import { cleanComposeServicesCommand } from './compose-services'
 import { cleanDepsCommand } from './deps'
 import { cleanDotEnvCommand } from './dot-env'
 import { cleanReposCommand } from './repos'
-import { cleanAllCommand } from './all'
-import { cleanComposeServicesCommand } from './compose-services'
 
 export function cleanCommand() {
   return new Command()

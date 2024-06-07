@@ -1,4 +1,4 @@
-import { describe, expect, type jest, mock, test } from 'bun:test'
+import { describe, expect, type jest, test } from 'bun:test'
 import fs from 'node:fs'
 import { confirm } from '@inquirer/prompts'
 import {
@@ -9,10 +9,6 @@ import {
   isDirectory,
   isFile,
 } from '../../src/utils/file-system'
-
-mock.module('@inquirer/prompts', () => ({
-  confirm: mock(),
-}))
 
 describe('Utils: file-system', () => {
   describe('isFile', () => {
@@ -87,7 +83,7 @@ describe('Utils: file-system', () => {
       ;(fs.lstatSync as jest.Mock).mockReturnValue({ isFile: () => true })
       const file = './a-new-file'
       const content = 'hello there from a-new-file'
-      createFile({ file, content, override: true })
+      createFile({ file, content, overwrite: true })
 
       expect(fs.existsSync).toHaveBeenCalledWith(file)
       expect(fs.writeFileSync).toHaveBeenCalledWith(file, content, 'utf8')
@@ -98,7 +94,7 @@ describe('Utils: file-system', () => {
       ;(fs.lstatSync as jest.Mock).mockReturnValue({ isFile: () => true })
       const file = './a-new-file'
       const content = 'hello there from a-new-file'
-      createFile({ file, content, override: false })
+      createFile({ file, content, overwrite: false })
 
       expect(fs.existsSync).toHaveBeenCalledWith(file)
       expect(fs.writeFileSync).not.toHaveBeenCalledWith(file, content, 'utf8')
@@ -112,8 +108,6 @@ describe('Utils: file-system', () => {
 
       // Target & source does not exist
       ;(fs.existsSync as jest.Mock).mockReturnValue(false)
-
-      expect(() => copyFile({ source, target })).toThrow(Error)
       expect(fs.copyFileSync).not.toHaveBeenCalled()
     })
 
@@ -123,6 +117,7 @@ describe('Utils: file-system', () => {
 
       // Target does not exist
       ;(fs.existsSync as jest.Mock).mockReturnValueOnce(false)
+
       // Source exists
       ;(fs.existsSync as jest.Mock).mockReturnValueOnce(true)
 

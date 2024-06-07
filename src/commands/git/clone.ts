@@ -22,7 +22,9 @@ export function gitCloneCommand() {
       const { reposPath } = cliConfig.load()
 
       logger.info(`Project GitHub organization >> '${config.git.org}'`)
-      logger.info(`Current project git ref >> '${options.gitRef ?? config.git.defaultRef}'`)
+      logger.info(
+        `Current project git ref >> '${options.gitRef ?? config.git.defaultRef}'`,
+      )
 
       for (const repo of Object.values(config.repositories)) {
         await git.clone({
