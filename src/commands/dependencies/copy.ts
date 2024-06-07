@@ -16,18 +16,15 @@ export function depsCopyCommand() {
     `),
     )
     .action(() => {
-      const config = projectConfig.load()
-      const configCLI = cliConfig.load()
+      const { repositories, projectName } = projectConfig.load()
+      const { reposPath } = cliConfig.load()
 
-      for (const repo in config.repositories) {
+      for (const repo in repositories) {
         composeExec({
           command: [
             'cp',
-            `${repo.replace(
-              `${config.projectName}-`,
-              '',
-            )}:/usr/app/node_modules`,
-            join(configCLI.reposPath, repo, 'node_modules'),
+            `${repo.replace(`${projectName}-`, '')}:/usr/app/node_modules`,
+            join(reposPath, repo, 'node_modules'),
           ],
         })
       }

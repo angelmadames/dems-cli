@@ -15,7 +15,6 @@ export const dotEnv = {
       for (const repo in config.repositories) {
         flatConfig[`${toUpperSnakeCase(repo)}_PATH`] = `'${join(
           configCLI.reposPath,
-          config.projectName,
           repo,
         )}'`
       }

@@ -1,8 +1,8 @@
+import { join } from 'node:path'
 import { Command } from 'commander'
 import { cliConfig } from '../../config/cli.config'
 import { projectConfig } from '../../config/project.config'
 import { git } from '../../utils/git'
-import { join } from 'node:path'
 
 export function gitBranchCommand() {
   return new Command()

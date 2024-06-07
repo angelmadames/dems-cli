@@ -6,14 +6,14 @@ import cmd from './cmd'
 import { isFile } from './file-system'
 import type { ComposeExecParams, ComposeFilesParams } from './interfaces'
 
-export function composeExec({ command }: ComposeExecParams) {
+export async function composeExec({ command }: ComposeExecParams) {
   let composeCommand = ['docker', 'compose']
+
   composeCommand = composeCommand
     .concat(composeExecParams())
     .concat(composeFiles({ prefix: 'compose' }))
     .concat(command)
-  // @TODO: Use native Bun.spawnSync when they support stdio with 'inherit'.
-  // const result = Bun.spawnSync(command.join(' ').split(' '));
+
   return cmd.run(composeCommand.join(' '))
 }
 
@@ -36,16 +36,16 @@ export function composeFiles({ prefix = 'compose' }: ComposeFilesParams) {
 }
 
 export function composeExecParams() {
-  const config = projectConfig.load()
-  const configCLI = cliConfig.load()
+  const { projectName, envFile, repositories } = projectConfig.load()
+  const { reposPath } = cliConfig.load()
 
   const params = []
 
-  params.push(`--project-name ${config.projectName}`)
-  params.push(`--env-file ${config.envFile}`)
+  params.push(`--project-name ${projectName}`)
+  params.push(`--env-file ${envFile}`)
 
-  for (const repo in config.repositories) {
-    const envFile = join(configCLI.reposPath, repo, '.env')
+  for (const repo in repositories) {
+    const envFile = join(reposPath, repo, '.env')
     if (isFile(envFile)) {
       params.push(`--env-file ${envFile}`)
     }
