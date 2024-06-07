@@ -1,9 +1,9 @@
+import { join } from 'node:path'
 import { Command } from 'commander'
+import { cliConfig } from '../../config/cli.config'
 import { projectConfig } from '../../config/project.config'
 import { git } from '../../utils/git'
 import { noIndent } from '../../utils/string'
-import { cliConfig } from '../../config/cli.config'
-import { join } from 'node:path'
 
 export function gitCheckoutCommand() {
   return new Command()
@@ -19,7 +19,7 @@ export function gitCheckoutCommand() {
     .argument('[gitRef]', 'Custom git ref to checkout to')
     .action(async (gitRef) => {
       const config = projectConfig.load()
-      const { reposPath, } = cliConfig.load()
+      const { reposPath } = cliConfig.load()
 
       for (const repo in config.repositories) {
         await git.checkout({

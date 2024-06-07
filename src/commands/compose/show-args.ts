@@ -7,10 +7,12 @@ export function composeShowArgsCommand() {
   return new Command()
     .name('show-args')
     .summary('Show args for DEMS-custom Compose command')
-    .description(noIndent(`
+    .description(
+      noIndent(`
       Prints to console all the flags and arguments used for the custom
       docker compose command for DEMS.
-    `))
+    `),
+    )
     .action(() => {
       logger.info('Compose Command parameters:')
       logger.info(JSON.stringify(composeExecParams(), null, 2))

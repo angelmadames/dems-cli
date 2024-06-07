@@ -16,7 +16,7 @@ export function gitCloneCommand() {
         project.
       `),
     )
-    .action(async (options) => {
+    .action(async () => {
       const config = projectConfig.load()
       const configCLI = cliConfig.load()
 

@@ -7,7 +7,7 @@ export const formatLog = (text: string): string => {
 
 const stream = pretty({
   colorize: true,
-  sync: true
+  sync: true,
 })
 
 const logger = pino(stream)

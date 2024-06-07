@@ -1,6 +1,5 @@
 import { join } from 'node:path'
 import { $ } from 'bun'
-import cmd from './cmd'
 import { createPath, isDirectory } from './file-system'
 import type { GitParams } from './interfaces'
 import logger from './log'
@@ -15,7 +14,7 @@ export const git = {
       logger.warn(`Repo ${repo} already cloned.`)
     } else {
       await $`git -C ${path} clone ${repo} -b ${ref}`
-      logger.info(`Repo '${repo}' was cloned su ccessfully!`)
+      logger.info(`Repo '${repo}' was cloned successfully!`)
     }
   },
 
@@ -29,18 +28,20 @@ export const git = {
       logger.info(`Running checkout with ref '${ref}' on repo '${path}'`)
       await $`git -C ${path} checkout ${ref}`
     } catch (error) {
-      logger.error(`Could not checkout specified ref '${ref}' on repo '${path}'`)
+      logger.error(
+        `Could not checkout specified ref '${ref}' on repo '${path}'`,
+      )
       logger.error('See above for more info. The ref probably does not exist.')
-      process.exit(1);
+      process.exit(1)
     }
   },
 
-  branch({ path, ref }: Omit<GitParams, 'repo'>) {
+  async branch({ path, ref }: Omit<GitParams, 'repo'>) {
     if (!localRepoExists(path)) {
       logger.error(`${path} is not a valid Git repository.`)
       throw new Error(`Repo not found in ${path}.`)
     }
-    cmd.run(`git -C ${path} checkout -b ${ref}`)
+    await $`git -C ${path} checkout -b ${ref}`
     logger.info(`Branch ${ref} was created successfully!`)
   },
 }
