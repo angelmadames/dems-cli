@@ -21,13 +21,18 @@ export function cleanComposeServicesCommand() {
         logger.warn('User interactivity disabled due to --force flag.')
       }
 
-      await composeExec({
-        command: [
-          'down',
-          '--volumes',
-          '--remove-orphans'
-        ]
-      })
+      try {
+        await composeExec({
+          command: [
+            'down',
+            '--volumes',
+            '--remove-orphans'
+          ]
+        })
+      } catch (error) {
+        logger.warn('Could not remove running services.')
+        logger.warn('Probably there are no services running.')
+      }
 
       logger.info('All Docker Compose services were removed alongside their volumes.')
     })
