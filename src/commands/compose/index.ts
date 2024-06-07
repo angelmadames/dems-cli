@@ -1,6 +1,7 @@
 import { Command } from 'commander'
 import { composeExec } from '../../utils/compose'
 import logger from '../../utils/log'
+import { noIndent } from '../../utils/string'
 import { composeShowArgsCommand } from './show-args'
 
 export function composeCommand() {
@@ -8,8 +9,10 @@ export function composeCommand() {
     .name('compose')
     .summary('Container orchestration command for DEMS')
     .description(
-      'Aids in container orchestration for services in DEMS.\n' +
-        'Uses Compose under the hood.',
+      noIndent(`
+        Aids in container orchestration for services in DEMS
+        Uses Compose under the hood.
+    `),
     )
     .addCommand(composeShowArgsCommand())
     .argument('[composeArgs...]', 'Compose arguments to use')

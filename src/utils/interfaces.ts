@@ -23,9 +23,6 @@ export interface PathModificationOperation {
 
 export interface ComposeFilesParams {
   prefix?: string
-  filesDir?: string
-  reposRoot?: string
-  repos?: string[]
 }
 
 export interface ComposeExecParams {

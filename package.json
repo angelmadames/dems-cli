@@ -15,24 +15,24 @@
     "compile": "bun build --compile --minify --sourcemap ./cli.ts --outfile ./dems",
     "format": "biome format src/ test/ --write",
     "format:ci": "biome format src/ test/",
-    "lint": "biome lint src/ test/ --apply",
+    "lint": "biome lint src/ test/ --write",
     "lint:ci": "biome lint src/ test/",
-    "check": "biome check src/ test/ --apply",
+    "check": "biome check src/ test/ --write",
     "check:ci": "biome check src/ test/",
     "test": "bun test"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.6.1"
+    "@biomejs/biome": "^1.8.0"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@inquirer/prompts": "^5.0.0",
-    "bun-types": "^1.0.32",
+    "@inquirer/prompts": "^5.0.5",
+    "bun-types": "^1.1.12",
     "chalk": "^5.3.0",
-    "commander": "^12.0.0",
-    "pino": "^9.0.0",
-    "pino-pretty": "^11.0.0"
+    "commander": "^12.1.0",
+    "pino": "^9.1.0",
+    "pino-pretty": "^11.1.0"
   }
 }
