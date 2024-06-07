@@ -3,6 +3,7 @@ import { noIndent } from '../../utils/string'
 import { cleanDepsCommand } from './deps'
 import { cleanDotEnvCommand } from './dot-env'
 import { cleanReposCommand } from './repos'
+import { cleanAllCommand } from './all'
 
 export function cleanCommand() {
   return new Command()
@@ -17,4 +18,5 @@ export function cleanCommand() {
     .addCommand(cleanDepsCommand())
     .addCommand(cleanDotEnvCommand())
     .addCommand(cleanReposCommand())
+    .addCommand(cleanAllCommand())
 }

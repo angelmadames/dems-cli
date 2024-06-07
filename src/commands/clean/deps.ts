@@ -14,8 +14,8 @@ export function cleanDepsCommand() {
     .description('Cleans all repos dependencies locally installed.')
     .addOption(sharedOptions.force)
     .action(async (options) => {
-      const config = projectConfig.load()
-      const configCLI = cliConfig.load()
+      const { repositories } = projectConfig.load()
+      const { reposPath } = cliConfig.load()
 
       logger.info('Cleaning all local dependencies for managed apps...')
 
@@ -23,9 +23,9 @@ export function cleanDepsCommand() {
         logger.warn('User interactivity disabled due to --force flag.')
       }
 
-      for (const repo of Object.values(config.repositories)) {
+      for (const repo in repositories) {
         await deletePath({
-          path: join(configCLI.reposPath, repo, 'node_modules'),
+          path: join(reposPath, repo, 'node_modules'),
           force: options.force,
         })
       }
