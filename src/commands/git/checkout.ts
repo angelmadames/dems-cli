@@ -1,7 +1,9 @@
 import { Command } from 'commander'
 import { projectConfig } from '../../config/project.config'
-import git, { getRepoNameFromURL } from '../../utils/git'
+import { git } from '../../utils/git'
 import { noIndent } from '../../utils/string'
+import { cliConfig } from '../../config/cli.config'
+import { join } from 'node:path'
 
 export function gitCheckoutCommand() {
   return new Command()
@@ -14,13 +16,15 @@ export function gitCheckoutCommand() {
         repositories defined in the config.json file of the current project.
      `),
     )
-    .action((options) => {
+    .argument('[gitRef]', 'Custom git ref to checkout to')
+    .action(async (gitRef) => {
       const config = projectConfig.load()
+      const { reposPath, } = cliConfig.load()
 
-      for (const repo of Object.values(config.repositories)) {
-        git.checkout({
-          path: getRepoNameFromURL(repo),
-          ref: config.git.defaultRef,
+      for (const repo in config.repositories) {
+        await git.checkout({
+          path: join(reposPath, repo),
+          ref: gitRef ?? config.git.defaultRef,
         })
       }
     })

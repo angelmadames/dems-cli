@@ -1,7 +1,7 @@
 import { Command } from 'commander'
 import { cliConfig } from '../../config/cli.config'
 import { projectConfig } from '../../config/project.config'
-import git from '../../utils/git'
+import { git } from '../../utils/git'
 import logger from '../../utils/log'
 import { noIndent } from '../../utils/string'
 

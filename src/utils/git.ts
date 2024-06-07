@@ -5,7 +5,7 @@ import { createPath, isDirectory } from './file-system'
 import type { GitParams } from './interfaces'
 import logger from './log'
 
-const git = {
+export const git = {
   clone({ path, repo, ref }: GitParams) {
     if (!isDirectory(path)) createPath({ path })
 
@@ -19,14 +19,20 @@ const git = {
     }
   },
 
-  checkout({ path, ref }: Omit<GitParams, 'repo'>) {
+  async checkout({ path, ref }: Omit<GitParams, 'repo'>) {
     if (!localRepoExists(path)) {
       logger.error(`Repo was not found in path '${path}'.`)
       process.exit(1)
     }
 
-    cmd.run(`git -C ${path} checkout ${ref}`)
-    logger.info(`Repo was checked out to ref ${ref} successfully!`)
+    try {
+      logger.info(`Running checkout with ref '${ref}' on repo '${path}'`)
+      await $`git -C ${path} checkout ${ref}`
+    } catch (error) {
+      logger.error(`Could not checkout specified ref '${ref}' on repo '${path}'`)
+      logger.error('See above for more info. The ref probably does not exist.')
+      process.exit(1);
+    }
   },
 
   branch({ path, ref }: Omit<GitParams, 'repo'>) {
@@ -64,5 +70,3 @@ export const remoteRepoExists = async ({ repo }: Pick<GitParams, 'repo'>) => {
 
   throw new Error(`Remote repo: ${repo} is not valid or does not exist.`)
 }
-
-export default git
