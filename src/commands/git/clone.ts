@@ -16,18 +16,19 @@ export function gitCloneCommand() {
         project.
       `),
     )
-    .action(async () => {
+    .option('-g, --git-ref [ref]', 'Git ref to clone repositories')
+    .action(async (options) => {
       const config = projectConfig.load()
-      const configCLI = cliConfig.load()
+      const { reposPath } = cliConfig.load()
 
       logger.info(`Project GitHub organization >> '${config.git.org}'`)
-      logger.info(`Current project git ref >> '${config.git.defaultRef}'`)
+      logger.info(`Current project git ref >> '${options.gitRef ?? config.git.defaultRef}'`)
 
       for (const repo of Object.values(config.repositories)) {
         await git.clone({
-          path: configCLI.reposPath,
+          path: reposPath,
           repo: repo,
-          ref: config.git.defaultRef,
+          ref: options.gitRef ?? config.git.defaultRef,
         })
       }
     })
