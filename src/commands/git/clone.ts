@@ -16,7 +16,7 @@ export function gitCloneCommand() {
         project.
       `),
     )
-    .action((options) => {
+    .action(async (options) => {
       const config = projectConfig.load()
       const configCLI = cliConfig.load()
 
@@ -24,7 +24,7 @@ export function gitCloneCommand() {
       logger.info(`Current project git ref >> '${config.git.defaultRef}'`)
 
       for (const repo of Object.values(config.repositories)) {
-        git.clone({
+        await git.clone({
           path: configCLI.reposPath,
           repo: repo,
           ref: config.git.defaultRef,

@@ -6,7 +6,7 @@ import type { GitParams } from './interfaces'
 import logger from './log'
 
 export const git = {
-  clone({ path, repo, ref }: GitParams) {
+  async clone({ path, repo, ref }: GitParams) {
     if (!isDirectory(path)) createPath({ path })
 
     const repoPath = join(path, getRepoNameFromURL(repo))
@@ -14,7 +14,7 @@ export const git = {
     if (localRepoExists(repoPath)) {
       logger.warn(`Repo ${repo} already cloned.`)
     } else {
-      cmd.run(`git -C ${path} clone ${repo} -b ${ref}`)
+      await $`git -C ${path} clone ${repo} -b ${ref}`
       logger.info(`Repo '${repo}' was cloned su ccessfully!`)
     }
   },
