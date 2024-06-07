@@ -4,6 +4,7 @@ import { cleanDepsCommand } from './deps'
 import { cleanDotEnvCommand } from './dot-env'
 import { cleanReposCommand } from './repos'
 import { cleanAllCommand } from './all'
+import { cleanComposeServicesCommand } from './compose-services'
 
 export function cleanCommand() {
   return new Command()
@@ -18,5 +19,6 @@ export function cleanCommand() {
     .addCommand(cleanDepsCommand())
     .addCommand(cleanDotEnvCommand())
     .addCommand(cleanReposCommand())
+    .addCommand(cleanComposeServicesCommand())
     .addCommand(cleanAllCommand())
 }

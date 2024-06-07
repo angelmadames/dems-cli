@@ -4,6 +4,7 @@ import sharedOptions from '../../utils/shared-options'
 import { cleanDepsCommand } from './deps'
 import { cleanDotEnvCommand } from './dot-env'
 import { cleanReposCommand } from './repos'
+import { cleanComposeServicesCommand } from './compose-services'
 
 export function cleanAllCommand() {
   return new Command()
@@ -18,6 +19,7 @@ export function cleanAllCommand() {
         logger.warn('User interactivity disabled due to --force flag.')
       }
 
+      await cleanComposeServicesCommand().parseAsync()
       await cleanDepsCommand().parseAsync()
       await cleanDotEnvCommand().parseAsync()
       await cleanReposCommand().parseAsync()
