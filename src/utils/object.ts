@@ -1,7 +1,6 @@
 import fs from 'node:fs'
 import { isFile } from './file-system'
 import logger from './log'
-import { toUpperSnakeCase } from './string'
 
 export const flattenObject = (
   object: Record<string, any>,
@@ -11,9 +10,7 @@ export const flattenObject = (
   const result: Record<string, string | number> = {}
 
   for (const [key, value] of Object.entries(object)) {
-    const newKey = parentKey
-      ? `${parentKey}${separator}${key}`
-      : key
+    const newKey = parentKey ? `${parentKey}${separator}${key}` : key
     if (typeof value === 'object' && !Array.isArray(value)) {
       const flattened = flattenObject(value, newKey, separator)
       Object.assign(result, flattened)

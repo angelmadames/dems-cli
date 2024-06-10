@@ -21,7 +21,7 @@ export function cleanAllCommand() {
         flags.push('--force')
       }
 
-      await cleanComposeServicesCommand().parseAsync(flags)
+      cleanComposeServicesCommand().parse(flags)
       await cleanDepsCommand().parseAsync(flags)
       await cleanDotEnvCommand().parseAsync(flags)
       await cleanReposCommand().parseAsync(flags)

@@ -3,17 +3,19 @@ import { composeExec } from '../../utils/compose'
 import logger from '../../utils/log'
 import { noIndent } from '../../utils/string'
 import { composeShowArgsCommand } from './show-args'
+import { composeValidateCommand } from './validate'
 
 export function composeCommand() {
   return new Command()
     .name('compose')
-    .summary('Container orchestration command for DEMS')
+    .summary('Container orchestration via Docker Compose command for DEMS')
     .description(
       noIndent(`
         Aids in container orchestration for services in DEMS
-        Uses Compose under the hood.
+        Uses Docker Compose under the hood (all commands are avaiable).
     `),
     )
+    .addCommand(composeValidateCommand())
     .addCommand(composeShowArgsCommand())
     .argument('[composeArgs...]', 'Compose arguments to use')
     .allowUnknownOption()

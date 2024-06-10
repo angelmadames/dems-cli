@@ -10,14 +10,11 @@ export function cleanDotEnvCommand() {
   return new Command()
     .name('dot-env')
     .aliases(['env', 'dotenv'])
-    .summary('Cleanup repositories dot env files (.env).')
-    .description(
-      'Removes the dot env files (.env) for all the DEMS-managed repositories configured.',
-    )
+    .summary('Cleanup repositories dot env files (.env)')
     .addOption(sharedOptions.force)
     .action(async (options) => {
-      const config = projectConfig.load()
-      const configCLI = cliConfig.load()
+      const { repositories } = projectConfig.load()
+      const { reposPath } = cliConfig.load()
 
       logger.info('Removing dot env files for managed repositories...')
 
@@ -25,9 +22,9 @@ export function cleanDotEnvCommand() {
         logger.warn('User interactivity disabled due to --force flag.')
       }
 
-      for (const repo in config.repositories) {
+      for (const repo in repositories) {
         await deletePath({
-          path: join(configCLI.reposPath, repo, '.env'),
+          path: join(reposPath, repo, '.env'),
           force: options.force,
         })
       }

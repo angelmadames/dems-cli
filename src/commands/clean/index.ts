@@ -13,7 +13,7 @@ export function cleanCommand() {
     .description(
       noIndent(`
         Cleans all configured resources and services initialized
-        by DEMS. Resets your local development environment.
+        by DEMS. Resets the current project local development environment.
       `),
     )
     .addCommand(cleanDepsCommand())

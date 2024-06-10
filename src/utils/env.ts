@@ -13,10 +13,10 @@ export const dotEnv = {
       const flatConfig = flattenObject(config)
 
       for (const repo in config.repositories) {
-        flatConfig[`${toUpperSnakeCase(repo)}_PATH`] = `'${join(
+        flatConfig[`${toUpperSnakeCase(repo)}_PATH`] = `${join(
           configCLI.reposPath,
           repo,
-        )}'`
+        )}`
       }
 
       const envContents = Object.entries(flatConfig)

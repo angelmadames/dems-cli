@@ -6,7 +6,7 @@ import cmd from './cmd'
 import { isFile } from './file-system'
 import type { ComposeExecParams, ComposeFilesParams } from './interfaces'
 
-export async function composeExec({ command }: ComposeExecParams) {
+export function composeExec({ command }: ComposeExecParams) {
   let composeCommand = ['docker', 'compose']
 
   composeCommand = composeCommand
