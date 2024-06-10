@@ -103,9 +103,6 @@ describe('Utils: file-system', () => {
 
   describe('copyFile', () => {
     test('logs error and throw an error if source is not a valid file', () => {
-      const source = 'invalid-file.txt'
-      const target = 'target-file.txt'
-
       // Target & source does not exist
       ;(fs.existsSync as jest.Mock).mockReturnValue(false)
       expect(fs.copyFileSync).not.toHaveBeenCalled()

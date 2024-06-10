@@ -140,12 +140,12 @@ describe('Utils: object', () => {
     test('flattens an object with arrays without modifying them', () => {
       const obj = {
         key1: 'value1',
-        array: 1,
+        array: '1',
       }
       const flattened = flattenObject(obj)
       expect(flattened).toEqual({
         key1: 'value1',
-        array: 1,
+        array: '1',
       })
     })
   })

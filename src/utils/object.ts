@@ -12,13 +12,13 @@ export const flattenObject = (
 
   for (const [key, value] of Object.entries(object)) {
     const newKey = parentKey
-      ? `${parentKey}${separator}${toUpperSnakeCase(key)}`
-      : toUpperSnakeCase(key)
+      ? `${parentKey}${separator}${key}`
+      : key
     if (typeof value === 'object' && !Array.isArray(value)) {
       const flattened = flattenObject(value, newKey, separator)
       Object.assign(result, flattened)
     } else {
-      result[newKey] = `'${value}'`
+      result[newKey] = `${value}`
     }
   }
 

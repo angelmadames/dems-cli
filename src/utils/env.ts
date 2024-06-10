@@ -20,7 +20,7 @@ export const dotEnv = {
       }
 
       const envContents = Object.entries(flatConfig)
-        .map(([key, value]) => `${key.toUpperCase()}=${value}`)
+        .map(([key, value]) => `${toUpperSnakeCase(key)}='${value}'`)
         .join('\n')
 
       fs.writeFileSync(envFilePath, envContents)

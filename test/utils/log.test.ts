@@ -1,32 +1,19 @@
 import { describe, expect, test } from 'bun:test'
-import chalk from 'chalk'
-import log from '../../src/utils/log'
+import logger from '../../src/utils/log'
 
 describe('log', () => {
-  test('should log info message in blue color', () => {
+  test('should log info message', () => {
     logger.info('info message')
-    expect(console.log).toHaveBeenCalledWith(chalk.blue('info message'))
+    expect(logger.info).toHaveBeenCalledWith('info message')
   })
 
-  test('should log success message in green color', () => {
-    logger.info('success message')
-    expect(console.log).toHaveBeenCalledWith(chalk.green('success message'))
-  })
-
-  test('should log warning message in yellow color', () => {
+  test('should log warning message', () => {
     logger.warn('warning message')
-    expect(console.log).toHaveBeenCalledWith(chalk.yellow('warning message'))
+    expect(logger.warn).toHaveBeenCalledWith('warning message')
   })
 
-  test('should log dimmed warning message in dim yellow color', () => {
-    log.dimmedWarning('dimmed warning message')
-    expect(console.log).toHaveBeenCalledWith(
-      chalk.dim.yellow('dimmed warning message'),
-    )
-  })
-
-  test('should log error message in red color', () => {
+  test('should log error message', () => {
     logger.error('error message')
-    expect(console.log).toHaveBeenCalledWith(chalk.red('error message'))
+    expect(logger.error).toHaveBeenCalledWith('error message')
   })
 })

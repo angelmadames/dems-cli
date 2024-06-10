@@ -18,7 +18,7 @@ export function noIndent(text: string) {
   return text.replace(/(\n)\s+/g, '$1').trim()
 }
 
-export function toUpperSnakeCase(str: string) {
+export function toUpperSnakeCase(str: string): string {
   return (
     str
       // Convert camelCase to snake_case
