@@ -1,4 +1,4 @@
-import * as fs from 'node:fs'
+import fs from 'node:fs'
 import { join } from 'node:path'
 import { cliConfig } from '../config/cli.config'
 import type { ProjectConfigSpec } from '../config/project.config'

@@ -99,10 +99,11 @@ export const projectConfig = {
 
   reposPaths() {
     const paths = []
-    const configCLI = cliConfig.load()
+    const { repositories } = this.load()
+    const { reposPath } = cliConfig.load()
 
-    for (const repo in this.load().repositories) {
-      paths.push(join(configCLI.reposPath, repo))
+    for (const repo in repositories) {
+      paths.push(join(reposPath, repo))
     }
 
     return paths

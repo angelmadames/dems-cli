@@ -39,8 +39,10 @@ export function environmentCommand() {
 
       if (options.generateDotEnv) {
         const config = projectConfig.load()
+
         logger.info("Generating project's dot env file...")
         dotEnv.generate(config.envFile, config)
+
         return
       }
     })

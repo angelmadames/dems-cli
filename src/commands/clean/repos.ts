@@ -1,4 +1,3 @@
-import { join } from 'node:path'
 import { Command } from 'commander'
 import { cliConfig } from '../../config/cli.config'
 import { projectConfig } from '../../config/project.config'
@@ -14,7 +13,6 @@ export function cleanReposCommand() {
     .addOption(sharedOptions.force)
     .action(async (options) => {
       const { repositories } = projectConfig.load()
-      const { reposPath } = cliConfig.load()
 
       logger.info('Deleting repositories for active project...')
       logger.info(`Current project >> ${cliConfig.activeProject()}`)
@@ -28,9 +26,9 @@ export function cleanReposCommand() {
         logger.warn(`  - ${repo}`)
       }
 
-      for (const repo in repositories) {
+      for (const repoPath in projectConfig.reposPaths()) {
         await deletePath({
-          path: join(reposPath, repo),
+          path: repoPath,
           force: options.force,
         })
       }
