@@ -5,6 +5,7 @@ import {
   noIndent,
   removeBreakLines,
   removeExtraSpaces,
+  toUpperSnakeCase,
 } from '../../src/utils/string'
 
 describe('Utils: string', () => {
@@ -63,4 +64,46 @@ describe('Utils: string', () => {
       expect(noIndent(input)).toBe(expectedOutput)
     })
   })
+
+  describe('toUpperSnakeCase', () => {
+    test('converts camelCase to UPPER_SNAKE_CASE', () => {
+      const result = toUpperSnakeCase('camelCaseString');
+      expect(result).toBe('CAMEL_CASE_STRING');
+    });
+
+    test('converts kebab-case to UPPER_SNAKE_CASE', () => {
+      const result = toUpperSnakeCase('kebab-case-string');
+      expect(result).toBe('KEBAB_CASE_STRING');
+    });
+
+    test('converts mixed camelCase and kebab-case to UPPER_SNAKE_CASE', () => {
+      const result = toUpperSnakeCase('camelCase-kebab-case');
+      expect(result).toBe('CAMEL_CASE_KEBAB_CASE');
+    });
+
+    test('converts single word to UPPER_SNAKE_CASE', () => {
+      const result = toUpperSnakeCase('word');
+      expect(result).toBe('WORD');
+    });
+
+    test('handles empty string input', () => {
+      const result = toUpperSnakeCase('');
+      expect(result).toBe('');
+    });
+
+    test('handles strings with underscores correctly', () => {
+      const result = toUpperSnakeCase('already_snake_case');
+      expect(result).toBe('ALREADY_SNAKE_CASE');
+    });
+
+    test('handles strings with multiple uppercase letters in sequence', () => {
+      const result = toUpperSnakeCase('HTTPResponseCode');
+      expect(result).toBe('HTTP_RESPONSE_CODE');
+    });
+
+    test('handles non-alphabetic characters correctly', () => {
+      const result = toUpperSnakeCase('special@#Characters');
+      expect(result).toBe('SPECIAL@#CHARACTERS');
+    });
+  });
 })

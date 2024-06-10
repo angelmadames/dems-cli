@@ -23,8 +23,10 @@ export function toUpperSnakeCase(str: string): string {
     str
       // Convert camelCase to snake_case
       .replace(/([a-z])([A-Z])/g, '$1_$2')
+      // Convert sequences of uppercase letters followed by lowercase letters to snake_case
+      .replace(/([A-Z]+)([A-Z][a-z])/g, '$1_$2')
       // Replace hyphens with underscores
       .replace(/-/g, '_')
       .toUpperCase()
-  )
+  );
 }

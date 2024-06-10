@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import logger from '../../src/utils/log'
+import logger, { formatLog } from '../../src/utils/log'
 
 describe('log', () => {
   test('should log info message', () => {
@@ -16,4 +16,34 @@ describe('log', () => {
     logger.error('error message')
     expect(logger.error).toHaveBeenCalledWith('error message')
   })
+
+  test('should trim leading and trailing whitespace', () => {
+    const result = formatLog('  Hello World  ');
+    expect(result).toBe('Hello World');
+  });
+
+  test('should replace multiple spaces with a single space', () => {
+    const result = formatLog('Hello   World');
+    expect(result).toBe('Hello World');
+  });
+
+  test('should handle strings with only whitespace', () => {
+    const result = formatLog('     ');
+    expect(result).toBe('');
+  });
+
+  test('should handle empty strings', () => {
+    const result = formatLog('');
+    expect(result).toBe('');
+  });
+
+  test('should handle strings with mixed whitespace characters', () => {
+    const result = formatLog('Hello \t World \n');
+    expect(result).toBe('Hello World');
+  });
+
+  test('should not change a properly formatted string', () => {
+    const result = formatLog('Hello World');
+    expect(result).toBe('Hello World');
+  });
 })
