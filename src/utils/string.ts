@@ -28,5 +28,5 @@ export function toUpperSnakeCase(str: string): string {
       // Replace hyphens with underscores
       .replace(/-/g, '_')
       .toUpperCase()
-  );
+  )
 }

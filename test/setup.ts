@@ -1,4 +1,5 @@
-import { afterEach, beforeAll, jest, mock } from 'bun:test'
+import { afterEach, beforeAll, beforeEach, jest, mock, spyOn } from 'bun:test'
+import logger from '../src/utils/log'
 
 beforeAll(() => {
   mock.module('node:fs', () => ({
@@ -22,21 +23,13 @@ beforeAll(() => {
   mock.module('node:child_process', () => ({
     execSync: mock(),
   }))
-
-  mock.module('../src/utils/log', () => ({
-    default: {
-      info: mock(),
-      warn: mock(),
-      error: mock(),
-    },
-  }))
 })
 
-/*
 beforeEach(() => {
-  spyOn(console, 'log').mockImplementation(() => {})
-  })
-*/
+  spyOn(logger, 'info').mockImplementation(() => {})
+  spyOn(logger, 'warn').mockImplementation(() => {})
+  spyOn(logger, 'error').mockImplementation(() => {})
+})
 
 afterEach(() => {
   jest.clearAllMocks()
