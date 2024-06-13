@@ -1,49 +1,12 @@
-import { join } from 'node:path'
 import { Command } from 'commander'
-import { projectConfig } from '../../config/project.config'
-import { dotEnv } from '../../utils/env'
-import { copyFile } from '../../utils/file-system'
-import logger from '../../utils/log'
-import { noIndent } from '../../utils/string'
+import { copyExampleFilesCommand } from './copy-example-files'
+import { generateDotEnvCommand } from './generate-dot-env'
 
 export function environmentCommand() {
   return new Command()
     .name('environment')
     .alias('env')
     .summary('Updates application environment config (.env)')
-    .description(
-      noIndent(`
-      Apps are run in different environments throughout their development
-      life cycle. To ensure their configuration matches what's
-      expected for DEMS, we override some of the default env settings.
-    `),
-    )
-    .option(
-      '-g, --generate-dot-env',
-      "Generate the dot env file for current project's config.json",
-    )
-    .option(
-      '-c, --copy-example-files',
-      "Copy the .env.example file of the current project's repositories",
-    )
-    .action((options) => {
-      if (options.copyExampleFiles) {
-        for (const path of projectConfig.reposPaths()) {
-          copyFile({
-            source: join(path, '.env.example'),
-            target: join(path, '.env'),
-          })
-        }
-        return
-      }
-
-      if (options.generateDotEnv) {
-        const config = projectConfig.load()
-
-        logger.info("Generating project's dot env file...")
-        dotEnv.generate(config.envFile, config)
-
-        return
-      }
-    })
+    .addCommand(generateDotEnvCommand())
+    .addCommand(copyExampleFilesCommand())
 }
