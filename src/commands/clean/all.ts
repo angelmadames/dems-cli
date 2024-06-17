@@ -15,16 +15,10 @@ export function cleanAllCommand() {
     .action(async (options) => {
       logger.info('Cleaning all local dependencies for managed apps...')
 
-      const flags = ['']
-      if (options.force) {
-        logger.warn('User interactivity disabled due to --force flag.')
-        flags.push('--force')
-      }
-
-      cleanComposeServicesCommand().parse(flags)
-      await cleanDepsCommand().parseAsync(flags)
-      await cleanDotEnvCommand().parseAsync(flags)
-      await cleanReposCommand().parseAsync(flags)
+      cleanComposeServicesCommand().parse()
+      await cleanDepsCommand().parseAsync()
+      await cleanDotEnvCommand().parseAsync()
+      await cleanReposCommand().parseAsync()
 
       logger.info('Cleanup of everything completed.')
     })

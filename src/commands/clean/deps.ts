@@ -18,7 +18,7 @@ export function cleanDepsCommand() {
         logger.warn('User interactivity disabled due to --force flag.')
       }
 
-      for (const repoPath in projectConfig.reposPaths()) {
+      for (const repoPath of projectConfig.reposPaths()) {
         await deletePath({
           path: repoPath,
           force: options.force,

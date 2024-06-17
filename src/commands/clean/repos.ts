@@ -26,7 +26,7 @@ export function cleanReposCommand() {
         logger.warn(`  - ${repo}`)
       }
 
-      for (const repoPath in projectConfig.reposPaths()) {
+      for (const repoPath of projectConfig.reposPaths()) {
         await deletePath({
           path: repoPath,
           force: options.force,
