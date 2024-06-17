@@ -6,7 +6,7 @@ import { createProjectCommand } from './create'
 import { setActiveProjectCommand } from './set'
 
 export function projectCommand() {
-  const command = new Command()
+  return new Command()
     .name('project')
     .summary('Manage DEMS current project state')
     .description('Manage the current project state of DEMS')
@@ -15,5 +15,4 @@ export function projectCommand() {
     .addCommand(createProjectCommand())
     .addCommand(projectConfigCommand())
     .addCommand(removeProjectCommand())
-  return command
 }

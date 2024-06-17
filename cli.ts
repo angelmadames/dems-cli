@@ -10,6 +10,7 @@ import { gitCommand } from "./src/commands/git";
 import { noIndent } from "./src/utils/string";
 import { name, version, description } from "./package.json";
 import { projectCommand } from "./src/commands/project";
+import { setupCommand } from "./src/commands/setup";
 
 const cli = new Command()
   .name(name)
@@ -29,6 +30,7 @@ const cli = new Command()
   .addCommand(cleanCommand())
   .addCommand(environmentCommand())
   .addCommand(composeCommand())
-  .addCommand(dependenciesCommand());
+  .addCommand(dependenciesCommand())
+  .addCommand(setupCommand());
 
 cli.parse();
