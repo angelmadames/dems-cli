@@ -11,6 +11,7 @@ import { noIndent } from "./src/utils/string";
 import { name, version, description } from "./package.json";
 import { projectCommand } from "./src/commands/project";
 import { setupCommand } from "./src/commands/setup";
+import { installCommand } from "./src/commands/install";
 
 const cli = new Command()
   .name(name)
@@ -24,6 +25,7 @@ const cli = new Command()
     initialization of a project and all of its respositories.
   `),
   )
+  .addCommand(installCommand())
   .addCommand(projectCommand())
   .addCommand(configCommand())
   .addCommand(gitCommand())

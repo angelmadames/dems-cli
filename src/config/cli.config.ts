@@ -8,7 +8,6 @@ export const CONFIG_PATH = join(homedir(), '.dems')
 export const CONFIG_FILE_PATH = join(CONFIG_PATH, 'config.json')
 export const ACTIVE_PROJECT_FILE = join(CONFIG_PATH, 'active-project')
 export const DEMS_REPOS_PATH = join(homedir(), 'repos')
-export const DEMS_FILES_PATH = '.dems'
 
 export interface CLIConfigSpec {
   // The system path where all DEMS-related files will live.
@@ -23,11 +22,6 @@ export interface CLIConfigSpec {
 
   // The path where all git repositories will be cloned by DEMS.
   reposPath: string
-
-  // The application configuration needed by DEMS is expected to be inside each
-  // application repository. The DEMS file path is the relative path of each
-  // application repository where DEMS-files will be stored.
-  filesPath: string
 }
 
 export const cliConfig = {
@@ -37,7 +31,6 @@ export const cliConfig = {
       configFile: CONFIG_FILE_PATH,
       activeProjectFile: ACTIVE_PROJECT_FILE,
       reposPath: DEMS_REPOS_PATH,
-      filesPath: DEMS_FILES_PATH,
     }
   },
 

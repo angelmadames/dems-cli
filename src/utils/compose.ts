@@ -18,8 +18,8 @@ export function composeExec({ command }: ComposeExecParams) {
 }
 
 export function composeFiles({ prefix = 'compose' }: ComposeFilesParams) {
-  const { repositories } = projectConfig.load()
-  const { reposPath, filesPath } = cliConfig.load()
+  const { repositories, filesPath } = projectConfig.load()
+  const { reposPath } = cliConfig.load()
 
   const composeFiles = []
 

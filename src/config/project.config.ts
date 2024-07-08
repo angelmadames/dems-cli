@@ -15,6 +15,7 @@ const CURRENT_PROJECT = cliConfig.activeProject()
 const PROJECT_CONFIG_ROOT = join(CONFIG_PATH, CURRENT_PROJECT)
 const PROJECT_CONFIG_FILE = join(PROJECT_CONFIG_ROOT, 'config.json')
 const PROJECT_ENV_FILE = join(PROJECT_CONFIG_ROOT, '.env')
+const DEMS_FILES_PATH = '.ops'
 
 export interface ProjectConfigSpec {
   // The project name determines how docker compose services will be prefixed,
@@ -29,6 +30,11 @@ export interface ProjectConfigSpec {
 
   // The project config file (config.json). Relative to project root path.
   configFile: string
+
+  // The application configuration needed by DEMS is expected to be inside each
+  // application repository. The DEMS file path is the relative path of each
+  // application repository where DEMS-files will be stored.
+  filesPath: string
 
   // The Dockerfile name used by DEMS for the project. The location of the
   // Dockerfile is expected by DEMS in the application's repository DEMS
@@ -58,7 +64,8 @@ export const projectConfig = {
       projectName: 'demo',
       projectRootPath: PROJECT_CONFIG_ROOT,
       configFile: PROJECT_CONFIG_FILE,
-      dockerfile: 'Dockerfile',
+      filesPath: DEMS_FILES_PATH,
+      dockerfile: 'dems.Dockerfile',
       envFile: PROJECT_ENV_FILE,
       repositories: {
         'demo-api': join(homedir(), 'repos', 'demo', 'demo-api'),
