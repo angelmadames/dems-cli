@@ -1,5 +1,5 @@
 import { join } from 'node:path'
-import { confirm, input } from '@inquirer/prompts'
+import { confirm, input, select } from '@inquirer/prompts'
 import { Command } from 'commander'
 import { CONFIG_PATH, cliConfig } from '../../config/cli.config'
 import { projectConfig } from '../../config/project.config'
@@ -16,7 +16,7 @@ export function createProjectCommand() {
     .option('-d, --dockerfile', 'Dockerfile used for local services')
     .option('-g, --git-ref', 'Git ref to clone repositories')
     .option('-f, --files-path', "Path for project's DEMS-files")
-    .option('-e, --env-file', 'The .env file path')
+    .option('-t, --project-type', 'Sets the project type')
     .action(async (options) => {
       const newProject = projectConfig.default()
 
@@ -27,7 +27,6 @@ export function createProjectCommand() {
           message: 'What is the name of the project?',
         })
       }
-      cliConfig.setActiveProject(newProject.projectName)
 
       if (options.filesPath) {
         newProject.filesPath = options.filesPath
@@ -40,6 +39,37 @@ export function createProjectCommand() {
 
       newProject.projectRootPath = join(CONFIG_PATH, newProject.projectName)
       newProject.configFile = join(newProject.projectRootPath, 'config.json')
+      newProject.envFile = join(newProject.projectRootPath, '.env')
+
+      if (options.projectType) {
+        newProject.projectType = options.projectType
+      } else {
+        newProject.projectType = await select({
+          message: 'Select the project type',
+          choices: [
+            {
+              name: 'Single',
+              value: 'Single',
+              description:
+                'A single repository containining a single application',
+            },
+            {
+              name: 'Mono Repo',
+              value: 'MonoRepo',
+              description:
+                'A single repository containing multiple applications or services',
+            },
+            {
+              name: 'Multi Repo',
+              value: 'MultiRepo',
+              description:
+                'Multiple repositories containing single applications or services',
+            },
+          ],
+        })
+      }
+
+      cliConfig.setActiveProject(newProject.projectName)
 
       if (options.gitOrg) {
         newProject.git.org = options.gitOrg
@@ -51,16 +81,28 @@ export function createProjectCommand() {
 
       newProject.repositories = {}
       if (options.repos) {
-      } else {
-        while (true) {
-          const repo = await input({
-            message: 'What is the name of the repository?',
-          })
+        for (const repo of options.repos) {
           newProject.repositories[repo] =
             `git@github.com:${newProject.git.org}/${repo}.git`
-          if (
-            !(await confirm({ message: 'Do you want to add another one?' }))
-          ) {
+        }
+      } else {
+        switch (newProject.projectType) {
+          case 'Single' || 'MonoRepo': {
+            const repo = await input({
+              message: 'What is the name of the repository?',
+            })
+            newProject.repositories[repo] =
+              `git@github.com:${newProject.git.org}/${repo}.git`
+            break
+          }
+          case 'MultiRepo': {
+            do {
+              const repo = await input({
+                message: 'What is the name of the repository?',
+              })
+              newProject.repositories[repo] =
+                `git@github.com:${newProject.git.org}/${repo}.git`
+            } while (await confirm({ message: 'Add another one?' }))
             break
           }
         }
@@ -72,15 +114,6 @@ export function createProjectCommand() {
         newProject.dockerfile = await input({
           message: `Dockerfile path? (Relative to ${newProject.filesPath})`,
           default: newProject.dockerfile,
-        })
-      }
-
-      if (options.envFile) {
-        newProject.envFile = options.envFile
-      } else {
-        newProject.envFile = await input({
-          message: 'Project root .env path?',
-          default: newProject.envFile.replace('demo', newProject.projectName),
         })
       }
 

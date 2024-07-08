@@ -17,6 +17,11 @@ const PROJECT_CONFIG_FILE = join(PROJECT_CONFIG_ROOT, 'config.json')
 const PROJECT_ENV_FILE = join(PROJECT_CONFIG_ROOT, '.env')
 const DEMS_FILES_PATH = '.ops'
 
+// Single: A single repository containing a single application or service.
+// MonoRepo: A single repository containing N applications.
+// MultiRepo: Multiple repositories containing a single application or service.
+export type ProjectTypes = 'Single' | 'MonoRepo' | 'MultiRepo'
+
 export interface ProjectConfigSpec {
   // The project name determines how docker compose services will be prefixed,
   // thus maintaining compslete isolation with other services deployed locally.
@@ -36,14 +41,19 @@ export interface ProjectConfigSpec {
   // application repository where DEMS-files will be stored.
   filesPath: string
 
-  // The Dockerfile name used by DEMS for the project. The location of the
-  // Dockerfile is expected by DEMS in the application's repository DEMS
-  // files directory.
-  dockerfile: string
+  // Defines the project type that identifies the project. This will change the
+  // behavior of DEMS commands and helper, so it's important that it's set to the
+  // right type.
+  projectType: ProjectTypes
 
   // All docker compose commands run by DEMS will have the --env-file [path].
   // The env file will be appended to docker compose commands.
   envFile: string
+
+  // The Dockerfile name used by DEMS for the project. The location of the
+  // Dockerfile is expected by DEMS in the application's repository DEMS
+  // files directory.
+  dockerfile: string
 
   // The repositories object is a refernce to the application repositories,
   // their names (key) and path (value). This is required for DEMS to be aware
@@ -58,6 +68,7 @@ export interface ProjectConfigSpec {
     defaultRef: string
   }
 }
+
 export const projectConfig = {
   default(): ProjectConfigSpec {
     return {
@@ -65,6 +76,7 @@ export const projectConfig = {
       projectRootPath: PROJECT_CONFIG_ROOT,
       configFile: PROJECT_CONFIG_FILE,
       filesPath: DEMS_FILES_PATH,
+      projectType: 'Single',
       dockerfile: 'dems.Dockerfile',
       envFile: PROJECT_ENV_FILE,
       repositories: {
