@@ -1,4 +1,5 @@
 import fs from 'node:fs'
+import path from 'node:path'
 import { confirm } from '@inquirer/prompts'
 import type {
   FileModificationOperation,
@@ -7,21 +8,21 @@ import type {
 } from './interfaces'
 import logger from './log'
 
-export const isFile = (path: string) => {
+export async function isFile(path: string) {
   return fs.existsSync(path) && fs.lstatSync(path).isFile()
 }
 
-export const isDirectory = (path: string) => {
+export async function isDirectory(path: string) {
   return fs.existsSync(path) && fs.lstatSync(path).isDirectory()
 }
 
-export const copyFile = ({ source, target }: SourceTargetOperation) => {
-  if (isFile(target)) {
+export async function copyFile({ source, target }: SourceTargetOperation) {
+  if (await isFile(target)) {
     logger.warn(`Path: ${target} already exists.`)
     return
   }
 
-  if (isFile(source)) {
+  if (await isFile(source)) {
     fs.copyFileSync(source, target, 0)
     logger.info(`File: ${source} copied to ${target}.`)
   } else {
@@ -30,11 +31,11 @@ export const copyFile = ({ source, target }: SourceTargetOperation) => {
   }
 }
 
-export const createFile = ({
+export function createFile({
   file,
   content,
   overwrite = false,
-}: FileModificationOperation) => {
+}: FileModificationOperation) {
   if (!isFile(file) || overwrite) {
     logger.info(`Creating file: ${file}...`)
     fs.writeFileSync(file, content, 'utf8')
@@ -44,7 +45,7 @@ export const createFile = ({
   }
 }
 
-export const createPath = ({ path }: PathModificationOperation) => {
+export function createPath({ path }: PathModificationOperation) {
   if (!isDirectory(path)) {
     logger.info(`Creating path: ${path}...`)
     fs.mkdirSync(path, { recursive: true })
@@ -54,11 +55,11 @@ export const createPath = ({ path }: PathModificationOperation) => {
   }
 }
 
-export const deletePath = async ({
+export async function deletePath({
   path,
   force = false,
-}: PathModificationOperation) => {
-  if (isDirectory(path)) {
+}: PathModificationOperation) {
+  if (await isDirectory(path)) {
     if (
       force ||
       (await confirm({ message: `Delete directory ${path} recursively?` }))
@@ -68,7 +69,7 @@ export const deletePath = async ({
     }
   }
 
-  if (isFile(path)) {
+  if (await isFile(path)) {
     if (
       force ||
       (await confirm({
@@ -81,4 +82,30 @@ export const deletePath = async ({
   }
 
   return
+}
+
+export function readPathMatchingFiles(
+  dir: string,
+  matchFileName: string,
+): Array<string> {
+  const results: Array<string> = [];
+
+  function recursiveReadDir(dir: string) {
+    const entries = fs.readdirSync(dir, { withFileTypes: true })
+
+    for (const entry of entries) {
+      const fullPath = path.join(entry.parentPath, entry.name)
+
+      if (entry.isDirectory()) {
+        recursiveReadDir(fullPath)
+      }
+
+      if (entry.isFile() && entry.name.includes(matchFileName)) {
+        results.push(fullPath)
+      }
+    }
+  }
+
+  recursiveReadDir(dir)
+  return results
 }
