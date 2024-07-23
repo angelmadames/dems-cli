@@ -25,8 +25,6 @@ export function composeCommand() {
         process.exit(1)
       }
 
-      composeExec({
-        command: composeArgs,
-      })
+      composeExec({ command: composeArgs })
     })
 }

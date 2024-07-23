@@ -8,21 +8,21 @@ import type {
 } from './interfaces'
 import logger from './log'
 
-export async function isFile(path: string) {
+export function isFile(path: string) {
   return fs.existsSync(path) && fs.lstatSync(path).isFile()
 }
 
-export async function isDirectory(path: string) {
+export function isDirectory(path: string) {
   return fs.existsSync(path) && fs.lstatSync(path).isDirectory()
 }
 
-export async function copyFile({ source, target }: SourceTargetOperation) {
-  if (await isFile(target)) {
+export function copyFile({ source, target }: SourceTargetOperation) {
+  if (isFile(target)) {
     logger.warn(`Path: ${target} already exists.`)
     return
   }
 
-  if (await isFile(source)) {
+  if (isFile(source)) {
     fs.copyFileSync(source, target, 0)
     logger.info(`File: ${source} copied to ${target}.`)
   } else {
@@ -69,7 +69,7 @@ export async function deletePath({
     }
   }
 
-  if (await isFile(path)) {
+  if (isFile(path)) {
     if (
       force ||
       (await confirm({
@@ -88,7 +88,7 @@ export function readPathMatchingFiles(
   dir: string,
   matchFileName: string,
 ): Array<string> {
-  const results: Array<string> = [];
+  const results: Array<string> = []
 
   function recursiveReadDir(dir: string) {
     const entries = fs.readdirSync(dir, { withFileTypes: true })

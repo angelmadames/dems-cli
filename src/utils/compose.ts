@@ -1,6 +1,5 @@
 import fs from 'node:fs'
 import { join } from 'node:path'
-import { cliConfig } from '../config/cli.config'
 import { projectConfig } from '../config/project.config'
 import cmd from './cmd'
 import { isFile } from './file-system'
@@ -18,34 +17,35 @@ export function composeExec({ command }: ComposeExecParams) {
 }
 
 export function composeFiles({ prefix = 'compose' }: ComposeFilesParams) {
-  const { repositories, filesPath } = projectConfig.load()
-  const { reposPath } = cliConfig.load()
+  const { filesPath } = projectConfig.load()
+  const reposPath = projectConfig.reposPaths()
 
-  const composeFiles = []
+  const files = []
 
-  for (const repo in repositories) {
-    const files = fs.readdirSync(join(reposPath, repo, filesPath))
-    for (const file of files) {
-      if (file.match(`^.*${prefix}.*\.yml$`)) {
-        composeFiles.push(`--file ${join(reposPath, repo, filesPath, file)}`)
+  for (const repo of reposPath) {
+    const paths = fs.readdirSync(join(repo, filesPath))
+
+    for (const path of paths) {
+      if (path.match(`^.*${prefix}.*\.yml$`)) {
+        files.push(`--file ${join(repo, filesPath, path)}`)
       }
     }
   }
 
-  return composeFiles
+  return files
 }
 
 export function composeExecParams() {
-  const { projectName, envFile, repositories } = projectConfig.load()
-  const { reposPath } = cliConfig.load()
+  const { projectName, envFile } = projectConfig.load()
+  const reposPath = projectConfig.reposPaths()
 
   const params = []
 
   params.push(`--project-name ${projectName}`)
   params.push(`--env-file ${envFile}`)
 
-  for (const repo in repositories) {
-    const envFile = join(reposPath, repo, '.env')
+  for (const repo of reposPath) {
+    const envFile = join(repo, '.env')
     if (isFile(envFile)) {
       params.push(`--env-file ${envFile}`)
     }
