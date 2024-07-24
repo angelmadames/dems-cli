@@ -1,5 +1,4 @@
 import fs from 'node:fs'
-import { homedir } from 'node:os'
 import { join } from 'node:path'
 import {
   createFile,
@@ -68,7 +67,7 @@ export interface ProjectConfigSpec {
   //   frontend: "path/to/frontend"
   // }
   // 'projectType' must be set to 'MonoRepo' for this directive to work.
-  monoRepoProjects?: { [key: string]: string }
+  monoRepoProjects?: Array<string>
 
   // The `git` object contains all configuration values for Git resources.
   git: {

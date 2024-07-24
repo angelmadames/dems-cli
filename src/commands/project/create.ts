@@ -108,6 +108,16 @@ export function createProjectCommand() {
         }
       }
 
+      if (newProject.projectType === 'MonoRepo') {
+        newProject.monoRepoProjects = []
+        do {
+          const newMonoRepoProject = await input({
+            message: 'What is the name of the mono-repo project or service?',
+          })
+          newProject.monoRepoProjects.push(newMonoRepoProject)
+        } while (await confirm({ message: 'Add another mono-repo service?' }))
+      }
+
       if (options.dockerfile) {
         newProject.dockerfile = options.dockerfile
       } else {
