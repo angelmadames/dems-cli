@@ -9,7 +9,7 @@ import {
   isFile,
 } from '../utils/file-system'
 import logger from '../utils/log'
-import { CONFIG_PATH, cliConfig } from './cli.config'
+import { CONFIG_PATH, DEMS_REPOS_PATH, cliConfig } from './cli.config'
 
 const CURRENT_PROJECT = cliConfig.activeProject()
 const PROJECT_CONFIG_ROOT = join(CONFIG_PATH, CURRENT_PROJECT)
@@ -41,11 +41,6 @@ export interface ProjectConfigSpec {
   // application repository where DEMS-files will be stored.
   filesPath: string
 
-  // Defines the project type that identifies the project. This will change the
-  // behavior of DEMS commands and helper, so it's important that it's set to the
-  // right type.
-  projectType: ProjectTypes
-
   // All docker compose commands run by DEMS will have the --env-file [path].
   // The env file will be appended to docker compose commands.
   envFile: string
@@ -59,6 +54,21 @@ export interface ProjectConfigSpec {
   // their names (key) and path (value). This is required for DEMS to be aware
   // of the desired state of applications to be managed.
   repositories: { [key: string]: string }
+
+  // Defines the project type that identifies the project. This will change the
+  // behavior of DEMS commands and helper, so it's important that it's set to the
+  // right type.
+  projectType: ProjectTypes
+
+  // Individual projects inside a MonoRepo project type. For example,
+  // if a mono repo has two projects, backend & frontend, then, the
+  // monoRepoProjects will be like (relative to the path of the main repo):
+  // monoRepoProjects: {
+  //   backend: "path/to/backend",
+  //   frontend: "path/to/frontend"
+  // }
+  // 'projectType' must be set to 'MonoRepo' for this directive to work.
+  monoRepoProjects?: { [key: string]: string }
 
   // The `git` object contains all configuration values for Git resources.
   git: {
@@ -80,8 +90,8 @@ export const projectConfig = {
       dockerfile: 'dems.Dockerfile',
       envFile: PROJECT_ENV_FILE,
       repositories: {
-        'demo-api': join(homedir(), 'repos', 'demo', 'demo-api'),
-        'demo-webapp': join(homedir(), 'repos', 'demo', 'demo-web'),
+        'demo-api': join(DEMS_REPOS_PATH, 'demo', 'demo-api'),
+        'demo-webapp': join(DEMS_REPOS_PATH, 'demo', 'demo-web'),
       },
       git: {
         org: 'gbh-tech',
@@ -140,6 +150,7 @@ export const projectConfig = {
     const projectPath = join(CONFIG_PATH, project)
     if (isDirectory(projectPath)) {
       deletePath({ path: projectPath, force: true })
+      logger.info(`Project '${project}' was successfully deleted.`)
       return
     }
 
