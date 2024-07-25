@@ -61,13 +61,13 @@ export interface ProjectConfigSpec {
 
   // Individual projects inside a MonoRepo project type. For example,
   // if a mono repo has two projects, backend & frontend, then, the
-  // monoRepoProjects will be like (relative to the path of the main repo):
-  // monoRepoProjects: {
+  // monoRepoServices will be like (relative to the path of the main repo):
+  // monoRepoServices: {
   //   backend: "path/to/backend",
   //   frontend: "path/to/frontend"
   // }
   // 'projectType' must be set to 'MonoRepo' for this directive to work.
-  monoRepoProjects?: Array<string>
+  monoRepoServices?: Array<string>
 
   // The `git` object contains all configuration values for Git resources.
   git: {
@@ -86,6 +86,7 @@ export const projectConfig = {
       configFile: PROJECT_CONFIG_FILE,
       filesPath: DEMS_FILES_PATH,
       projectType: 'Single',
+      monoRepoServices: [""],
       dockerfile: 'dems.Dockerfile',
       envFile: PROJECT_ENV_FILE,
       repositories: {
@@ -117,31 +118,12 @@ export const projectConfig = {
     return JSON.parse(fs.readFileSync(configFile).toString())
   },
 
-  repoList() {
-    return Object.keys(this.load().repositories)
-  },
-
-  repoURLs() {
-    return Object.values(this.load().repositories)
-  },
-
-  reposPaths() {
-    const paths = []
-    const { repositories } = this.load()
-    const { reposPath } = cliConfig.load()
-
-    for (const repo in repositories) {
-      paths.push(join(reposPath, repo))
-    }
-
-    return paths
-  },
-
   save(config: ProjectConfigSpec) {
     createPath({ path: config.projectRootPath })
     createFile({
       file: `${config.projectRootPath}/config.json`,
       content: JSON.stringify(config, null, 2),
+      overwrite: true,
     })
   },
 
@@ -161,6 +143,45 @@ export const projectConfig = {
     if (isFile(configFile)) return
     logger.warn('Project config file does not exist or is not a valid file.')
     logger.warn("Run 'dems setup' to create it.")
+    process.exit(1)
+  },
+
+  repoList() {
+    return Object.keys(this.load().repositories)
+  },
+
+  repoURLs() {
+    return Object.values(this.load().repositories)
+  },
+
+  reposPaths() {
+    const paths = []
+    const { repositories, projectType } = this.load()
+    const { reposPath } = cliConfig.load()
+
+    if (projectType === 'MonoRepo') {
+      const { monoRepoServices } = this.load()
+      if (monoRepoServices) {
+        for (const service of monoRepoServices) {
+          paths.push(join(reposPath, Object.keys(repositories)[0], service))
+        }
+      }
+    } else {
+      for (const repo in repositories) {
+        paths.push(join(reposPath, repo))
+      }
+    }
+
+    return paths
+  },
+
+  repoServicesList() {
+    const { projectType, monoRepoServices } = this.load()
+    if (projectType === 'MonoRepo') {
+      return monoRepoServices
+    }
+
+    logger.error('Curent project is not a mono repository.')
     process.exit(1)
   },
 }

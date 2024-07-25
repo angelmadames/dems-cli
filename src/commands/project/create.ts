@@ -87,14 +87,6 @@ export function createProjectCommand() {
         }
       } else {
         switch (newProject.projectType) {
-          case 'Single' || 'MonoRepo': {
-            const repo = await input({
-              message: 'What is the name of the repository?',
-            })
-            newProject.repositories[repo] =
-              `git@github.com:${newProject.git.org}/${repo}.git`
-            break
-          }
           case 'MultiRepo': {
             do {
               const repo = await input({
@@ -105,16 +97,24 @@ export function createProjectCommand() {
             } while (await confirm({ message: 'Add another one?' }))
             break
           }
+          default: {
+            const repo = await input({
+              message: 'What is the name of the repository?',
+            })
+            newProject.repositories[repo] =
+              `git@github.com:${newProject.git.org}/${repo}.git`
+            break
+          }
         }
       }
 
       if (newProject.projectType === 'MonoRepo') {
-        newProject.monoRepoProjects = []
+        newProject.monoRepoServices = []
         do {
           const newMonoRepoProject = await input({
             message: 'What is the name of the mono-repo project or service?',
           })
-          newProject.monoRepoProjects.push(newMonoRepoProject)
+          newProject.monoRepoServices.push(newMonoRepoProject)
         } while (await confirm({ message: 'Add another mono-repo service?' }))
       }
 
@@ -137,7 +137,6 @@ export function createProjectCommand() {
         })
       ) {
         createPath({ path: newProject.projectRootPath })
-
         projectConfig.save(newProject)
         logger.info('New project created successfully.')
       }
