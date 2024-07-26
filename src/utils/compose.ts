@@ -36,7 +36,7 @@ export function composeFiles({ prefix = 'compose' }: ComposeFilesParams) {
 }
 
 export function composeExecParams() {
-  const { projectName, envFile } = projectConfig.load()
+  const { projectName, envFile, projectType, monoRepoServices } = projectConfig.load()
   const reposPath = projectConfig.reposPaths()
 
   const params = []
@@ -45,9 +45,17 @@ export function composeExecParams() {
   params.push(`--env-file ${envFile}`)
 
   for (const repo of reposPath) {
-    const envFile = join(repo, '.env')
-    if (isFile(envFile)) {
-      params.push(`--env-file ${envFile}`)
+    if (projectType === 'MonoRepo' && monoRepoServices) {
+      for (const path of projectConfig.repoServicesPaths()) {
+        if (isFile(join(path, '.env'))) {
+          params.push(`--env-file ${join(path, '.env')}`)
+        }
+      }
+    } else {
+      const envFile = join(repo, '.env')
+      if (isFile(envFile)) {
+        params.push(`--env-file ${envFile}`)
+      }
     }
   }
 
