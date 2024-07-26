@@ -156,20 +156,11 @@ export const projectConfig = {
 
   reposPaths() {
     const paths = []
-    const { repositories, projectType } = this.load()
+    const { repositories } = this.load()
     const { reposPath } = cliConfig.load()
 
-    if (projectType === 'MonoRepo') {
-      const { monoRepoServices } = this.load()
-      if (monoRepoServices) {
-        for (const service of monoRepoServices) {
-          paths.push(join(reposPath, Object.keys(repositories)[0], service))
-        }
-      }
-    } else {
-      for (const repo in repositories) {
-        paths.push(join(reposPath, repo))
-      }
+    for (const repo in repositories) {
+      paths.push(join(reposPath, repo))
     }
 
     return paths
@@ -184,4 +175,25 @@ export const projectConfig = {
     logger.error('Curent project is not a mono repository.')
     process.exit(1)
   },
+
+  repoServicesPaths() {
+    const paths = []
+    const { repositories, projectType } = this.load()
+    const { reposPath } = cliConfig.load()
+
+    if (projectType === 'MonoRepo') {
+      const { monoRepoServices } = this.load()
+      if (monoRepoServices) {
+        for (const service of monoRepoServices) {
+          paths.push(join(reposPath, Object.keys(repositories)[0], service))
+        }
+      }
+    } else {
+      logger.error('Cannot determine services paths.')
+      logger.error('Current project is not of type MonoRepo.')
+      process.exit(1)
+    }
+
+    return paths
+  }
 }

@@ -13,10 +13,20 @@ export const dotEnv = {
       const flatConfig = flattenObject(config)
 
       for (const repo in config.repositories) {
-        flatConfig[`${toUpperSnakeCase(repo)}_PATH`] = `${join(
+        flatConfig[`${toUpperSnakeCase(repo)}_PATH`] = join(
           configCLI.reposPath,
           repo,
-        )}`
+        )
+      }
+
+      if (config.projectType === 'MonoRepo' && config.monoRepoServices) {
+        for (const service of config.monoRepoServices) {
+          flatConfig[`${toUpperSnakeCase(config.projectName)}_${toUpperSnakeCase(service)}_PATH`] = join(
+            configCLI.reposPath,
+            Object.keys(config.repositories)[0],
+            service
+          )
+        }
       }
 
       const envContents = Object.entries(flatConfig)
