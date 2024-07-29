@@ -86,7 +86,7 @@ export const projectConfig = {
       configFile: PROJECT_CONFIG_FILE,
       filesPath: DEMS_FILES_PATH,
       projectType: 'Single',
-      monoRepoServices: [""],
+      monoRepoServices: [''],
       dockerfile: 'dems.Dockerfile',
       envFile: PROJECT_ENV_FILE,
       repositories: {
@@ -195,5 +195,5 @@ export const projectConfig = {
     }
 
     return paths
-  }
+  },
 }

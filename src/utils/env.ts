@@ -21,10 +21,12 @@ export const dotEnv = {
 
       if (config.projectType === 'MonoRepo' && config.monoRepoServices) {
         for (const service of config.monoRepoServices) {
-          flatConfig[`${toUpperSnakeCase(config.projectName)}_${toUpperSnakeCase(service)}_PATH`] = join(
+          flatConfig[
+            `${toUpperSnakeCase(config.projectName)}_${toUpperSnakeCase(service)}_PATH`
+          ] = join(
             configCLI.reposPath,
             Object.keys(config.repositories)[0],
-            service
+            service,
           )
         }
       }

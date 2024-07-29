@@ -9,7 +9,8 @@ export function depsCopyCommand() {
     .name('copy')
     .summary('Copy dependencies from containers to local repository')
     .action(() => {
-      const { repositories, projectName, projectType, monoRepoServices } = projectConfig.load()
+      const { repositories, projectName, projectType, monoRepoServices } =
+        projectConfig.load()
       const { reposPath } = cliConfig.load()
 
       if (projectType === 'MonoRepo' && monoRepoServices) {

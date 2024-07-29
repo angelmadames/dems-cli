@@ -1,17 +1,17 @@
 #!/usr/bin/env bun
 
-import { Command } from "commander";
-import { configCommand } from "./src/commands/config";
-import { cleanCommand } from "./src/commands/clean";
-import { environmentCommand } from "./src/commands/environment";
-import { composeCommand } from "./src/commands/compose";
-import { dependenciesCommand } from "./src/commands/dependencies";
-import { gitCommand } from "./src/commands/git";
-import { noIndent } from "./src/utils/string";
-import { name, version, description } from "./package.json";
-import { projectCommand } from "./src/commands/project";
-import { setupCommand } from "./src/commands/setup";
-import { installCommand } from "./src/commands/install";
+import { Command } from 'commander'
+import { configCommand } from './src/commands/config'
+import { cleanCommand } from './src/commands/clean'
+import { environmentCommand } from './src/commands/environment'
+import { composeCommand } from './src/commands/compose'
+import { dependenciesCommand } from './src/commands/dependencies'
+import { gitCommand } from './src/commands/git'
+import { noIndent } from './src/utils/string'
+import { name, version, description } from './package.json'
+import { projectCommand } from './src/commands/project'
+import { setupCommand } from './src/commands/setup'
+import { installCommand } from './src/commands/install'
 
 const cli = new Command()
   .name(name)
@@ -33,6 +33,6 @@ const cli = new Command()
   .addCommand(environmentCommand())
   .addCommand(composeCommand())
   .addCommand(dependenciesCommand())
-  .addCommand(setupCommand());
+  .addCommand(setupCommand())
 
-cli.parse();
+cli.parse()

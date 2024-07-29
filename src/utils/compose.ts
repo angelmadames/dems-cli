@@ -36,7 +36,8 @@ export function composeFiles({ prefix = 'compose' }: ComposeFilesParams) {
 }
 
 export function composeExecParams() {
-  const { projectName, envFile, projectType, monoRepoServices } = projectConfig.load()
+  const { projectName, envFile, projectType, monoRepoServices } =
+    projectConfig.load()
   const reposPath = projectConfig.reposPaths()
 
   const params = []
