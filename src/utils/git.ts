@@ -1,28 +1,20 @@
 import { join } from 'node:path'
 import { $ } from 'bun'
-import { createPath, isDirectory } from './file-system'
+import { createPath, isDirectory, isFile } from './file-system'
 import type { GitParams } from './interfaces'
 import logger from './log'
 
 export const git = {
   async clone({ path, repo, ref }: GitParams) {
-    if (!isDirectory(path)) createPath({ path })
+    createPath({ path })
+    checkLocalRepo(join(path, getRepoNameFromURL(repo)))
 
-    const repoPath = join(path, getRepoNameFromURL(repo))
-
-    if (localRepoExists(repoPath)) {
-      logger.warn(`Repo ${repo} already cloned.`)
-    } else {
-      await $`git -C ${path} clone ${repo} -b ${ref}`
-      logger.info(`Repo '${repo}' was cloned successfully!`)
-    }
+    await $`git -C ${path} clone ${repo} -b ${ref}`
+    logger.info(`Repo '${repo}' was cloned successfully!`)
   },
 
   async checkout({ path, ref }: Omit<GitParams, 'repo'>) {
-    if (!localRepoExists(path)) {
-      logger.error(`Repo was not found in path '${path}'.`)
-      process.exit(1)
-    }
+    checkLocalRepo(path, true)
 
     try {
       logger.info(`Running checkout with ref '${ref}' on repo '${path}'`)
@@ -46,13 +38,30 @@ export const git = {
   },
 }
 
-export function getRepoNameFromURL(gitURL: string): string {
-  const name = gitURL.split('/').at(-1) || ''
-  return name.replace('.git', '')
+export function getRepoNameFromURL(url: string) {
+  if (url) {
+    const name = url.split('/').at(-1)
+    if (name) {
+      return name.replace('.git', '')
+    }
+  }
+
+  logger.error(`Could not obtain repo name from passed git URL: '${url}'`)
+  process.exit(1)
 }
 
-export function localRepoExists(repoPath: string) {
-  return isDirectory(`${repoPath}/.git`)
+export function checkLocalRepo(repoPath: string, errorIfNotFound = false) {
+  if (isDirectory(`${repoPath}/.git`) && isFile(`${repoPath}/.git/index`)) {
+    logger.warn(`Repo is already cloned at '${repoPath}'`)
+    return true
+  }
+
+  if (errorIfNotFound) {
+    logger.error(`Repo was not found in path '${repoPath}'.`)
+    process.exit(1)
+  }
+
+  return false
 }
 
 export const validateLocalGitRepo = async (path: string) => {
