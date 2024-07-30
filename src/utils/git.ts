@@ -7,7 +7,10 @@ import logger from './log'
 export const git = {
   async clone({ path, repo, ref }: GitParams) {
     createPath({ path })
-    checkLocalRepo(join(path, getRepoNameFromURL(repo)))
+
+    if (checkLocalRepo(join(path, getRepoNameFromURL(repo)))) {
+      return
+    }
 
     await $`git -C ${path} clone ${repo} -b ${ref}`
     logger.info(`Repo '${repo}' was cloned successfully!`)

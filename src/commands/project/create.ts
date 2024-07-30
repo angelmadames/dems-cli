@@ -28,6 +28,22 @@ export function createProjectCommand() {
         })
       }
 
+      newProject.projectRootPath = join(CONFIG_PATH, newProject.projectName)
+      newProject.configFile = join(newProject.projectRootPath, 'config.json')
+      newProject.envFile = join(newProject.projectRootPath, '.env')
+
+      if (projectConfig.confirmExists(newProject.configFile)) {
+        if (
+          await confirm({
+            message: 'Project config will be overwritten. Continue?',
+          })
+        ) {
+          logger.warn('Modiying existing project config...')
+        } else {
+          return
+        }
+      }
+
       if (options.filesPath) {
         newProject.filesPath = options.filesPath
       } else {
@@ -36,10 +52,6 @@ export function createProjectCommand() {
           default: newProject.filesPath,
         })
       }
-
-      newProject.projectRootPath = join(CONFIG_PATH, newProject.projectName)
-      newProject.configFile = join(newProject.projectRootPath, 'config.json')
-      newProject.envFile = join(newProject.projectRootPath, '.env')
 
       if (options.projectType) {
         newProject.projectType = options.projectType

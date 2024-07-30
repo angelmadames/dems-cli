@@ -146,6 +146,15 @@ export const projectConfig = {
     process.exit(1)
   },
 
+  confirmExists(configFile = PROJECT_CONFIG_FILE) {
+    if (isFile(configFile)) {
+      logger.warn('Project has been already initialized.')
+      return true
+    }
+
+    return false
+  },
+
   repoList() {
     return Object.keys(this.load().repositories)
   },

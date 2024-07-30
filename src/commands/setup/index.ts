@@ -5,6 +5,7 @@ import { copyExampleFilesCommand } from '../environment/copy-example-files'
 import { generateDotEnvCommand } from '../environment/generate-dot-env'
 import { gitCloneCommand } from '../git/clone'
 import { createProjectCommand } from '../project/create'
+import logger from '../../utils/log'
 
 export function setupCommand() {
   return new Command()
@@ -18,9 +19,17 @@ export function setupCommand() {
       copyExampleFilesCommand().parse()
       generateDotEnvCommand().parse()
 
+      logger.info('Building services images using Docker Compose.')
       composeCommand().parse(['build'], { from: 'user' })
+
+      logger.info('Provisioning services using Docker Compose.')
       composeCommand().parse(['up -d'], { from: 'user' })
 
       depsCopyCommand().parse()
+
+      logger.info('To manage your newly created DEMS project, use:')
+      logger.info('> dems compose <COMMAND>\n')
+      logger.info('✅ Your DEMS project was been successfully initialized!')
+      logger.info('🚀 Happy coding!')
     })
 }
