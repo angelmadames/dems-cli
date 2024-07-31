@@ -1,11 +1,11 @@
 import { Command } from 'commander'
+import logger from '../../utils/log'
 import { composeCommand } from '../compose'
 import { depsCopyCommand } from '../dependencies/copy'
 import { copyExampleFilesCommand } from '../environment/copy-example-files'
 import { generateDotEnvCommand } from '../environment/generate-dot-env'
 import { gitCloneCommand } from '../git/clone'
 import { createProjectCommand } from '../project/create'
-import logger from '../../utils/log'
 
 export function setupCommand() {
   return new Command()
