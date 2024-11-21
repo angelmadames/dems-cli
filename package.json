@@ -36,6 +36,6 @@
     "chalk": "^5.3.0",
     "commander": "^12.1.0",
     "pino": "^9.3.2",
-    "pino-pretty": "^11.2.2"
+    "pino-pretty": "^13.0.0"
   }
 }
